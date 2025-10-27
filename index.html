@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ramdev Hardware</title>
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="#" class="logo">
+                <img src="./Imges/Logo.png" alt="Ramdev logo" />
+            </a>
+        </div>
+
+        <div class="nav-center">
+            <form class="search-form" role="search">
+                <input type="search" placeholder="Search products..." aria-label="Search products">
+                <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="./About/About.html">About</a></li>
+                <li><a href="./Products/Products.html">Products</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
+                <img src="./Imges/Menu.png" alt="menu" data-closed="./Imges/Menu.png" data-open="./Imges/Close.png" />
+            </button>
+        </div>
+    </nav>
+
+<main class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-container">
+    <h1>
+      <span id="animatedText" class="typing"></span>
+    </h1>
+    <p class="hero-sub">
+      Everything you need — from precision hand tools to modular electronic components — curated for reliability and performance.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="./Products/Products.html">Shop Now</a>
+      <a class="btn btn-ghost" href="#products">Browse Products</a>
+    </div>
+  </div>
+</main>
+
+
+    <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Products</a>
+        <a href="#">Contact</a>
+    </div>
+
+    <div id="menuBackdrop" class="menu-backdrop" aria-hidden="true"></div>
+
+    <script src="./index.js"></script>
+</body>
+</html>

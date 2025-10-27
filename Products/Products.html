@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products</title>
+  <link rel="stylesheet" href="./Products.css">
+  <link rel="stylesheet" href="../index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="#" class="logo"><img src="../Imges/Logo.png" alt="Ramdev logo"></a>
+    </div>
+    <div class="nav-center">
+      <form class="search-form" role="search">
+        <input type="search" placeholder="Search products..." aria-label="Search products">
+        <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+      </form>
+    </div>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../About/About.html">About</a></li>
+        <li><a href="../Products/Products.html">Products</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Products</h1>
+    <div id="productsList" class="products-list">Loading products...</div>
+  </div>
+
+  <script type="module" src="Products.js"></script>
+</body>
+</html>
