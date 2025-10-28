@@ -176,3 +176,40 @@
     .about-section h1 { font-size: 24px; }
     .about-content p { font-size: 15px; }
     }
+/* Default menu button - no extra margin for mobile */
+.menu-btn {
+  display: none; /* hidden on desktop initially, shown via media query */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+}
+
+/* Menu button image */
+.menu-btn img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+/* ---- LAPTOP / DESKTOP SPECIFIC ---- */
+@media (min-width: 801px) {
+  .menu-btn {
+    display: inline-flex;   /* show button on desktop/laptop */
+    margin-left: 12px;      /* margin between nav-links and menu button */
+    margin-right: 12px;     /* margin from right edge */
+  }
+}
+
+/* ---- MOBILE SPECIFIC ---- */
+@media (max-width: 800px) {
+  .menu-btn {
+    display: inline-flex;   /* show button on mobile */
+    margin-left: 0;         /* reset margin on mobile */
+    margin-right: 0;
+  }
+}
