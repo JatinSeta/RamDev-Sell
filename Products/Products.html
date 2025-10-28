@@ -5,35 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Products</title>
   <link rel="stylesheet" href="./Products.css">
-  <link rel="stylesheet" href="../index.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="nav-left">
-      <a href="#" class="logo"><img src="../Imges/Logo.png" alt="Ramdev logo"></a>
-    </div>
-    <div class="nav-center">
-      <form class="search-form" role="search">
-        <input type="search" placeholder="Search products..." aria-label="Search products">
-        <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
-      </form>
-    </div>
-    <div class="nav-right">
-      <ul class="nav-links">
-        <li><a href="../index.html">Home</a></li>
-        <li><a href="../About/About.html">About</a></li>
-        <li><a href="../Products/Products.html">Products</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </div>
-  </nav>
 
-  <div class="container">
-    <h1>Products</h1>
-    <div id="productsList" class="products-list">Loading products...</div>
+  <!-- Loader -->
+  <div id="loader" class="loader">
+    <img src="../Imges/engineer.png" class="center-img" alt="Engineer">
+    <div class="tools-circle">
+      <img src="../Imges/screw.png" class="tool" alt="Screw">
+      <img src="../Imges/copper-wire.png" class="tool" alt="Copper Wire">
+      <img src="../Imges/rotary-hammer.png" class="tool" alt="Rotary Hammer">
+      <img src="../Imges/tools-kit.png" class="tool" alt="Tools Kit">
+      <img src="../Imges/hammer.png" class="tool" alt="Hammer">
+      <img src="../Imges/screwdriver.png" class="tool" alt="Saw">
+      <img src="../Imges/voltmeter.png" class="tool" alt="Drill">
+    </div>
   </div>
 
-  <script type="module" src="Products.js"></script>
+  <!-- Navbar -->
+   <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="../index.html" class="logo">
+                <img src="../Imges/Logo.png" alt="Ramdev logo" />
+            </a>
+        </div>
+
+        <div class="nav-center">
+            <form class="search-form" role="search">
+                <input type="search" placeholder="Search products..." aria-label="Search products">
+                <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../About/About.html">About</a></li>
+                <li><a href="../Products/Products.html">Products</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
+                <img src="../Imges/Menu.png" alt="menu" data-closed="../Imges/Menu.png" data-open="../Imges/Close.png" />
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+        <div class="mobile-inner">
+            <a href="../index.html">Home</a>
+            <a href="../About/About.html">About</a>
+            <a href="../Products/Products.html">Products</a>
+            <a href="#">Contact</a>
+        </div>
+    </div>
+
+    <!-- Menu backdrop -->
+    <div id="menuBackdrop" class="menu-backdrop" aria-hidden="true"></div>
+
+  <div id="mainContent" style="display:none;">
+    <section class="hero">
+      <div class="hero-container">
+          <h1>All Products</h1>
+          <p class="hero-sub">Turning ideas into reality with top-quality hardware and electrical supplies.</p>
+      </div>
+      <div class="hero-image"></div>
+    </section>
+
+    <div class="products-wrapper">
+   
+
+      <div class="container">
+        <div id="productsList" class="products-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./Products.js"></script>
+  <script type="module" src="../index.js"></script>
 </body>
 </html>

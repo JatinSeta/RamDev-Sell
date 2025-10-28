@@ -224,3 +224,171 @@ body { font-family: Arial, sans-serif; background: #f7f9fb; color: gray; }
     .hero-sub { font-size: 0.9rem; }
     .hero-cta .btn { padding: 8px 15px; font-size: 0.8rem; }
 }
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  background: #ffffff;
+  border-bottom: 1px solid #e6e9ee;
+  z-index: 2000; /* increased so it's above hero */
+}
+
+/* Mobile menu: animate open/close using max-height + opacity */
+.mobile-menu {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  z-index: 1900; /* higher than hero overlay */
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: max-height 320ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease;
+}
+
+.mobile-menu.active {
+  max-height: 520px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Backdrop shown under the mobile menu */
+.menu-backdrop {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.28);
+  z-index: 1850; /* below menu, above hero */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+.menu-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    z-index: 1; /* ensures it stays below navbar/menu */
+    background-image: url('./Imges/HeroSections.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 50, 0.5);
+    z-index: 0; /* below hero text */
+}
+.hero-container {
+    position: relative;
+    z-index: 2; /* above overlay */
+}
+.about-us {
+    padding: 80px 20px;
+    background-color: #f9f9f9;
+}
+
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 40px;
+}
+
+.about-text {
+    flex: 1 1 500px;
+}
+
+.about-text h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.about-text p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.about-image {
+    flex: 1 1 400px;
+    text-align: center;
+}
+
+.about-image img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+/* Base button style */
+.btn {
+    display: inline-block;
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* Primary button style */
+.btn-primary {
+    background-color: #007bff; /* Blue color */
+    color: #fff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    color: #fff;
+}
+
+/* Ghost / outline button */
+.btn-ghost {
+    background-color: transparent;
+    color: #007bff;
+    border: 2px solid #007bff;
+}
+
+.btn-ghost:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .about-container {
+        flex-direction: column-reverse;
+        text-align: center;
+    }
+
+    .about-text, .about-image {
+        flex: 1 1 100%;
+    }
+}
