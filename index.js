@@ -1,103 +1,93 @@
+// ======= Mobile Menu Toggle Script =======
+
 const menuBtn = document.getElementById('menuBtn');
 const mobileMenu = document.getElementById('mobileMenu');
 const menuBackdrop = document.getElementById('menuBackdrop');
-// menu icon image swap: closed/open sources (fallback filenames)
-let menuImg, closedSrc, openSrc;
 
-// Helper to close the mobile menu (idempotent and safe to call from any handler)
+let menuImg;
+let closedSrc;
+let openSrc;
+
+// Function to close the mobile menu safely
 function closeMenu() {
-  if (!mobileMenu) return;
-  if (!mobileMenu.classList.contains('active')) return;
+  if (!mobileMenu || !menuImg) return;
+
   mobileMenu.classList.remove('active');
   mobileMenu.setAttribute('aria-hidden', 'true');
-  if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
-  try {
-    if (menuImg) menuImg.src = closedSrc || (menuImg.getAttribute && menuImg.getAttribute('src')) || './Imges/Menu.png';
-  } catch (err) {
-    // ignore
-  }
+  menuBtn.setAttribute('aria-expanded', 'false');
+  menuImg.src = closedSrc;
+
   if (menuBackdrop) {
     menuBackdrop.classList.remove('active');
     menuBackdrop.setAttribute('aria-hidden', 'true');
   }
 }
 
+// Setup menu button and event listeners
 if (menuBtn && mobileMenu) {
-  // find img inside button (if present) and determine sources
   menuImg = menuBtn.querySelector('img');
-  closedSrc = menuImg?.dataset?.closed || menuImg?.getAttribute('src') || './Imges/Menu.png';
-  openSrc = menuImg?.dataset?.open || './Imges/Close.png';
 
-  const setMenuState = (isActive) => {
-    mobileMenu.classList.toggle('active', isActive);
-    mobileMenu.setAttribute('aria-hidden', String(!isActive));
-    menuBtn.setAttribute('aria-expanded', String(isActive));
-    if (menuImg) menuImg.src = isActive ? openSrc : closedSrc;
-    if (menuBackdrop) {
-      menuBackdrop.classList.toggle('active', isActive);
-      menuBackdrop.setAttribute('aria-hidden', String(!isActive));
+  // Use reliable attributes — avoids fallback path issues on mobile
+  closedSrc = menuImg.getAttribute('data-closed') || './Images/Menu.png';
+  openSrc = menuImg.getAttribute('data-open') || './Images/Close.png';
+
+  const toggleMenu = () => {
+    const isActive = mobileMenu.classList.contains('active');
+
+    if (isActive) {
+      closeMenu();
+    } else {
+      mobileMenu.classList.add('active');
+      mobileMenu.setAttribute('aria-hidden', 'false');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      menuImg.src = openSrc;
+
+      if (menuBackdrop) {
+        menuBackdrop.classList.add('active');
+        menuBackdrop.setAttribute('aria-hidden', 'false');
+      }
     }
   };
 
-  menuBtn.addEventListener('click', () => {
-    const willBeActive = !mobileMenu.classList.contains('active');
-    setMenuState(willBeActive);
-  });
+  menuBtn.addEventListener('click', toggleMenu);
 
-  // close mobile menu when a link is clicked
+  // Clicking a menu link closes the menu
   mobileMenu.addEventListener('click', (e) => {
-    if (e.target.tagName === 'A') {
-      setMenuState(false);
-    }
+    if (e.target.tagName === 'A') closeMenu();
   });
 
-  // clicking the backdrop closes the menu as well
+  // Clicking outside menu closes it too
   if (menuBackdrop) {
-    menuBackdrop.addEventListener('click', () => setMenuState(false));
+    menuBackdrop.addEventListener('click', closeMenu);
   }
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  // Auto-close if resized back to desktop width
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 800) closeMenu();
+  });
 }
 
+// ======= Typing Animation Script =======
 
-// Close mobile menu on Escape, F11 (fullscreen key), or when fullscreenchange occurs.
-document.addEventListener('keydown', (e) => {
-  // Escape
-  if (e.key === 'Escape') {
-    closeMenu();
-    return;
-  }
-  // F11 key to toggle browser fullscreen -- close menu when user hits F11
-  // e.key may be 'F11' or use keyCode 122 for older browsers
-  if (e.key === 'F11' || e.keyCode === 122) {
-    // don't prevent default; just ensure the menu is closed
-    closeMenu();
-    return;
-  }
-});
-
-// Fullscreen API change (standard and vendor-prefixed events)
-document.addEventListener('fullscreenchange', closeMenu);
-document.addEventListener('webkitfullscreenchange', closeMenu);
-document.addEventListener('mozfullscreenchange', closeMenu);
-document.addEventListener('MSFullscreenChange', closeMenu);
-
-// If the viewport is resized to a larger width (desktop), close the mobile menu.
-window.addEventListener('resize', () => {
-  try {
-    if (window.innerWidth > 800) closeMenu();
-  } catch (err) {
-    // ignore
-  }
-});
 const animatedText = document.getElementById('animatedText');
-const texts = ["Welcome To Our Website","Power Your Projects with RamDev Sales Corporation"];
+const texts = [
+  "Welcome To Our Website",
+  "Power Your Projects with RamDev Sales Corporation"
+];
+
 let textIndex = 0;
 let charIndex = 0;
-let typingSpeed = 100;   // faster typing
-let deletingSpeed = 50;  // faster deleting
-let delayBetweenTexts = 1500;
+const typingSpeed = 100;   // typing speed in ms
+const deletingSpeed = 50;  // deleting speed in ms
+const delayBetweenTexts = 1500; // pause before deleting
 
 function randomDelay(base) {
-  return base + Math.random() * 50;  // slight randomness for natural effect
+  return base + Math.random() * 50;
 }
 
 function type() {
