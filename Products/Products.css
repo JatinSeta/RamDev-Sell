@@ -49,24 +49,66 @@ body { font-family: Arial, sans-serif; background: #f7f9fb; color: gray; }
 .menu-btn img { width: 24px; height: 24px; display: block; }
 
 /* Mobile menu */
+/* ==== MOBILE MENU ==== */
 .mobile-menu {
   position: fixed;
-  top: 64px; left: 0; right: 0;
+  top: 72px; /* slightly below navbar for margin */
+  left: 12px;  /* small side gap */
+  right: 12px;
   background: #fff;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  z-index: 900;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  border-radius: 10px; /* rounded look */
+  z-index: 1900;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
   pointer-events: none;
-  transition: max-height 320ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease;
+  transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
+  transform: translateY(-10px);
 }
-.mobile-menu.active { max-height: 520px; opacity: 1; pointer-events: auto; }
-.mobile-menu .mobile-inner { padding-top: 8px; }
-.mobile-menu a { display: block; padding: 12px 16px; color: #333; text-decoration: none; border-bottom: 1px solid #f0f0f0; }
-.mobile-menu .mobile-search { margin: 12px 16px 16px; display: flex; gap: 8px; }
-.mobile-menu .mobile-search input { flex: 1; padding: 8px; border: 1px solid #d6dbe6; border-radius: 6px; }
-.mobile-menu .mobile-search button { padding: 8px 10px; border: none; background: #007bff; color: #fff; border-radius: 6px; }
+
+.mobile-menu.active {
+  max-height: 420px;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 14px 18px;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.mobile-menu a:last-child {
+  border-bottom: none;
+}
+
+.mobile-menu a:hover {
+  background-color: #f7f9fb;
+  color: #007bff;
+}
+
+/* ==== BACKDROP ==== */
+.menu-backdrop {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 1850;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.menu-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
 
 /* Backdrop */
 .menu-backdrop {
