@@ -25,9 +25,8 @@ function closeMenu() {
 if (menuBtn && mobileMenu) {
   // find img inside button (if present) and determine sources
   menuImg = menuBtn.querySelector('img');
-openSrc = menuImg?.dataset?.open || './Imges/close.png';
-closedSrc = menuImg?.dataset?.closed || './Imges/Menu.png';
-
+  closedSrc = menuImg?.dataset?.closed || menuImg?.getAttribute('src') || './Imges/Menu.png';
+  openSrc = menuImg?.dataset?.open || './Imges/Close.png';
 
   const setMenuState = (isActive) => {
     mobileMenu.classList.toggle('active', isActive);
