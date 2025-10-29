@@ -39,18 +39,6 @@ body {
   align-items: center;
 }
 
-.nav-left {
-  flex: 0 0 auto;
-}
-.nav-center {
-  flex: 1 1 auto;
-  justify-content: center;
-}
-.nav-right {
-  flex: 0 0 auto;
-  gap: 12px;
-}
-
 .logo img {
   width: 42px;
   height: auto;
@@ -141,39 +129,45 @@ body {
 ================================ */
 .mobile-menu {
   position: fixed;
-  top: 64px;
-  left: 0;
-  right: 0;
+  top: 70px;
+  left: 12px;
+  right: 12px;
   background: #fff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
   z-index: 1900;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
   pointer-events: none;
-  transition: max-height 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
-    opacity 0.3s ease;
+  transform: translateY(-10px);
+  transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
+}
+
+.mobile-menu.active {
+  max-height: 420px;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .mobile-menu a {
   display: block;
-  padding: 14px 24px;
+  padding: 14px 18px;
   color: #333;
   text-decoration: none;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #f0f0f0;
   font-weight: 500;
   transition: background 0.2s;
 }
 
-.mobile-menu a:hover {
-  background: #f4f7fb;
-  color: #007bff;
+.mobile-menu a:last-child {
+  border-bottom: none;
 }
 
-.mobile-menu.active {
-  max-height: 320px;
-  opacity: 1;
-  pointer-events: auto;
+.mobile-menu a:hover {
+  background-color: #f7f9fb;
+  color: #007bff;
 }
 
 /* ================================
@@ -243,9 +237,6 @@ body {
   margin-bottom: 25px;
 }
 
-/* ================================
-   HERO BUTTONS
-================================ */
 .hero-cta .btn {
   padding: 12px 24px;
   margin: 0 10px;
@@ -283,12 +274,8 @@ body {
 }
 
 @keyframes blink {
-  0%, 50%, 100% {
-    opacity: 1;
-  }
-  25%, 75% {
-    opacity: 0;
-  }
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
 }
 
 /* ================================
@@ -339,6 +326,9 @@ body {
    RESPONSIVE STYLES
 ================================ */
 @media (max-width: 1024px) {
+  .search-form {
+    width: 75%;
+  }
   .hero-Section h1 {
     font-size: 2.5rem;
   }
@@ -348,14 +338,20 @@ body {
 }
 
 @media (max-width: 800px) {
-  .search-form {
-    width: 80%;
-  }
   .nav-links {
     display: none;
   }
   .menu-btn {
     display: inline-flex;
+  }
+  .search-form {
+    width: 80%;
+  }
+  .hero-Section h1 {
+    font-size: 2rem;
+  }
+  .hero-sub {
+    font-size: 1rem;
   }
 }
 
@@ -364,17 +360,9 @@ body {
     flex-direction: column-reverse;
     text-align: center;
   }
-
   .about-text,
   .about-image {
     flex: 1 1 100%;
-  }
-
-  .hero-Section h1 {
-    font-size: 2rem;
-  }
-  .hero-sub {
-    font-size: 1rem;
   }
   .hero-cta .btn {
     padding: 10px 18px;
@@ -383,11 +371,15 @@ body {
 }
 
 @media (max-width: 480px) {
-  .search-form {
-    width: 92%;
+  .navbar {
+    padding: 0 12px;
+    height: 60px;
   }
   .logo img {
-    width: 38px;
+    width: 36px;
+  }
+  .search-form {
+    width: 92%;
   }
   .hero-Section h1 {
     font-size: 1.8rem;
@@ -398,5 +390,9 @@ body {
   .hero-cta .btn {
     padding: 8px 15px;
     font-size: 0.8rem;
+  }
+  .mobile-menu a {
+    padding: 12px 16px;
+    font-size: 15px;
   }
 }
