@@ -72,3 +72,4 @@ async function loadProducts() {
 
 // Run the function
 loadProducts();
+

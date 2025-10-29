@@ -1,69 +1,161 @@
-    /* Basic reset */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; background: #f7f9fb; }
+/* ================================
+   RESET + BASE
+================================ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-    /* Navbar */
-    .navbar {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 18px;
-    background: #ffffff;
-    border-bottom: 1px solid #e6e9ee;
-    z-index: 1000;
-    }
-    .nav-left, .nav-center, .nav-right { display: flex; align-items: center; }
-    .nav-left { flex: 0 0 auto; }
-    .nav-center { flex: 1 1 auto; justify-content: center; }
-    .nav-right { flex: 0 0 auto; gap: 12px; }
-    .logo img { width: 42px; height: auto; display: block; }
+body {
+  font-family: "Poppins", Arial, sans-serif;
+  background: #f7f9fb;
+  color: #333;
+  line-height: 1.5;
+}
 
-    /* Search form */
-    .search-form { display: flex; width: 60%; max-width: 720px; }
-    .search-form input[type="search"] {
-    flex: 1 1 auto;
-    padding: 10px 12px;
-    border: 1px solid #d6dbe6;
-    border-right: none;
-    border-radius: 6px 0 0 6px;
-    outline: none;
-    }
-    .search-form button {
-    display: inline-flex; align-items: center; justify-content: center;
-    padding: 10px 12px; border: 1px solid #d6dbe6; border-left: none;
-    border-radius: 0 6px 6px 0; background: #007bff; color: #fff; cursor: pointer;
-    }
-    .search-form button i { font-size: 14px; }
+/* ================================
+   NAVBAR
+================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  background: #ffffff;
+  border-bottom: 1px solid #e6e9ee;
+  z-index: 2000;
+}
 
-    /* Desktop nav links */
-    .nav-links { list-style: none; display: flex; gap: 18px; align-items: center; }
-    .nav-links a { color: #666666; text-decoration: none; font-weight: 500; padding: 6px 8px; }
-    .nav-links a:hover { color: #007bff; }
+.nav-left,
+.nav-center,
+.nav-right {
+  display: flex;
+  align-items: center;
+}
 
-    /* Mobile menu button */
-    .menu-btn { display: none; background: transparent; border: none; cursor: pointer; padding: 6px; width: 40px; height: 40px; align-items: center; justify-content: center; }
-    .menu-btn img { width: 24px; height: 24px; display: block; }
+.nav-left {
+  flex: 0 0 auto;
+}
 
-    /* Mobile menu */
-/* ==== MOBILE MENU ==== */
+.nav-center {
+  flex: 1 1 auto;
+  justify-content: center;
+}
+
+.nav-right {
+  flex: 0 0 auto;
+  gap: 12px;
+}
+
+.logo img {
+  width: 42px;
+  height: auto;
+  display: block;
+}
+
+/* ================================
+   SEARCH FORM
+================================ */
+.search-form {
+  display: flex;
+  width: 60%;
+  max-width: 720px;
+}
+
+.search-form input[type="search"] {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #d6dbe6;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  outline: none;
+}
+
+.search-form button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border: 1px solid #d6dbe6;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  background: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.search-form button i {
+  font-size: 14px;
+}
+
+/* ================================
+   NAV LINKS (Desktop)
+================================ */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.nav-links a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 6px 8px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #007bff;
+}
+
+/* ================================
+   MENU BUTTON (Mobile)
+================================ */
+.menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  z-index: 2100;
+}
+
+.menu-btn img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+/* ================================
+   MOBILE MENU
+================================ */
 .mobile-menu {
   position: fixed;
-  top: 72px; /* slightly below navbar for margin */
-  left: 12px;  /* small side gap */
+  top: 70px;
+  left: 12px;
   right: 12px;
   background: #fff;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-  border-radius: 10px; /* rounded look */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
   z-index: 1900;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
   pointer-events: none;
-  transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
   transform: translateY(-10px);
+  transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
 }
 
 .mobile-menu.active {
@@ -79,6 +171,8 @@
   color: #333;
   text-decoration: none;
   border-bottom: 1px solid #f0f0f0;
+  font-weight: 500;
+  transition: background 0.2s;
 }
 
 .mobile-menu a:last-child {
@@ -90,18 +184,20 @@
   color: #007bff;
 }
 
-/* ==== BACKDROP ==== */
+/* ================================
+   BACKDROP
+================================ */
 .menu-backdrop {
   position: fixed;
   top: 64px;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.28);
   z-index: 1850;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s ease;
 }
 
 .menu-backdrop.active {
@@ -109,70 +205,157 @@
   pointer-events: auto;
 }
 
-    /* Backdrop */
-    .menu-backdrop {
-    position: fixed;
-    top: 64px; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.28);
-    z-index: 880;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 220ms ease;
-    }
-    .menu-backdrop.active { opacity: 1; pointer-events: auto; }
+/* ================================
+   ABOUT SECTION
+================================ */
+.about-section {
+  padding-top: 100px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fbfdff 0%, #ffffff 100%);
+}
 
-    /* About section */
-    .about-section {
-    padding-top: 100px;
-    min-height: 100vh;
-    background: linear-gradient(180deg, #fbfdff 0%, #ffffff 100%);
-    }
-    .about-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    }
-    .about-section h1 {
-    font-size: 32px;
-    color: #0b2b4a;
-    margin-bottom: 32px;
+.about-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.about-section h1 {
+  font-size: 32px;
+  color: #0b2b4a;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.about-content {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.about-text {
+  flex: 1 1 500px;
+  color: #4b647b;
+}
+
+.about-text p {
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.about-text .welcome {
+  font-size: 18px;
+  color: #0b2b4a;
+}
+
+.about-text .closing {
+  font-weight: 500;
+  color: #0b2b4a;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.about-image {
+  flex: 1 1 200px;
+  text-align: center;
+}
+
+.about-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+/* ================================
+   RESPONSIVE DESIGN
+================================ */
+
+/* ---------- Tablets ---------- */
+@media (max-width: 1024px) {
+  .search-form {
+    width: 75%;
+  }
+
+  .about-section h1 {
+    font-size: 28px;
+  }
+}
+
+/* ---------- Mobile (<=800px) ---------- */
+@media (max-width: 800px) {
+  .nav-links {
+    display: none;
+  }
+
+  .menu-btn {
+    display: inline-flex;
+  }
+
+  .search-form {
+    width: 80%;
+  }
+
+  .about-content {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .about-text {
     text-align: center;
-    }
+  }
 
-    /* About content: side by side */
-    .about-content {
-    display: flex;
-    gap: 40px;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    }
-    .about-text { flex: 1 1 500px; color: #4b647b; }
-    .about-text p { line-height: 1.6; margin-bottom: 16px; }
-    .about-text .welcome { font-size: 18px; color: #0b2b4a; }
-    .about-text .closing {
-    font-weight: 500;
-    color: #0b2b4a;
-    padding: 20px;
-    background: #f8fafc;
-    border-radius: 12px;
-    text-align: center;
-    }
-    .about-image { flex: 1 1 200px; text-align: center; }
-    .about-image img { max-width: 100%; height: auto; border-radius: 12px; }
+  .about-image {
+    width: 100%;
+  }
+}
 
-    /* Responsive */
-    @media (max-width: 800px) {
-    .search-form { width: 80%; }
-    .nav-links { display: none; }
-    .menu-btn { display: inline-flex; }
-    .about-content { flex-direction: column; gap: 24px; }
-    .about-text { text-align: center; }
-    .about-image { width: 100%; }
-    }
-    @media (max-width: 480px) {
-    .search-form { width: 92%; }
-    .logo img { width: 40px; }
-    .about-section h1 { font-size: 24px; }
-    .about-content p { font-size: 15px; }
-    }
+/* ---------- Small Mobile (<=480px) ---------- */
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0 12px;
+    height: 60px;
+  }
+
+  .logo img {
+    width: 38px;
+  }
+
+  .search-form {
+    width: 90%;
+  }
+
+  .search-form input[type="search"] {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .search-form button {
+    padding: 8px;
+  }
+
+  .mobile-menu a {
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+
+  .about-section h1 {
+    font-size: 24px;
+  }
+
+  .about-content p {
+    font-size: 15px;
+  }
+
+  .about-text .welcome {
+    font-size: 16px;
+  }
+
+  .about-text .closing {
+    font-size: 15px;
+    padding: 16px;
+  }
+}
