@@ -5,44 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel | RamDev Sales Corporation</title>
   <link rel="stylesheet" href="../AdminePanel/AdminPanel.css" />
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-  <div class="container" >
+  <div class="container">
     <h1>Admin Panel</h1>
 
-   <form id="dataForm">
-  <label>Product Name:</label>
-  <input type="text" id="name" placeholder="Enter Product Name" required />
+    <form id="dataForm">
+      <label>Product Name:</label>
+      <input type="text" id="name" placeholder="Enter Product Name" required />
 
-  <label>Product Details (Max 500 words):</label>
-    <textarea id="details" placeholder="Enter product details" required></textarea>
-    <div id="wordCount">0 / 500 words</div>
-  <label>Image URLs:</label>
-  <input type="url" id="url1" class="image-url" placeholder="Main Image URL" required />
-  <input type="url" id="url2" class="image- url" placeholder="Second Image URL" required />
+      <label>Product Details (Max 500 characters):</label>
+      <textarea id="details" placeholder="Enter product details" required></textarea>
+      <div id="wordCount">0 / 500 characters</div>
 
-  <div id="extraUrls"></div>
-  <button type="button" id="addUrlBtn">➕ Add More Images</button>
+      <label>Image URLs:</label>
+      <input type="url" id="url1" class="image-url" placeholder="Main Image URL" required />
+      <input type="url" id="url2" class="image-url" placeholder="Second Image URL" required />
+      <div id="extraUrls"></div>
+      <button type="button" id="addUrlBtn">➕ Add More Images</button>
 
-  <div id="previewContainer" style="display:none;">
-    <div class="preview-section">
-      <button type="button" id="prevBtn" class="nav-btn">⮜</button>
-      <img id="mainPreview" alt="Main Preview" />
-      <button type="button" id="nextBtn" class="nav-btn">⮞</button>
-    </div>
-    <div id="thumbnails" class="thumbnails"></div>
-  </div>
+      <div id="previewContainer" style="display:none;">
+        <div class="preview-section">
+          <button type="button" id="prevBtn" class="nav-btn">⮜</button>
+          <img id="mainPreview" alt="Main Preview" />
+          <button type="button" id="nextBtn" class="nav-btn">⮞</button>
+        </div>
+        <div id="thumbnails" class="thumbnails"></div>
+      </div>
 
-  <button type="submit" class="submit-btn">Save Product</button>
-</form>
+      <label>Category:</label>
+      <select id="category" required>
+        <option value="">Select Category</option>
+        <option value="Hardware">Hardware</option>
+        <option value="Electrical">Electrical</option>
+      </select>
 
+      <button type="submit" class="submit-btn">Save Product</button>
+    </form>
 
     <hr />
 
   </div>
+
+  <section class="best-sellers-section">
+  <h2>Best Sellers</h2>
+  <div id="bestSellersList" class="products-grid"></div>
+  <button>Best Sellers</button>
+</section>
 
   <section class="products-section">
     <h2>All Products</h2>

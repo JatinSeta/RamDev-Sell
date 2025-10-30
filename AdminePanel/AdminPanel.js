@@ -1,5 +1,5 @@
 import { app, db } from "../firebase-config.js";
-import { collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 const form = document.getElementById("dataForm");
 const addUrlBtn = document.getElementById("addUrlBtn");
@@ -12,195 +12,332 @@ const previewContainer = document.getElementById('previewContainer');
 const productsList = document.getElementById('productsList');
 const detailsTextarea = document.getElementById('details');
 const wordCountDisplay = document.getElementById('wordCount');
+const categorySelect = document.getElementById('category');
+const bestSellersBtn = document.querySelector('.best-sellers-section button');
+const bestSellersList = document.getElementById('bestSellersList');
 
 let currentLoadedImages = [];
 let previewIndex = 0;
 let urlCount = 2;
-const MAX_CHARS = 500; // Maximum characters allowed
+const MAX_CHARS = 500;
+let editMode = false;
+let editingProductId = null;
+let bestSellerMode = false;
 
-// ----------------- IMAGE PREVIEW FUNCTIONS -----------------
+// ---------- IMAGE PREVIEW ----------
 function testImageLoad(url, timeout = 5000) {
-  return new Promise(resolve => {
-    const img = new Image();
-    let done = false;
-    const clean = ok => { if(done) return; done=true; resolve({ok,url}); };
-    img.onload = () => clean(true);
-    img.onerror = () => clean(false);
-    img.src = url;
-    setTimeout(() => clean(false), timeout);
-  });
-}
-
-function showToast(text,type='success',duration=3000){
-  const existing = document.querySelector('.toast');
-  if(existing) existing.remove();
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  toast.innerHTML = `<button class="close-btn" aria-label="close">&times;</button><div class="toast-text">${text}</div>`;
-  document.body.appendChild(toast);
-  toast.querySelector('.close-btn').addEventListener('click',()=>{toast.remove();});
-  requestAnimationFrame(()=>toast.classList.add('show'));
-  setTimeout(()=>toast.remove(),duration);
+    return new Promise(resolve => {
+        const img = new Image();
+        let done = false;
+        const clean = ok => { if(done) return; done=true; resolve({ok,url}); };
+        img.onload = () => clean(true);
+        img.onerror = () => clean(false);
+        img.src = url;
+        setTimeout(() => clean(false), timeout);
+    });
 }
 
 function getCurrentImages() {
-  if(currentLoadedImages.length>0) return currentLoadedImages.slice();
-  const inputs = document.querySelectorAll('.image-url');
-  return Array.from(inputs).map(i=>i.value.trim()).filter(v=>v!=='');
+    const inputs = document.querySelectorAll('.image-url');
+    return Array.from(inputs).map(i => i.value.trim()).filter(v => v !== '');
 }
 
 function showPreviewAt(index) {
-  const imgs = getCurrentImages();
-  if(!imgs.length){mainPreview.src='';thumbnailsContainer.innerHTML='';previewContainer.style.display='none';return;}
-  previewContainer.style.display='block';
-  mainPreview.src = imgs[index];
-  Array.from(thumbnailsContainer.children).forEach((thumb,i)=>{
-    thumb.style.outline = (i===index)?'2px solid #007bff':'none';
-  });
+    if(!currentLoadedImages.length) return;
+    mainPreview.src = currentLoadedImages[index];
+    Array.from(thumbnailsContainer.children).forEach((thumb,i)=>{
+        thumb.style.outline = (i===index)?'2px solid #007bff':'none';
+    });
 }
 
 function updatePreviews(){
-  const inputs = Array.from(document.querySelectorAll('.image-url')).map(i=>i.value.trim()).filter(v=>v!=='');
+    const urls = getCurrentImages();
+    if(!urls.length){ previewContainer.style.display='none'; return; }
 
-  thumbnailsContainer.innerHTML='';
-  if(!inputs.length){currentLoadedImages=[];previewIndex=0;mainPreview.src='';previewContainer.style.display='none'; return;}
-  const checks = inputs.map(u=>testImageLoad(u));
-  Promise.all(checks).then(results=>{
-    currentLoadedImages = results.filter(r=>r.ok).map(r=>r.url);
-    if(!currentLoadedImages.length){previewIndex=0;mainPreview.src='';previewContainer.style.display='none'; return;}
-    previewContainer.style.display='block';
-    currentLoadedImages.forEach((u,i)=>{
-      const t = document.createElement('img');
-      t.src=u;t.style.width='48px';t.style.height='48px';t.style.objectFit='cover';t.style.cursor='pointer';
-      t.addEventListener('click',()=>{previewIndex=i;showPreviewAt(i);});
-      thumbnailsContainer.appendChild(t);
+    Promise.all(urls.map(u=>testImageLoad(u))).then(results=>{
+        currentLoadedImages = results.filter(r=>r.ok).map(r=>r.url);
+        if(!currentLoadedImages.length){ previewContainer.style.display='none'; return; }
+
+        previewContainer.style.display='block';
+        thumbnailsContainer.innerHTML='';
+        currentLoadedImages.forEach((url,i)=>{
+            const t = document.createElement('img');
+            t.src = url; t.style.width='48px'; t.style.height='48px'; t.style.objectFit='cover'; t.style.cursor='pointer';
+            t.addEventListener('click',()=>{ previewIndex=i; showPreviewAt(i); });
+            thumbnailsContainer.appendChild(t);
+        });
+
+        previewIndex = Math.min(previewIndex, currentLoadedImages.length-1);
+        showPreviewAt(previewIndex);
     });
-    previewIndex = Math.min(previewIndex,currentLoadedImages.length-1);
-    showPreviewAt(previewIndex);
-  });
 }
 
-document.getElementById('url1').addEventListener('input',updatePreviews);
-document.getElementById('url2').addEventListener('input',updatePreviews);
-
-addUrlBtn.addEventListener('click',()=>{
-  urlCount+=1;
-  const wrapper = document.createElement("div");
-  wrapper.style.display = "flex"; wrapper.style.alignItems = "center"; wrapper.style.marginTop="8px";
-  const input = document.createElement("input");
-  input.type="url"; input.id=`url${urlCount}`; input.placeholder=`Image URL ${urlCount}`; input.className="image-url"; input.style.flexGrow="1";
-  const removeBtn = document.createElement("button");
-  removeBtn.type="button"; removeBtn.className="remove-btn";
-  const removeIcon = document.createElement("img");
-  removeIcon.src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png"; removeIcon.alt="Remove";
-  removeBtn.appendChild(removeIcon);
-  removeBtn.addEventListener("click",()=>{wrapper.remove(); updatePreviews();});
-  wrapper.appendChild(input); wrapper.appendChild(removeBtn);
-  extraUrlsContainer.appendChild(wrapper);
-  input.addEventListener('input',updatePreviews);
-  updatePreviews();
-});
-
-prevBtn.addEventListener('click',()=>{const imgs=getCurrentImages();if(!imgs.length) return; previewIndex=(previewIndex-1+imgs.length)%imgs.length; showPreviewAt(previewIndex);});
-nextBtn.addEventListener('click',()=>{const imgs=getCurrentImages();if(!imgs.length) return; previewIndex=(previewIndex+1)%imgs.length; showPreviewAt(previewIndex);});
-
-// ----------------- CHARACTER COUNT FUNCTION -----------------
+// ---------- CHARACTER COUNT ----------
 function updateCharCount() {
-  let text = detailsTextarea.value;
-  if(text.length > MAX_CHARS) {
-    detailsTextarea.value = text.substring(0, MAX_CHARS);
-    text = detailsTextarea.value;
-  }
-  wordCountDisplay.textContent = `${text.length} / ${MAX_CHARS} characters`;
+    let text = detailsTextarea.value;
+    if(text.length > MAX_CHARS) text = text.substring(0, MAX_CHARS);
+    detailsTextarea.value = text;
+    wordCountDisplay.textContent = `${text.length} / ${MAX_CHARS} characters`;
 }
-
 detailsTextarea.addEventListener('input', updateCharCount);
 
-// ----------------- FORM SUBMISSION -----------------
+// ---------- LIVE IMAGE PREVIEW ----------
+function attachLivePreview(input){
+    input.addEventListener('input', updatePreviews);
+}
+document.querySelectorAll('.image-url').forEach(attachLivePreview);
+
+// ---------- DYNAMIC IMAGE INPUT ----------
+addUrlBtn.addEventListener('click',()=>{
+    urlCount+=1;
+    const wrapper = document.createElement("div");
+    wrapper.style.display="flex"; wrapper.style.alignItems="center"; wrapper.style.marginTop="8px";
+
+    const input = document.createElement("input");
+    input.type="url"; input.placeholder=`Image URL ${urlCount}`; input.className="image-url"; input.style.flexGrow="1";
+    attachLivePreview(input);
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type="button"; removeBtn.className="remove-btn";
+    removeBtn.textContent = "Remove";
+    removeBtn.addEventListener("click",()=>{wrapper.remove(); updatePreviews();});
+
+    wrapper.appendChild(input); wrapper.appendChild(removeBtn);
+    extraUrlsContainer.appendChild(wrapper);
+});
+
+// ---------- PREVIEW NAVIGATION ----------
+prevBtn.addEventListener('click',()=>{ 
+    if(!currentLoadedImages.length) return; 
+    previewIndex=(previewIndex-1+currentLoadedImages.length)%currentLoadedImages.length; 
+    showPreviewAt(previewIndex); 
+});
+nextBtn.addEventListener('click',()=>{ 
+    if(!currentLoadedImages.length) return; 
+    previewIndex=(previewIndex+1)%currentLoadedImages.length; 
+    showPreviewAt(previewIndex); 
+});
+
+// ---------- TOAST ----------
+function showToast(text,type='success',duration=3000){
+    const existing = document.querySelector('.toast');
+    if(existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<button class="close-btn" aria-label="close">&times;</button><div class="toast-text">${text}</div>`;
+    document.body.appendChild(toast);
+    toast.querySelector('.close-btn').addEventListener('click',()=>{toast.remove();});
+    requestAnimationFrame(()=>toast.classList.add('show'));
+    setTimeout(()=>toast.remove(),duration);
+}
+
+// ---------- FORM SUBMISSION ----------
 form.addEventListener("submit", async e => {
-  e.preventDefault();
-  const name = document.getElementById("name").value.trim();
-  const details = detailsTextarea.value.trim(); 
-  const imagesAll = getCurrentImages();
+    e.preventDefault();
+    const name = document.getElementById("name").value.trim();
+    const details = detailsTextarea.value.trim();
+    const category = categorySelect.value.trim();
+    const imagesAll = getCurrentImages();
 
-  if (imagesAll.length < 2) {
-    showToast("Please provide at least 2 image URLs", 'error');
-    return;
-  }
+    if(!category){ showToast("Please select a category",'error'); return; }
+    if(imagesAll.length < 2){ showToast("Please provide at least 2 image URLs",'error'); return; }
 
-  const mainImage = imagesAll[0];
-  const otherImages = imagesAll.slice(1);
+    const mainImage = imagesAll[0];
+    const otherImages = imagesAll.slice(1);
 
-  try {
-    await addDoc(collection(db, "Products"), {
-      name,
-      details,
-      images: otherImages,
-      mainUrl: mainImage,
-      createdAt: serverTimestamp()
-    });
-    showToast("Data added successfully!");
-    
+    try{
+        if(editMode && editingProductId){
+            await updateDoc(doc(db,"Products",editingProductId), {
+                name, details, category, mainUrl:mainImage, images:otherImages, updatedAt: serverTimestamp()
+            });
+            showToast("Product updated successfully!");
+        } else {
+            await addDoc(collection(db,"Products"), {
+                name, details, category, mainUrl:mainImage, images:otherImages, createdAt: serverTimestamp(), bestSeller:false
+            });
+            showToast("Product added successfully!");
+        }
+        resetForm();
+        loadProducts();
+    } catch(err){ console.error(err); showToast("Error saving data!",'error'); }
+});
+
+function resetForm(){
     extraUrlsContainer.innerHTML = '';
     urlCount = 2;
     form.reset();
     thumbnailsContainer.innerHTML = '';
     mainPreview.src = '';
     previewIndex = 0;
-    previewContainer.style.display = 'none';
+    previewContainer.style.display='none';
     updateCharCount();
-    
-    loadProducts();
-  } catch (err) {
-    console.error(err);
-    showToast("Error adding data!", 'error');
-  }
-});
-
-// ----------------- LOAD PRODUCTS -----------------
-async function loadProducts(){
-  productsList.innerHTML='Loading...';
-  try{
-    const q = query(collection(db,'Products'),orderBy('createdAt','desc'),limit(50));
-    const snap = await getDocs(q);
-    if(snap.empty){productsList.innerHTML='<div>No products yet.</div>'; return;}
-    productsList.innerHTML='';
-
-    snap.forEach(docSnap=>{
-      const data = docSnap.data();
-      const card = document.createElement('div'); card.className='product-card';
-
-      const img = document.createElement('img'); 
-      img.src=data.mainUrl||''; 
-      img.alt=data.name||'product';
-
-      const title = document.createElement('div'); 
-      title.className='card-title'; 
-      title.textContent=data.name||'(no name)';
-
-      const delBtn = document.createElement('button');
-      delBtn.className = 'delete-btn';
-      delBtn.textContent = 'Delete';
-      delBtn.addEventListener('click', async e=>{
-        e.stopPropagation(); 
-        if(confirm('Are you sure you want to delete this product?')){
-          await deleteDoc(doc(db,'Products',docSnap.id));
-          showToast('Product deleted!');
-          loadProducts();
-        }
-      });
-
-      card.appendChild(img);
-      card.appendChild(title);
-      card.appendChild(delBtn);
-
-      card.addEventListener('click',()=>{window.location.href=`productDetails.html?id=${docSnap.id}`;});
-
-      productsList.appendChild(card);
-    });
-  }catch(err){console.error(err); productsList.innerHTML='<div>Error loading products</div>';}
+    editMode=false;
+    editingProductId=null;
 }
 
-updatePreviews();
-updateCharCount();
+// ---------- BEST SELLER MODE ----------
+bestSellersBtn.addEventListener('click', () => {
+    bestSellerMode = !bestSellerMode;
+    bestSellersBtn.textContent = bestSellerMode ? "Click a Product to Toggle Best Seller" : "Best Sellers";
+
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.style.cursor = bestSellerMode ? 'pointer' : 'default';
+        card.style.border = bestSellerMode ? '2px dashed #ffa500' : '1px solid #ccc';
+    });
+});
+
+async function toggleBestSeller(productId, currentStatus) {
+    try {
+        await updateDoc(doc(db, "Products", productId), { bestSeller: !currentStatus });
+        showToast(`Product ${!currentStatus ? "added to" : "removed from"} Best Sellers!`);
+        loadProducts();
+    } catch (err) {
+        console.error(err);
+        showToast("Error updating Best Seller!", 'error');
+    }
+}
+
+// ---------- LOAD PRODUCTS ----------
+async function loadProducts(){
+    productsList.innerHTML=''; // clear first
+    const q = query(collection(db,"Products"), orderBy("createdAt","desc"));
+    const snapshot = await getDocs(q);
+    snapshot.forEach(docSnap=>{
+        const data = docSnap.data();
+        const div = document.createElement('div'); 
+        div.className='product-card';
+        div.innerHTML = `
+            <img src="${data.mainUrl}" alt="${data.name}" />
+            <h3>${data.name}</h3>
+            <div class="product-actions">
+                <button class="edit-btn"> Edit</button>
+                <button class="delete-btn">Delete</button>
+            </div>
+        `;
+
+        div.style.boxShadow = data.bestSeller ? "0 0 10px 3px gold" : "none";
+
+        // Edit
+        div.querySelector('.edit-btn').addEventListener('click', async () => {
+            editMode = true;
+            editingProductId = docSnap.id;
+
+            document.getElementById('name').value = data.name;
+            detailsTextarea.value = data.details; 
+            updateCharCount();
+            categorySelect.value = data.category;
+
+            // Main images
+            document.getElementById('url1').value = data.mainUrl;
+            document.getElementById('url2').value = (data.images[0] || '');
+            extraUrlsContainer.innerHTML = '';
+            data.images.slice(1).forEach((url)=>{
+                urlCount += 1;
+                const wrapper = document.createElement("div");
+                wrapper.style.display = "flex"; 
+                wrapper.style.alignItems = "center"; 
+                wrapper.style.marginTop = "8px";
+
+                const input = document.createElement("input");
+                input.type = "url"; 
+                input.className = "image-url"; 
+                input.value = url; 
+                input.style.flexGrow = "1";
+                attachLivePreview(input);
+
+                const removeBtn = document.createElement("button");
+                removeBtn.type = "button"; 
+                removeBtn.className = "remove-btn";
+                removeBtn.textContent = "Remove";
+                removeBtn.addEventListener("click",()=>{ wrapper.remove(); updatePreviews(); });
+
+                wrapper.appendChild(input); 
+                wrapper.appendChild(removeBtn);
+                extraUrlsContainer.appendChild(wrapper);
+            });
+            updatePreviews();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Delete
+        div.querySelector('.delete-btn').addEventListener('click', async () => {
+            if(confirm("Are you sure you want to delete this product?")){
+                await deleteDoc(doc(db,"Products",docSnap.id));
+                showToast("Product deleted successfully!");
+                loadProducts();
+            }
+        });
+
+        // Best Seller Click
+        div.addEventListener('click', () => {
+            if(bestSellerMode){
+                toggleBestSeller(docSnap.id, data.bestSeller || false);
+            }
+        });
+
+        productsList.appendChild(div);
+    });
+    loadBestSellers();
+}
+
+// ---------- LOAD BEST SELLERS ----------
+async function loadBestSellers() {
+    bestSellersList.innerHTML = ''; // clear the list
+
+    const q = query(collection(db,"Products"), orderBy("createdAt","desc"));
+    const snapshot = await getDocs(q);
+
+    snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        if(data.bestSeller){
+            const div = document.createElement('div');
+            div.className = 'product-card';
+
+            // Image
+            const img = document.createElement('img');
+            img.src = data.mainUrl;
+            img.alt = data.name;
+            div.appendChild(img);
+
+            // Title
+            const title = document.createElement('div');
+            title.className = 'card-title';
+            title.textContent = data.name;
+            div.appendChild(title);
+
+            // Delete Button (remove from Best Sellers)
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.textContent = 'Remove';
+            deleteBtn.addEventListener('click', async (e) => {
+                e.stopPropagation(); // prevent card click if you have one
+                try {
+                    await updateDoc(doc(db, "Products", docSnap.id), { bestSeller: false });
+                    showToast(`${data.name} removed from Best Sellers!`);
+                    loadProducts(); // refresh All Products
+                } catch (err) {
+                    console.error(err);
+                    showToast("Error removing Best Seller!", 'error');
+                }
+            });
+            div.appendChild(deleteBtn);
+
+            // Optional: Edit Button
+            const editBtn = document.createElement('button');
+            editBtn.className = 'edit-btn';
+            editBtn.textContent = 'Edit';
+            editBtn.addEventListener('click', () => {
+                openEditForm(docSnap.id); // your existing edit logic
+            });
+            div.appendChild(editBtn);
+
+            bestSellersList.appendChild(div);
+        }
+    });
+}
+
+
+// ---------- INITIAL LOAD ----------
 loadProducts();
+updateCharCount();
+updatePreviews();

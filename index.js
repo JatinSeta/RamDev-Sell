@@ -1,21 +1,25 @@
+// ==================== Mobile Menu Logic ====================
 const menuBtn = document.getElementById('menuBtn');
 const mobileMenu = document.getElementById('mobileMenu');
 const menuBackdrop = document.getElementById('menuBackdrop');
-// menu icon image swap: closed/open sources (fallback filenames)
+
+// menu icon image swap: closed/open sources
 let menuImg, closedSrc, openSrc;
 
-// Helper to close the mobile menu (idempotent and safe to call from any handler)
 function closeMenu() {
-  if (!mobileMenu) return;
-  if (!mobileMenu.classList.contains('active')) return;
+  if (!mobileMenu || !mobileMenu.classList.contains('active')) return;
+
   mobileMenu.classList.remove('active');
   mobileMenu.setAttribute('aria-hidden', 'true');
+
   if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+
   try {
-    if (menuImg) menuImg.src = closedSrc || (menuImg.getAttribute && menuImg.getAttribute('src')) || './Imges/Menu.png';
+    if (menuImg) menuImg.src = closedSrc || (menuImg.getAttribute && menuImg.getAttribute('src')) || './Images/Menu.png';
   } catch (err) {
     // ignore
   }
+
   if (menuBackdrop) {
     menuBackdrop.classList.remove('active');
     menuBackdrop.setAttribute('aria-hidden', 'true');
@@ -23,10 +27,9 @@ function closeMenu() {
 }
 
 if (menuBtn && mobileMenu) {
-  // find img inside button (if present) and determine sources
   menuImg = menuBtn.querySelector('img');
-  closedSrc = menuImg?.dataset?.closed || menuImg?.getAttribute('src') || './Imges/Menu.png';
-  openSrc = menuImg?.dataset?.open || './Imges/close.png';
+  closedSrc = menuImg?.dataset?.closed || menuImg?.getAttribute('src') || './Images/Menu.png';
+  openSrc = menuImg?.dataset?.open || './Images/close.png';
 
   const setMenuState = (isActive) => {
     mobileMenu.classList.toggle('active', isActive);
@@ -44,60 +47,47 @@ if (menuBtn && mobileMenu) {
     setMenuState(willBeActive);
   });
 
-  // close mobile menu when a link is clicked
   mobileMenu.addEventListener('click', (e) => {
-    if (e.target.tagName === 'A') {
-      setMenuState(false);
-    }
+    if (e.target.tagName === 'A') setMenuState(false);
   });
 
-  // clicking the backdrop closes the menu as well
   if (menuBackdrop) {
     menuBackdrop.addEventListener('click', () => setMenuState(false));
   }
 }
 
-
-// Close mobile menu on Escape, F11 (fullscreen key), or when fullscreenchange occurs.
 document.addEventListener('keydown', (e) => {
-  // Escape
-  if (e.key === 'Escape') {
+  if (e.key === 'Escape' || e.key === 'F11' || e.keyCode === 122) {
     closeMenu();
-    return;
-  }
-  // F11 key to toggle browser fullscreen -- close menu when user hits F11
-  // e.key may be 'F11' or use keyCode 122 for older browsers
-  if (e.key === 'F11' || e.keyCode === 122) {
-    // don't prevent default; just ensure the menu is closed
-    closeMenu();
-    return;
   }
 });
 
-// Fullscreen API change (standard and vendor-prefixed events)
 document.addEventListener('fullscreenchange', closeMenu);
 document.addEventListener('webkitfullscreenchange', closeMenu);
 document.addEventListener('mozfullscreenchange', closeMenu);
 document.addEventListener('MSFullscreenChange', closeMenu);
 
-// If the viewport is resized to a larger width (desktop), close the mobile menu.
 window.addEventListener('resize', () => {
   try {
     if (window.innerWidth > 800) closeMenu();
-  } catch (err) {
-    // ignore
-  }
+  } catch (err) {}
 });
+
+// ==================== Animated Typing Text ====================
 const animatedText = document.getElementById('animatedText');
-const texts = ["Welcome To Our Websites","Power Your Projects with RamDev Sales Corporation"];
+const texts = [
+  "Welcome To Our Websites",
+  "Power Your Projects with RamDev Sales Corporation"
+];
+
 let textIndex = 0;
 let charIndex = 0;
-let typingSpeed = 100;   // faster typing
-let deletingSpeed = 50;  // faster deleting
+let typingSpeed = 100;
+let deletingSpeed = 50;
 let delayBetweenTexts = 1500;
 
 function randomDelay(base) {
-  return base + Math.random() * 50;  // slight randomness for natural effect
+  return base + Math.random() * 50;
 }
 
 function type() {
@@ -124,3 +114,79 @@ function deleteText() {
 }
 
 type();
+
+// Function to load bestsellers from Firestore
+import { db } from "../firebase-config.js";
+import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+// Get references to the DOM elements
+const bestsellerList = document.getElementById('bestsellerList');
+const bestsellerLoader = document.getElementById('bestsellerLoader');
+
+// Function to load bestsellers from Firestore
+async function loadBestsellers() {
+  try {
+    // Query to fetch products that are marked as best sellers
+    const q = query(collection(db, 'Products'), where('bestSeller', '==', true));
+    const snap = await getDocs(q);
+
+    // Clear loader and start adding content
+    bestsellerList.innerHTML = ''; // Clear loader
+
+    if (snap.empty) {
+      bestsellerList.innerHTML = '<div>No best seller products yet.</div>';
+      return;
+    }
+
+    // Create the main cards with 8 images (2 cards with 4 images each)
+    const mainCards = createMainCards(snap);
+    mainCards.forEach(card => bestsellerList.appendChild(card));
+
+  } catch (err) {
+    console.error(err);
+    bestsellerList.innerHTML = '<div>Error loading best sellers.</div>';
+  } finally {
+    if (bestsellerLoader) bestsellerLoader.style.display = 'none';
+  }
+}
+
+// Create two main cards with 4 images each
+function createMainCards(snap) {
+  const cards = [];
+  let count = 0;
+
+  // Create 2 cards (each card will have 4 images)
+  for (let cardIndex = 0; cardIndex < 2; cardIndex++) {
+    const mainCard = document.createElement('div');
+    mainCard.className = 'bestseller-card';
+
+    // Create the card-images container
+    const cardImages = document.createElement('div');
+    cardImages.className = 'card-images';
+
+    // Loop through 4 products for this main card
+    for (let i = 0; i < 4 && count < snap.size; i++) {
+      const data = snap.docs[count].data();
+      const img = document.createElement('img');
+      img.src = data.mainUrl || 'https://via.placeholder.com/150';  // Fallback image
+      img.alt = data.name || 'Product ' + (count + 1);
+      cardImages.appendChild(img);
+      count++;
+    }
+
+    mainCard.appendChild(cardImages);
+
+    // Explore All link (optional)
+    const exploreLink = document.createElement('a');
+    exploreLink.href = './Products/Products.html';
+    exploreLink.className = 'explore-all-link';
+    exploreLink.textContent = 'Explore All';
+    mainCard.appendChild(exploreLink);
+
+    cards.push(mainCard);
+  }
+
+  return cards;
+}
+
+loadBestsellers();

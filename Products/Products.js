@@ -46,7 +46,7 @@ async function loadProducts() {
         viewBtn.textContent = 'View';
         viewBtn.addEventListener('click', e => {
           e.stopPropagation();
-          window.location.href = `../AdminePanel/productDetails.html?id=${docSnap.id}`;
+          window.location.href = `./productDetails.html?id=${docSnap.id}`;
         });
 
         buttonsContainer.appendChild(contactBtn);

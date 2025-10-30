@@ -1,6 +1,3 @@
-/* ======================= */
-/* GENERAL BODY & CONTAINER */
-/* ======================= */
 body {
   font-family: Arial, sans-serif;
   background-color: #f5f6fa;
@@ -10,12 +7,11 @@ body {
 }
 
 .container {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 15px;
   background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border-radius: 8px;
 }
 
 /* ======================= */
@@ -23,27 +19,30 @@ body {
 /* ======================= */
 form label {
   display: block;
-  margin-top: 15px;
+  margin-top: 12px;
   font-weight: bold;
 }
 
 form input[type="text"],
 form input[type="url"],
-form textarea {
+form textarea,
+form select {
   width: 100%;
-  padding: 10px 12px;
-  margin-top: 6px;
+  padding: 8px 10px;
+  margin-top: 4px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 13px;
   box-sizing: border-box;
   transition: border 0.2s;
 }
 
 form input:focus,
-form textarea:focus {
+form textarea:focus,
+form select:focus {
   border-color: #007bff;
   outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
 }
 
 #wordCount {
@@ -59,9 +58,9 @@ button {
   cursor: pointer;
   border: none;
   border-radius: 6px;
-  padding: 10px 16px;
-  margin-top: 12px;
-  font-size: 14px;
+  padding: 8px 12px;
+  margin-top: 8px;
+  font-size: 13px;
   transition: background-color 0.2s;
 }
 
@@ -84,45 +83,63 @@ button {
   background-color: #0056b3;
 }
 
-.remove-btn {
-  background-color: transparent;
-  margin-left: 8px;
+.delete-btn {
+  background-color: #ff4d4f;
+  color: white;
+  margin: 8px auto;
+  width: 80%;
+  padding: 5px 0;
+  border-radius: 6px;
+  font-size: 13px;
 }
 
-.remove-btn img {
-  width: 20px;
-  height: 20px;
+.delete-btn:hover {
+  background-color: #e84342;
+}
+
+.edit-btn {
+  background-color: #28a745;
+  color: white;
+  margin: 8px auto;
+  width: 80%;
+  padding: 5px 0;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.edit-btn:hover {
+  background-color: #218838;
 }
 
 /* ======================= */
 /* IMAGE PREVIEW SECTION */
 /* ======================= */
 #previewContainer {
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .preview-section {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 8px;
   flex-wrap: wrap;
 }
 
 #mainPreview {
-  width: 300px;
-  height: 200px;
+  width: 250px;
+  height: 150px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid #ccc;
 }
 
 .nav-btn {
   background-color: #007bff;
   color: white;
-  padding: 8px 12px;
-  font-size: 18px;
+  padding: 6px 10px;
+  font-size: 16px;
 }
 
 .nav-btn:hover {
@@ -131,7 +148,7 @@ button {
 
 #thumbnails {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
@@ -146,7 +163,7 @@ button {
   color: white;
   padding: 12px 20px;
   border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   opacity: 0;
   transform: translateY(-20px);
   transition: all 0.3s ease;
@@ -176,200 +193,193 @@ button {
 /* ======================= */
 /* PRODUCTS GRID & CARDS */
 /* ======================= */
-/* ======================= */
-/* PRODUCTS GRID & CARDS */
-/* ======================= */
 .products-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-  padding: 20px 0;
+  gap: 16px;
+  /* moderate spacing */
+  padding: 15px 0;
+  justify-content: center;
 }
 
 .product-card {
-  flex: 1 1 22%; /* Grow/shrink, base width ~22% for spacing */
-  max-width: 25%; /* Ensures max 4 cards per row */
+  flex: 1 1 20%;
+  max-width: 22%;
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eee;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .product-card img {
   width: 100%;
-  height: 180px;
+  height: 140px;
   object-fit: cover;
-  border-bottom: 1px solid #eee;
 }
 
 .card-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
-  padding: 12px;
+  padding: 8px 6px;
   text-align: center;
   color: #333;
 }
 
-.delete-btn {
-  background-color: #ff4d4f;
-  color: white;
-  margin: 10px auto 12px auto;
-  width: 80%;
-  padding: 6px 0;
-  border-radius: 6px;
-  font-size: 14px;
-  border: none;
-  cursor: pointer;
-}
-
-.delete-btn:hover {
-  background-color: #e84342;
-}
-.products-section{
+/* Center sections */
+.products-section,
+.best-sellers-section {
   text-align: center;
 }
+
 /* ======================= */
-/* RESPONSIVE CARD STYLING */
+/* RESPONSIVE STYLING ALL DEVICES */
 /* ======================= */
+/* Large desktops */
+@media (max-width: 1400px) {
+  .product-card {
+    flex: 1 1 22%;
+    max-width: 22%;
+  }
+}
+
+/* Medium desktops / laptops */
 @media (max-width: 1200px) {
   .product-card {
-    flex: 1 1 30%; /* 3 cards per row */
-    max-width: 32%;
+    flex: 1 1 28%;
+    max-width: 28%;
   }
-}
 
-@media (max-width: 900px) {
-  .product-card {
-    flex: 1 1 45%; /* 2 cards per row */
-    max-width: 48%;
-  }
   .product-card img {
-    height: 150px;
+    height: 130px;
   }
 }
 
-@media (max-width: 600px) {
-  .product-card {
-    flex: 1 1 100%; /* 1 card per row */
-    max-width: 100%;
-  }
-  .product-card img {
-    height: 200px;
-  }
-  .card-title {
-    font-size: 14px;
-    padding: 8px;
-  }
-  .delete-btn {
-    width: 90%;
-    font-size: 13px;
-    padding: 6px 0;
-  }
-}
-/* ======================= */
-/* PRODUCTS GRID & CARDS */
-/* ======================= */
-.products-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  padding: 20px 0;
-  justify-content: center; /* Centers cards horizontally */
-}
-
-.product-card {
-  flex: 1 1 22%; /* Base width for spacing */
-  max-width: 25%; /* Max 4 cards per row */
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: transform 0.2s, box-shadow 0.2s;
-  cursor: pointer;
-}
-
-.product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-}
-
-.product-card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-bottom: 1px solid #eee;
-}
-
-.card-title {
-  font-size: 16px;
-  font-weight: 600;
-  padding: 12px;
-  text-align: center;
-  color: #333;
-}
-
-.delete-btn {
-  background-color: #ff4d4f;
-  color: white;
-  margin: 10px auto 12px auto;
-  width: 80%;
-  padding: 6px 0;
-  border-radius: 6px;
-  font-size: 14px;
-  border: none;
-  cursor: pointer;
-}
-
-.delete-btn:hover {
-  background-color: #e84342;
-}
-
-/* ======================= */
-/* RESPONSIVE CARD STYLING */
-/* ======================= */
-@media (max-width: 1200px) {
-  .product-card {
-    flex: 1 1 30%;
-    max-width: 32%;
-  }
-}
-
-@media (max-width: 900px) {
+/* Tablets / small laptops */
+@media (max-width: 992px) {
   .product-card {
     flex: 1 1 45%;
-    max-width: 48%;
+    max-width: 45%;
   }
+
   .product-card img {
-    height: 150px;
+    height: 120px;
+  }
+
+  .card-title {
+    font-size: 13px;
+    padding: 6px 4px;
   }
 }
 
-@media (max-width: 600px) {
+/* Small tablets / large phones */
+@media (max-width: 768px) {
+  .product-card {
+    flex: 1 1 48%;
+    max-width: 48%;
+  }
+
+  .product-card img {
+    height: 110px;
+  }
+
+  .card-title {
+    font-size: 12px;
+    padding: 5px 4px;
+  }
+}
+
+/* Phones */
+@media (max-width: 576px) {
   .product-card {
     flex: 1 1 100%;
     max-width: 100%;
   }
+
   .product-card img {
-    height: 200px;
+    height: 120px;
   }
+
   .card-title {
-    font-size: 14px;
-    padding: 8px;
+    font-size: 12px;
+    padding: 4px 3px;
   }
-  .delete-btn {
+
+  .delete-btn,
+  .edit-btn {
     width: 90%;
-    font-size: 13px;
-    padding: 6px 0;
+    font-size: 12px;
+    padding: 4px 0;
   }
 }
+
+/* Extra small phones */
+@media (max-width: 400px) {
+  .product-card img {
+    height: 100px;
+  }
+
+  .card-title {
+    font-size: 11px;
+    padding: 3px 2px;
+  }
+
+  .delete-btn,
+  .edit-btn {
+    width: 95%;
+    font-size: 11px;
+    padding: 3px 0;
+  }
+}
+
+/* ======================= */
+/* BUTTONS (Delete & Edit) */
+/* ======================= */
+.delete-btn,
+.edit-btn {
+  display: block;
+  margin: 10px auto;
+  width: 120px;
+  /* similar width to toast message */
+  height: 40px;
+  /* similar height to toast message */
+  border-radius: 8px;
+  /* rounded like toast */
+  font-size: 14px;
+  /* readable text */
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Delete button (red) */
+.delete-btn {
+  background-color: #ff4d4f;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #e84342;
+}
+
+/* Edit button (green) */
+.edit-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #218838;
+}
+
+
