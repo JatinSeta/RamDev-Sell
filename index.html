@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </head>
     <body>
+
+
         <nav class="navbar">
             <div class="nav-left">
                 <a href="#" class="logo">
@@ -78,10 +80,24 @@
     </section>
 
 <section id="bestsellers" class="bestsellers">
-    <h2>Best Sellers</h2>
-    <div id="bestsellerList" class="products-grid">
-        <div id="bestsellerLoader">Loading best sellers...</div>
+  <h2>Best Sellers</h2>
+
+  <!-- 🔹 Loader (your custom one) -->
+  <div id="bestsellerLoader" class="loader">
+    <img src="./Imges/engineer.png" class="center-img" alt="Engineer">
+    <div class="tools-circle">
+      <img src="./Imges/screw.png" class="tool" alt="Screw">
+      <img src="./Imges/copper-wire.png" class="tool" alt="Copper Wire">
+      <img src="./Imges/rotary-hammer.png" class="tool" alt="Rotary Hammer">
+      <img src="./Imges/tools-kit.png" class="tool" alt="Tools Kit">
+      <img src="./Imges/hammer.png" class="tool" alt="Hammer">
+      <img src="./Imges/screwdriver.png" class="tool" alt="Screwdriver">
+      <img src="./Imges/voltmeter.png" class="tool" alt="Voltmeter">
     </div>
+  </div>
+
+  <!-- 🔹 List where bestsellers will appear -->
+  <div id="bestsellerList" class="products-grid"></div>
 </section>
 
 

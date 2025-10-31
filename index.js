@@ -114,7 +114,6 @@ function deleteText() {
 }
 
 type();
-
 // Function to load bestsellers from Firestore
 import { db } from "../firebase-config.js";
 import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
@@ -124,21 +123,26 @@ const bestsellerList = document.getElementById('bestsellerList');
 const bestsellerLoader = document.getElementById('bestsellerLoader');
 
 // Function to load bestsellers from Firestore
+// Function to load bestsellers from Firestore
 async function loadBestsellers() {
   try {
-    // Query to fetch products that are marked as best sellers
+    // Show loader before fetching
+    if (bestsellerLoader) bestsellerLoader.style.display = 'flex';
+
+    // Clear previous items
+    bestsellerList.innerHTML = '';
+
+    // Query products from Firestore
     const q = query(collection(db, 'Products'), where('bestSeller', '==', true));
     const snap = await getDocs(q);
 
-    // Clear loader and start adding content
-    bestsellerList.innerHTML = ''; // Clear loader
-
+    // If empty
     if (snap.empty) {
       bestsellerList.innerHTML = '<div>No best seller products yet.</div>';
       return;
     }
 
-    // Create the main cards with 8 images (2 cards with 4 images each)
+    // Create cards
     const mainCards = createMainCards(snap);
     mainCards.forEach(card => bestsellerList.appendChild(card));
 
@@ -146,6 +150,7 @@ async function loadBestsellers() {
     console.error(err);
     bestsellerList.innerHTML = '<div>Error loading best sellers.</div>';
   } finally {
+    // Hide loader after fetching
     if (bestsellerLoader) bestsellerLoader.style.display = 'none';
   }
 }
@@ -154,29 +159,36 @@ async function loadBestsellers() {
 function createMainCards(snap) {
   const cards = [];
   let count = 0;
+  const totalDocs = snap.docs.length;
 
-  // Create 2 cards (each card will have 4 images)
-  for (let cardIndex = 0; cardIndex < 2; cardIndex++) {
+  for (let cardIndex = 0; cardIndex < 2 && count < totalDocs; cardIndex++) {
     const mainCard = document.createElement('div');
     mainCard.className = 'bestseller-card';
 
-    // Create the card-images container
     const cardImages = document.createElement('div');
     cardImages.className = 'card-images';
 
-    // Loop through 4 products for this main card
-    for (let i = 0; i < 4 && count < snap.size; i++) {
-      const data = snap.docs[count].data();
+    for (let i = 0; i < 4 && count < totalDocs; i++) {
+      const docSnap = snap.docs[count];
+      const data = docSnap.data();
+      
+      // Create the anchor tag for navigation
+      const anchor = document.createElement('a');
+      anchor.href = `./Products/productDetails.html?id=${docSnap.id}`;
+      
       const img = document.createElement('img');
-      img.src = data.mainUrl || 'https://via.placeholder.com/150';  // Fallback image
-      img.alt = data.name || 'Product ' + (count + 1);
-      cardImages.appendChild(img);
+      img.src = data.mainUrl || 'https://via.placeholder.com/150';
+      img.alt = data.name || `Product ${count + 1}`;
+
+      // Append the image to the anchor tag
+      anchor.appendChild(img);
+      cardImages.appendChild(anchor);
+      
       count++;
     }
 
     mainCard.appendChild(cardImages);
 
-    // Explore All link (optional)
     const exploreLink = document.createElement('a');
     exploreLink.href = './Products/Products.html';
     exploreLink.className = 'explore-all-link';
@@ -189,4 +201,6 @@ function createMainCards(snap) {
   return cards;
 }
 
+
 loadBestsellers();
+

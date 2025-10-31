@@ -35,7 +35,7 @@ async function loadProducts() {
 
         const contactBtn = document.createElement('button');
         contactBtn.className = 'contact-btn';
-        contactBtn.textContent = 'Contact User';
+        contactBtn.textContent = 'Contact Us';
         contactBtn.addEventListener('click', e => {
           e.stopPropagation();
           window.location.href = `mailto:seller@example.com?subject=Inquiry about ${data.name}`;
