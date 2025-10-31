@@ -530,6 +530,12 @@ img {
 }
 
 
+.Contact-Us-Titel {
+    text-align: center;  /* optional, centers the title */
+    font-size: 36px;     /* optional, makes it bigger */
+    font-weight: bold;   /* optional, makes it bold */
+}
+
 .Contact-Us {
   font-size: 10px;
 }
@@ -547,7 +553,6 @@ img {
 
 .container {
   flex: 0 1 700px;
-  margin: auto;
   padding: 10px;
 }
 
