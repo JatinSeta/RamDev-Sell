@@ -14,9 +14,6 @@ body {
   border-radius: 8px;
 }
 
-/* ======================= */
-/* FORM STYLING */
-/* ======================= */
 form label {
   display: block;
   margin-top: 12px;
@@ -51,9 +48,6 @@ form select:focus {
   color: #555;
 }
 
-/* ======================= */
-/* BUTTONS */
-/* ======================= */
 button {
   cursor: pointer;
   border: none;
@@ -111,9 +105,6 @@ button {
   background-color: #218838;
 }
 
-/* ======================= */
-/* IMAGE PREVIEW SECTION */
-/* ======================= */
 #previewContainer {
   margin-top: 15px;
 }
@@ -152,9 +143,6 @@ button {
   flex-wrap: wrap;
 }
 
-/* ======================= */
-/* TOAST NOTIFICATIONS */
-/* ======================= */
 .toast {
   position: fixed;
   top: 20px;
@@ -190,14 +178,10 @@ button {
   cursor: pointer;
 }
 
-/* ======================= */
-/* PRODUCTS GRID & CARDS */
-/* ======================= */
 .products-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  /* moderate spacing */
   padding: 15px 0;
   justify-content: center;
 }
@@ -235,16 +219,11 @@ button {
   color: #333;
 }
 
-/* Center sections */
 .products-section,
 .best-sellers-section {
   text-align: center;
 }
 
-/* ======================= */
-/* RESPONSIVE STYLING ALL DEVICES */
-/* ======================= */
-/* Large desktops */
 @media (max-width: 1400px) {
   .product-card {
     flex: 1 1 22%;
@@ -252,134 +231,30 @@ button {
   }
 }
 
-/* Medium desktops / laptops */
 @media (max-width: 1200px) {
   .product-card {
     flex: 1 1 28%;
     max-width: 28%;
   }
-
-  .product-card img {
-    height: 130px;
-  }
 }
 
-/* Tablets / small laptops */
 @media (max-width: 992px) {
   .product-card {
     flex: 1 1 45%;
     max-width: 45%;
   }
-
-  .product-card img {
-    height: 120px;
-  }
-
-  .card-title {
-    font-size: 13px;
-    padding: 6px 4px;
-  }
 }
 
-/* Small tablets / large phones */
 @media (max-width: 768px) {
   .product-card {
     flex: 1 1 48%;
     max-width: 48%;
   }
-
-  .product-card img {
-    height: 110px;
-  }
-
-  .card-title {
-    font-size: 12px;
-    padding: 5px 4px;
-  }
 }
 
-/* Phones */
 @media (max-width: 576px) {
   .product-card {
     flex: 1 1 100%;
     max-width: 100%;
   }
-
-  .product-card img {
-    height: 120px;
-  }
-
-  .card-title {
-    font-size: 12px;
-    padding: 4px 3px;
-  }
-
-  .delete-btn,
-  .edit-btn {
-    width: 90%;
-    font-size: 12px;
-    padding: 4px 0;
-  }
 }
-
-/* Extra small phones */
-@media (max-width: 400px) {
-  .product-card img {
-    height: 100px;
-  }
-
-  .card-title {
-    font-size: 11px;
-    padding: 3px 2px;
-  }
-
-  .delete-btn,
-  .edit-btn {
-    width: 95%;
-    font-size: 11px;
-    padding: 3px 0;
-  }
-}
-
-/* ======================= */
-/* BUTTONS (Delete & Edit) */
-/* ======================= */
-.delete-btn,
-.edit-btn {
-  display: block;
-  margin: 10px auto;
-  width: 120px;
-  /* similar width to toast message */
-  height: 40px;
-  /* similar height to toast message */
-  border-radius: 8px;
-  /* rounded like toast */
-  font-size: 14px;
-  /* readable text */
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-/* Delete button (red) */
-.delete-btn {
-  background-color: #ff4d4f;
-  color: white;
-}
-
-.delete-btn:hover {
-  background-color: #e84342;
-}
-
-/* Edit button (green) */
-.edit-btn {
-  background-color: #28a745;
-  color: white;
-}
-
-.edit-btn:hover {
-  background-color: #218838;
-}
-
-
