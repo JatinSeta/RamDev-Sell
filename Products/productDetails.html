@@ -1,36 +1,59 @@
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details</title>
-    <link rel="stylesheet" href="./productDetails.css">
-    </head>
-    <body>
-        <a href="javascript:history.back()" class="back-button">⮜ Back</a>
-
-
-    <div class="container">
-    <div id="imageGallery">
-        <div class="thumbnails" id="thumbnails"></div>
-
-        <div class="main-image">
-        <img id="mainImg" src="" alt="Product Image" style="max-width:400px;">
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product View Page</title>
+  <!-- Link to external CSS -->
+  <link rel="stylesheet" href="productDetails.css">
+</head>
+<body>
+  <div class="container">
+    <div class="product-section">
+      <div class="product-content">
+        <!-- Gallery -->
+        <div class="product-gallery">
+          <div class="main-image" id="mainImgContainer">
+            <img id="mainImg" src="" alt="Product Image">
+          </div>
+          <div class="thumbnail-container" id="thumbnails"></div>
         </div>
 
-        <div class="details">
-        <h1 id="productName">Product Name</h1>
-       <p id="productDetails" style="overflow:hidden;"></p>
-    <span id="toggleDetails" class="toggle-link" style="display:none;">Show more</span>
-<a href="mailto:support@example.com?subject=Inquiry%20About%20Product" class="email-button">Contact via Email</a>
-
+        <!-- Product Info -->
+        <div class="product-info">
+          <div class="product-title-container">
+            <h1 class="product-title" id="productName">Product Name</h1>
+            <div class="tags-container" style="margin-top:5px;">
+              <span class="best-seller-tag" id="bestSellerTag">Best Seller</span>
+              <span class="category-tag" id="categoryTag">Category</span>
+            </div>
+          </div>
+          <div class="product-price" id="productPrice">$0.00</div>
+          <div class="star-rating"><span class="stars">★★★★★</span> <span class="rating-text">(0/5.0)</span></div>
+          <p class="product-description" id="productDetails">Loading details...</p>
+          <div class="quantity-selector">
+            <span class="quantity-label">Quantity:</span>
+            <div class="quantity-controls">
+              <button class="quantity-btn" id="decrease-btn">−</button>
+              <div class="quantity-value" id="quantity-value">1</div>
+              <button class="quantity-btn" id="increase-btn">+</button>
+            </div>
+          </div>
+          <button class="contact-btn" id="contactBtn">Contact Us</button>
         </div>
-    </div>
-    </div>
+      </div>
 
-    <script type="module">
+      <!-- Related products container -->
+      <div class="related-products" id="relatedProducts">
+        <h2 class="section-title">Related Products</h2>
+        <div class="related-list" id="relatedList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
     import { db } from "../firebase-config.js";
-    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
@@ -39,101 +62,166 @@
     const mainImg = document.getElementById('mainImg');
     const thumbnails = document.getElementById('thumbnails');
     const detailsEl = document.getElementById('productDetails');
-    const toggleBtn = document.getElementById('toggleDetails');
+    const bestSellerTag = document.getElementById('bestSellerTag');
+    const categoryTag = document.getElementById('categoryTag');
+    const relatedList = document.getElementById('relatedList');
+
+    let quantity = 1;
+    let currentCategory = '';
 
     async function loadProduct() {
-    if (!id) {
-        nameEl.textContent = "No product selected";
-        return;
-    }
+        if (!id) {
+            nameEl.textContent = "No product selected";
+            bestSellerTag.style.display = 'none';
+            categoryTag.style.display = 'none';
+            return;
+        }
 
-    const ref = doc(db, 'Products', id);
-    const snap = await getDoc(ref);
+        const ref = doc(db, 'Products', id);
+        const snap = await getDoc(ref);
 
-    if (!snap.exists()) {
-        nameEl.textContent = "Product not found";
-        return;
-    }
+        if (!snap.exists()) {
+            nameEl.textContent = "Product not found";
+            bestSellerTag.style.display = 'none';
+            categoryTag.style.display = 'none';
+            return;
+        }
 
-    const data = snap.data();
-    nameEl.textContent = data.name || "(no name)";
+        const data = snap.data();
 
-    // Images
-    const images = [data.mainUrl, ...(Array.isArray(data.images) ? data.images : [])];
-    mainImg.src = images[0] || '';
+        // Name, price, and category
+        nameEl.textContent = data.name || "(no name)";
+        document.getElementById('productPrice').textContent = data.price || "$0.00";
+        bestSellerTag.style.display = data.bestSeller ? 'inline-block' : 'none';
+        if (data.category) {
+            categoryTag.textContent = data.category;
+            categoryTag.style.display = 'inline-block';
+            currentCategory = data.category;
+        } else {
+            categoryTag.style.display = 'none';
+        }
 
-    images.forEach((url, i) => {
-        const thumb = document.createElement('img');
-        thumb.src = url;
-        thumb.style.width = '60px';
-        thumb.style.height = '60px';
-        thumb.style.objectFit = 'cover';
-        thumb.style.cursor = 'pointer';
-        if (i === 0) thumb.style.border = '2px solid blue';
-        thumb.addEventListener('click', () => {
-        mainImg.src = url;
-        Array.from(thumbnails.children).forEach(img => img.style.border = 'none');
-        thumb.style.border = '2px solid blue';
+        // Images
+        const images = [data.mainUrl, ...(Array.isArray(data.images) ? data.images : [])].filter(Boolean);
+        mainImg.src = images[0] || '';
+        thumbnails.innerHTML = '';
+        images.forEach((url, i) => {
+            const thumb = document.createElement('img');
+            thumb.src = url;
+            if (i === 0) thumb.classList.add('active');
+
+            thumb.addEventListener('click', () => {
+                if (mainImg.src === url) return;
+                mainImg.classList.add('fade-out');
+                setTimeout(() => {
+                    mainImg.src = url;
+                    mainImg.classList.remove('fade-out');
+                }, 400);
+                Array.from(thumbnails.children).forEach(img => img.classList.remove('active'));
+                thumb.classList.add('active');
+            });
+
+            thumbnails.appendChild(thumb);
         });
-        thumbnails.appendChild(thumb);
-    });
 
-    // Details with Show More/Less
-const fullText = data.details || "(No details available)";
-const lines = fullText.split('\n');
-const maxLines = 3;
+        // Product details with Show more/Show less
+        const fullText = data.details || "(No details available)";
+        const lines = fullText.split('\n');
+        const maxLines = 3;
+        let expanded = false;
 
-let expanded = false;
+        function renderDetails() {
+            detailsEl.innerHTML = '';
+            const textSpan = document.createElement('span');
+            textSpan.textContent = (!expanded && lines.length > maxLines) 
+                ? lines.slice(0, maxLines).join('\n') + '...' 
+                : fullText;
+            detailsEl.appendChild(textSpan);
 
-function renderDetails() {
-  detailsEl.innerHTML = ''; // clear previous content
+            if (lines.length > maxLines) {
+                const link = document.createElement('span');
+                link.textContent = expanded ? ' Show less' : ' Show more';
+                link.className = 'show-more-link';
+                link.style.cursor = 'pointer';
+                link.addEventListener('click', () => {
+                    expanded = !expanded;
+                    renderDetails();
+                });
+                detailsEl.appendChild(link);
+            }
+        }
 
-  if (!expanded && lines.length > maxLines) {
-    const truncated = lines.slice(0, maxLines).join('\n') + '...';
-    detailsEl.textContent = truncated;
-
-    const link = document.createElement('span');
-    link.textContent = ' Show more';
-    link.className = 'show-more-link';
-    link.addEventListener('click', () => {
-      expanded = true;
-      renderDetails();
-    });
-
-    detailsEl.appendChild(link);
-  } else {
-    detailsEl.textContent = fullText;
-
-    if (lines.length > maxLines) {
-      const link = document.createElement('span');
-      link.textContent = ' Show less';
-      link.className = 'show-more-link';
-      link.addEventListener('click', () => {
-        expanded = false;
         renderDetails();
-      });
-      detailsEl.appendChild(link);
+        loadRelatedProducts();
     }
-  }
-}
 
-renderDetails();
+    async function loadRelatedProducts() {
+        if (!currentCategory) return;
+        const productsRef = collection(db, 'Products');
+        const q = query(productsRef, where('category', '==', currentCategory));
+        const snapshot = await getDocs(q);
 
+        const allRelated = [];
+        snapshot.forEach(docSnap => {
+            if (docSnap.id !== id) allRelated.push({ id: docSnap.id, ...docSnap.data() });
+        });
 
+        // Pick up to 4 available products
+        const available = allRelated.filter(p => p.available !== false);
+        const shuffled = available.sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 4);
+
+        relatedList.innerHTML = '';
+        selected.forEach(prod => {
+            const div = document.createElement('div');
+            div.className = 'product-card';
+            div.innerHTML = `
+                <img src="${prod.mainUrl || ''}" alt="${prod.name}">
+                <div class="card-content">
+                  <div class="title">${prod.name}</div>
+            <div class="card-buttons">
+  <button class="view-btn">View</button>
+  <button class="contact-btn">Contact</button>
+</div>
+
+                </div>
+            `;
+            div.addEventListener('click', () => {
+                window.location.href = `./productDetails.html?id=${prod.id}`;
+            });
+            relatedList.appendChild(div);
+        });
     }
 
     loadProduct();
-    // Open main image in fullscreen on click
-    mainImg.addEventListener('click', () => {
-    if (mainImg.requestFullscreen) {
-        mainImg.requestFullscreen();
-    } else if (mainImg.webkitRequestFullscreen) { /* Safari */
-        mainImg.webkitRequestFullscreen();
-    } else if (mainImg.msRequestFullscreen) { /* IE11 */
-        mainImg.msRequestFullscreen();
-    }
+
+    // Quantity buttons
+    document.getElementById('decrease-btn').addEventListener('click', () => {
+        if (quantity > 1) {
+            quantity--;
+            document.getElementById('quantity-value').textContent = quantity;
+        }
+    });
+    document.getElementById('increase-btn').addEventListener('click', () => {
+        quantity++;
+        document.getElementById('quantity-value').textContent = quantity;
     });
 
-    </script>
-    </body>
-    </html>
+    // Contact button
+    document.getElementById('contactBtn').addEventListener('click', () => {
+        const message = document.createElement('div');
+        message.textContent = 'Thank you for your interest! We will contact you soon.';
+        message.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #28a745; color: white; padding: 15px 30px; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 1000;';
+        document.body.appendChild(message);
+        setTimeout(() => message.remove(), 3000);
+    });
+
+    // Fullscreen image click
+    mainImg.addEventListener('click', () => {
+        if (mainImg.requestFullscreen) mainImg.requestFullscreen();
+        else if (mainImg.webkitRequestFullscreen) mainImg.webkitRequestFullscreen();
+        else if (mainImg.msRequestFullscreen) mainImg.msRequestFullscreen();
+    });
+  </script>
+</body>
+</html>
