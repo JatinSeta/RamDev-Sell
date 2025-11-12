@@ -459,6 +459,7 @@ img {
 .bestsellers {
   padding: 2rem 20px;
   background-color: #f9f9f9;
+  
 }
 
 #bestsellerList {
@@ -490,7 +491,8 @@ img {
   width: 100%;
   height: 300px; /* Adjust as necessary */
   object-fit: cover;
-  cursor: pointer; /* Show a pointer cursor on hover/click */
+  cursor: pointer; 
+    
 }
 
 @media (max-width: 768px) {
@@ -834,3 +836,195 @@ textarea {
 }
 
 
+    .cards-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #ffffff 0%, #e6f0ff 100%);
+      flex: 1 1 280px;
+      min-width: 280px;
+      max-width: 350px;
+      padding: 30px 20px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-align: center;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .card h3 {
+      margin-bottom: 15px;
+      color: #333;
+      font-size: 1.5rem;
+    }
+
+    .card p {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 15px 0;
+      color: #555;
+    }
+
+    .card ul li {
+      margin-bottom: 8px;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .card ul li::before {
+      content: "✔";
+      position: absolute;
+      left: 0;
+      color: #007BFF;
+    }
+
+    .card .btn {
+      display: inline-block;
+      text-decoration: none;
+      background-color: #007BFF;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 50px;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .card .btn:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 900px) {
+      .cards-section {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .card {
+        text-align: center;
+      }
+    }
+
+
+    /* Section styling */
+.why-choose-section {
+  padding: 50px 20px;
+  background-color: #ffffff; /* white background for section */
+  text-align: center;
+}
+
+/* Section title */
+.why-choose-section .section-title {
+  font-size: 2em;
+  margin-bottom: 40px;
+  color: #0056B3; /* blue title text */
+}
+
+/* Container for cards */
+.choose-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Individual card */
+.choose-card {
+  background-color: #ffffff; /* white card background */
+  color: #0056B3; /* blue text for title & content */
+  width: 250px;
+  padding: 25px 20px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1); /* subtle shadow */
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover effect */
+.choose-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
+/* GIF */
+.choose-card .choose-gif {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 15px;
+  object-fit: contain;
+}
+
+/* Card title */
+.choose-card h3 {
+  margin: 10px 0;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #0056B3; /* blue text */
+}
+
+/* Card description */
+.choose-card p {
+  font-size: 0.95em;
+  line-height: 1.5;
+  color: #333333; /* dark grey text for readability */
+}
+
+/* Responsive adjustments for tablets */
+@media (max-width: 1000px) {
+  .choose-card {
+    width: 220px;
+    padding: 20px 15px;
+  }
+
+  .choose-card .choose-gif {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 600px) {
+  .choose-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .choose-card {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .choose-card h3 {
+    font-size: 1.1em;
+  }
+
+  .choose-card p {
+    font-size: 0.9em;
+  }
+
+  .choose-card .choose-gif {
+    width: 70px;
+    height: 70px;
+  }
