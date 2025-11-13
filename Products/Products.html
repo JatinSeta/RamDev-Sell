@@ -79,9 +79,59 @@
 
       <div class="container">
         <div id="productsList" class="products-list"></div>
+
       </div>
+      <div class="products-wrapper">
+  <div class="container">
+    <div id="productsList" class="products-list"></div>
+    <div id="pagination" class="pagination"></div>
+  </div>
+</div>
+
     </div>
   </div>
+
+  <!-- Contact Modal -->
+<div id="contactModal" class="contact-modal" style="display:none;">
+  <div class="contact-modal-content">
+    <span id="closeModal" class="close-modal">&times;</span>
+    <div class="contact-header">
+      <div class="contact-logo">
+        <img src="../Imges/Logo.png" alt="Company Logo">
+      </div>
+      <div class="contact-info">
+        <p>Mobile: +1234567890</p>
+        <p>Email: contact@company.com</p>
+      </div>
+    </div>
+
+    <h2 class="form-title">Product Inquiry Form</h2>
+
+    <form class="contact-form" id="contactForm">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="company">Company Name</label>
+      <input type="text" id="company" name="company" required>
+
+      <label for="mobile">Mobile Number</label>
+      <input type="tel" id="mobile" name="mobile" required>
+
+      <label for="product">Product Name</label>
+      <input type="text" id="product" name="product" required readonly>
+
+      <label for="quantity">Quantity</label>
+      <input type="number" id="quantity" name="quantity" required>
+
+      <label for="file">Attach File</label>
+      <input type="file" id="file" name="file">
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+
+
 
   <script type="module" src="./Products.js"></script>
   <script type="module" src="../index.js"></script>

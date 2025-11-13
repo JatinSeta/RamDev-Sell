@@ -16,6 +16,12 @@ const categorySelect = document.getElementById('category');
 const bestSellersBtn = document.querySelector('.best-sellers-section button');
 const bestSellersList = document.getElementById('bestSellersList');
 
+// --- Key-Value Fields ---
+const addFieldBtn = document.getElementById('addFieldBtn');
+const keyValueContainer = document.getElementById('keyValueContainer');
+let fieldCount = 0;
+
+// ---------- GLOBAL VARIABLES ----------
 let currentLoadedImages = [];
 let previewIndex = 0;
 let urlCount = 2;
@@ -131,6 +137,50 @@ function showToast(text,type='success',duration=3000){
     setTimeout(()=>toast.remove(),duration);
 }
 
+// ---------- KEY-VALUE FIELDS ----------
+addFieldBtn.addEventListener('click', () => {
+    fieldCount++;
+    const wrapper = document.createElement('div');
+    wrapper.style.display = 'flex';
+    wrapper.style.alignItems = 'center';
+    wrapper.style.marginTop = '8px';
+    wrapper.className = 'key-value-row';
+
+    const keyInput = document.createElement('input');
+    keyInput.type = 'text';
+    keyInput.placeholder = `Key ${fieldCount}`;
+    keyInput.style.marginRight = '5px';
+    keyInput.required = true;
+
+    const valueInput = document.createElement('input');
+    valueInput.type = 'text';
+    valueInput.placeholder = `Value ${fieldCount}`;
+    valueInput.style.marginRight = '5px';
+    valueInput.required = true;
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.textContent = 'Remove';
+    removeBtn.addEventListener('click', () => wrapper.remove());
+
+    wrapper.appendChild(keyInput);
+    wrapper.appendChild(valueInput);
+    wrapper.appendChild(removeBtn);
+    keyValueContainer.appendChild(wrapper);
+});
+
+function getKeyValuePairs() {
+    const rows = document.querySelectorAll('.key-value-row');
+    const pairs = [];
+    rows.forEach(row => {
+        const inputs = row.querySelectorAll('input');
+        const key = inputs[0].value.trim();
+        const value = inputs[1].value.trim();
+        if(key && value) pairs.push({ key, value });
+    });
+    return pairs;
+}
+
 // ---------- FORM SUBMISSION ----------
 form.addEventListener("submit", async e => {
     e.preventDefault();
@@ -138,6 +188,7 @@ form.addEventListener("submit", async e => {
     const details = detailsTextarea.value.trim();
     const category = categorySelect.value.trim();
     const imagesAll = getCurrentImages();
+    const keyValuePairs = getKeyValuePairs(); // get dynamic fields
 
     if(!category){ showToast("Please select a category",'error'); return; }
     if(imagesAll.length < 2){ showToast("Please provide at least 2 image URLs",'error'); return; }
@@ -148,12 +199,12 @@ form.addEventListener("submit", async e => {
     try{
         if(editMode && editingProductId){
             await updateDoc(doc(db,"Products",editingProductId), {
-                name, details, category, mainUrl:mainImage, images:otherImages, updatedAt: serverTimestamp()
+                name, details, category, mainUrl:mainImage, images:otherImages, extraFields: keyValuePairs, updatedAt: serverTimestamp()
             });
             showToast("Product updated successfully!");
         } else {
             await addDoc(collection(db,"Products"), {
-                name, details, category, mainUrl:mainImage, images:otherImages, createdAt: serverTimestamp(), bestSeller:false
+                name, details, category, mainUrl:mainImage, images:otherImages, extraFields: keyValuePairs, createdAt: serverTimestamp(), bestSeller:false
             });
             showToast("Product added successfully!");
         }
@@ -164,7 +215,9 @@ form.addEventListener("submit", async e => {
 
 function resetForm(){
     extraUrlsContainer.innerHTML = '';
+    keyValueContainer.innerHTML = '';
     urlCount = 2;
+    fieldCount = 0;
     form.reset();
     thumbnailsContainer.innerHTML = '';
     mainPreview.src = '';
@@ -199,7 +252,7 @@ async function toggleBestSeller(productId, currentStatus) {
 
 // ---------- LOAD PRODUCTS ----------
 async function loadProducts(){
-    productsList.innerHTML=''; // clear first
+    productsList.innerHTML='';
     const q = query(collection(db,"Products"), orderBy("createdAt","desc"));
     const snapshot = await getDocs(q);
     snapshot.forEach(docSnap=>{
@@ -214,47 +267,69 @@ async function loadProducts(){
                 <button class="delete-btn">Delete</button>
             </div>
         `;
-
         div.style.boxShadow = data.bestSeller ? "0 0 10px 3px gold" : "none";
 
         // Edit
         div.querySelector('.edit-btn').addEventListener('click', async () => {
             editMode = true;
             editingProductId = docSnap.id;
-
             document.getElementById('name').value = data.name;
             detailsTextarea.value = data.details; 
             updateCharCount();
             categorySelect.value = data.category;
-
-            // Main images
             document.getElementById('url1').value = data.mainUrl;
             document.getElementById('url2').value = (data.images[0] || '');
             extraUrlsContainer.innerHTML = '';
             data.images.slice(1).forEach((url)=>{
                 urlCount += 1;
                 const wrapper = document.createElement("div");
-                wrapper.style.display = "flex"; 
-                wrapper.style.alignItems = "center"; 
-                wrapper.style.marginTop = "8px";
-
+                wrapper.style.display = "flex"; wrapper.style.alignItems = "center"; wrapper.style.marginTop = "8px";
                 const input = document.createElement("input");
-                input.type = "url"; 
-                input.className = "image-url"; 
-                input.value = url; 
-                input.style.flexGrow = "1";
+                input.type = "url"; input.className = "image-url"; input.value = url; input.style.flexGrow = "1";
                 attachLivePreview(input);
-
                 const removeBtn = document.createElement("button");
-                removeBtn.type = "button"; 
-                removeBtn.className = "remove-btn";
-                removeBtn.textContent = "Remove";
+                removeBtn.type = "button"; removeBtn.className = "remove-btn"; removeBtn.textContent = "Remove";
                 removeBtn.addEventListener("click",()=>{ wrapper.remove(); updatePreviews(); });
-
-                wrapper.appendChild(input); 
-                wrapper.appendChild(removeBtn);
+                wrapper.appendChild(input); wrapper.appendChild(removeBtn);
                 extraUrlsContainer.appendChild(wrapper);
             });
+
+            // Populate key-value fields
+            keyValueContainer.innerHTML = '';
+            fieldCount = 0;
+            if(data.extraFields){
+                data.extraFields.forEach((field)=>{
+                    fieldCount++;
+                    const wrapper = document.createElement('div');
+                    wrapper.style.display = 'flex';
+                    wrapper.style.alignItems = 'center';
+                    wrapper.style.marginTop = '8px';
+                    wrapper.className = 'key-value-row';
+
+                    const keyInput = document.createElement('input');
+                    keyInput.type = 'text';
+                    keyInput.value = field.key;
+                    keyInput.style.marginRight = '5px';
+                    keyInput.required = true;
+
+                    const valueInput = document.createElement('input');
+                    valueInput.type = 'text';
+                    valueInput.value = field.value;
+                    valueInput.style.marginRight = '5px';
+                    valueInput.required = true;
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.textContent = 'Remove';
+                    removeBtn.addEventListener('click', () => wrapper.remove());
+
+                    wrapper.appendChild(keyInput);
+                    wrapper.appendChild(valueInput);
+                    wrapper.appendChild(removeBtn);
+                    keyValueContainer.appendChild(wrapper);
+                });
+            }
+
             updatePreviews();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
@@ -282,39 +357,34 @@ async function loadProducts(){
 
 // ---------- LOAD BEST SELLERS ----------
 async function loadBestSellers() {
-    bestSellersList.innerHTML = ''; // clear the list
-
+    bestSellersList.innerHTML = '';
     const q = query(collection(db,"Products"), orderBy("createdAt","desc"));
     const snapshot = await getDocs(q);
-
     snapshot.forEach(docSnap => {
         const data = docSnap.data();
         if(data.bestSeller){
             const div = document.createElement('div');
             div.className = 'product-card';
 
-            // Image
             const img = document.createElement('img');
             img.src = data.mainUrl;
             img.alt = data.name;
             div.appendChild(img);
 
-            // Title
             const title = document.createElement('div');
             title.className = 'card-title';
             title.textContent = data.name;
             div.appendChild(title);
 
-            // Delete Button (remove from Best Sellers)
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'delete-btn';
             deleteBtn.textContent = 'Remove';
             deleteBtn.addEventListener('click', async (e) => {
-                e.stopPropagation(); // prevent card click if you have one
+                e.stopPropagation();
                 try {
                     await updateDoc(doc(db, "Products", docSnap.id), { bestSeller: false });
                     showToast(`${data.name} removed from Best Sellers!`);
-                    loadProducts(); // refresh All Products
+                    loadProducts();
                 } catch (err) {
                     console.error(err);
                     showToast("Error removing Best Seller!", 'error');
@@ -322,12 +392,13 @@ async function loadBestSellers() {
             });
             div.appendChild(deleteBtn);
 
-            // Optional: Edit Button
             const editBtn = document.createElement('button');
             editBtn.className = 'edit-btn';
             editBtn.textContent = 'Edit';
             editBtn.addEventListener('click', () => {
-                openEditForm(docSnap.id); // your existing edit logic
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                editMode = true;
+                editingProductId = docSnap.id;
             });
             div.appendChild(editBtn);
 
@@ -336,8 +407,23 @@ async function loadBestSellers() {
     });
 }
 
-
 // ---------- INITIAL LOAD ----------
 loadProducts();
 updateCharCount();
 updatePreviews();
+
+// ---------- SEARCH ----------
+const searchInput = document.getElementById('searchInput');
+searchInput.addEventListener('input', () => {
+    const query = searchInput.value.trim().toLowerCase().replace(/\s+/g, '');
+    const productCards = document.querySelectorAll('.product-card');
+    productCards.forEach(card => {
+        const productNameElem = card.querySelector('h3');
+        const productName = productNameElem ? productNameElem.textContent.toLowerCase().replace(/\s+/g, '') : '';
+        if (productName.includes(query)) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});

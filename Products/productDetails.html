@@ -4,59 +4,71 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product View Page</title>
-  <!-- Link to external CSS -->
-  <link rel="stylesheet" href="productDetails.css">
+  <link rel="stylesheet" href="./productDetails.css">
+ 
 </head>
 <body>
-  <!-- Breadcrumb Navbar -->
+
 <nav class="breadcrumb-nav">
   <a href="../index.html" class="breadcrumb-home">Home</a> › 
   <a href="../Products/Products.html" class="breadcrumb-products">Products</a> › 
   <span id="breadcrumbName">Product Name</span>
 </nav>
 
-  <div class="container">
-    <div class="product-section">
-      <div class="product-content">
-        <!-- Gallery -->
-        <div class="product-gallery">
-          <div class="main-image" id="mainImgContainer">
-            <img id="mainImg" src="" alt="Product Image">
-          </div>
-          <div class="thumbnail-container" id="thumbnails"></div>
+<div class="container">
+  <div class="product-section">
+    <div class="product-content">
+      <!-- Gallery -->
+      <div class="product-gallery">
+        <div class="main-image" id="mainImgContainer">
+          <img id="mainImg" src="" alt="Product Image">
         </div>
-
-        <!-- Product Info -->
-        <div class="product-info">
-          <div class="product-title-container">
-            <h1 class="product-title" id="productName">Product Name</h1>
-            <div class="tags-container" style="margin-top:5px;">
-              <span class="best-seller-tag" id="bestSellerTag">Best Seller</span>
-              <span class="category-tag" id="categoryTag">Category</span>
-            </div>
-          </div>
-          <div class="product-price" id="productPrice">$0.00</div>
-          <div class="star-rating"><span class="stars">★★★★★</span> <span class="rating-text">(0/5.0)</span></div>
-          <p class="product-description" id="productDetails">Loading details...</p>
-          <div class="quantity-selector">
-            <span class="quantity-label">Quantity:</span>
-            <div class="quantity-controls">
-              <button class="quantity-btn" id="decrease-btn">−</button>
-              <div class="quantity-value" id="quantity-value">1</div>
-              <button class="quantity-btn" id="increase-btn">+</button>
-            </div>
-          </div>
-          <button class="contact-btn" id="contactBtn">Contact Us</button>
-        </div>
+        <div class="thumbnail-container" id="thumbnails"></div>
       </div>
 
-      <!-- Related products container -->
-      <div class="related-products" id="relatedProducts">
-        <h2 class="section-title">Related Products</h2>
-        <div class="related-list" id="relatedList"></div>
+      <!-- Product Info -->
+      <div class="product-info">
+        <div class="product-title-container">
+          <h1 class="product-title" id="productName">Product Name</h1>
+          <div class="tags-container" style="margin-top:5px;">
+            <span class="best-seller-tag" id="bestSellerTag">Best Seller</span>
+            <span class="category-tag" id="categoryTag">Category</span>
+          </div>
+        </div>
+        <div class="product-price" id="productPrice">$0.00</div>
+        <div class="star-rating"><span class="stars">★★★★★</span> <span class="rating-text">(0/5.0)</span></div>
+        <p class="product-description" id="productDetails">Loading details...</p>
+        <div class="quantity-selector">
+          <span class="quantity-label">Quantity:</span>
+          <div class="quantity-controls">
+            <button class="quantity-btn" id="decrease-btn">−</button>
+            <div class="quantity-value" id="quantity-value">1</div>
+            <button class="quantity-btn" id="increase-btn">+</button>
+          </div>
+        </div>
+        <button class="contact-btn" id="contactBtn">Contact Us</button>
       </div>
     </div>
+
+    <!-- Related products container -->
+    <div class="related-products" id="relatedProducts">
+      <h2 class="section-title">Related Products</h2>
+      <div class="related-list" id="relatedList"></div>
+    </div>
+
+    <!-- Extra fields table -->
+    <div class="extra-fields" id="extraFieldsContainer">
+      <h2 class="section-title">About Product Details</h2>
+      <table class="extra-fields-table" id="extraFieldsTable">
+      
+        <tbody>
+          <!-- Rows will be populated by JS -->
+        </tbody>
+      </table>
+    </div>
+
   </div>
+</div>
 
 <script type="module">
 import { db } from "../firebase-config.js";
@@ -75,6 +87,7 @@ const detailsEl = document.getElementById('productDetails');
 const bestSellerTag = document.getElementById('bestSellerTag');
 const categoryTag = document.getElementById('categoryTag');
 const relatedList = document.getElementById('relatedList');
+const extraFieldsTableBody = document.getElementById('extraFieldsTable').querySelector('tbody');
 
 let quantity = 1;
 let currentCategory = '';
@@ -169,6 +182,21 @@ async function loadProduct() {
 
     renderDetails();
     loadRelatedProducts();
+
+    // Load extra fields into table
+    if (Array.isArray(data.extraFields)) {
+        extraFieldsTableBody.innerHTML = ''; // clear previous
+        data.extraFields.forEach(field => {
+            const tr = document.createElement('tr');
+            const keyTd = document.createElement('td');
+            const valueTd = document.createElement('td');
+            keyTd.textContent = field.key;
+            valueTd.textContent = field.value;
+            tr.appendChild(keyTd);
+            tr.appendChild(valueTd);
+            extraFieldsTableBody.appendChild(tr);
+        });
+    }
 }
 
 async function loadRelatedProducts() {
@@ -236,7 +264,6 @@ mainImg.addEventListener('click', () => {
     else if (mainImg.webkitRequestFullscreen) mainImg.webkitRequestFullscreen();
     else if (mainImg.msRequestFullscreen) mainImg.msRequestFullscreen();
 });
-
 </script>
 
 </body>
