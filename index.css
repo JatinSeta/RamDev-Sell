@@ -306,7 +306,7 @@ img {
 
 .about-text {
   flex: 1 1 45%;
-  text-align: right;
+  text-align: left;
 }
 
 .about-text h2 {
