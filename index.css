@@ -1110,6 +1110,7 @@ textarea.app-form-control {
     font-size: 13px;
   }
 }
+/* Hero Section adjustments */
 .hero-Section {
     position: relative;
     width: 100%;
@@ -1132,7 +1133,7 @@ textarea.app-form-control {
     width: auto;
     height: auto;
     transform: translate(-50%, -50%);
-    object-fit: cover; /* fill hero without leaving gaps */
+    object-fit: cover;
     z-index: 0;
 }
 
@@ -1159,15 +1160,15 @@ textarea.app-form-control {
 .hero h1 { font-size: 3rem; margin-bottom: 15px; }
 .hero-sub { font-size: 1.3rem; margin-bottom: 25px; }
 
-/* Buttons */
 .hero-cta .btn { padding: 12px 25px; margin: 0 10px; font-size: 1rem; }
 
-/* Animated cursor */
+/* Typing Cursor */
 #animatedText::after {
     content: '|';
     color: #007bff;
     animation: blink 0.8s infinite;
 }
+
 @keyframes blink {
     0%,50%,100%{opacity:1;} 25%,75%{opacity:0;}
 }
