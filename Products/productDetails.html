@@ -70,7 +70,7 @@
   </div>
 </div>
 
-<script type="module">
+<!-- <script type="module">
 import { db } from "../firebase-config.js";
 import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
@@ -264,7 +264,224 @@ mainImg.addEventListener('click', () => {
     else if (mainImg.webkitRequestFullscreen) mainImg.webkitRequestFullscreen();
     else if (mainImg.msRequestFullscreen) mainImg.msRequestFullscreen();
 });
-</script>
+</script> -->
+<script type="module">
+  import { db } from "../firebase-config.js";
+import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
+// Get product ID from URL
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id');
+
+// DOM Elements
+const breadcrumbName = document.getElementById('breadcrumbName');
+const nameEl = document.getElementById('productName');
+const mainImg = document.getElementById('mainImg');
+const thumbnails = document.getElementById('thumbnails');
+const detailsEl = document.getElementById('productDetails');
+const bestSellerTag = document.getElementById('bestSellerTag');
+const categoryTag = document.getElementById('categoryTag');
+const relatedList = document.getElementById('relatedList');
+const extraFieldsTableBody = document.getElementById('extraFieldsTable').querySelector('tbody');
+
+let quantity = 1;
+let currentCategory = '';
+
+// ================= Load Product =================
+async function loadProduct() {
+    if (!id) {
+        nameEl.textContent = "No product selected";
+        breadcrumbName.textContent = "No product selected";
+        bestSellerTag.style.display = 'none';
+        categoryTag.style.display = 'none';
+        return;
+    }
+
+    const ref = doc(db, 'Products', id);
+    const snap = await getDoc(ref);
+
+    if (!snap.exists()) {
+        nameEl.textContent = "Product not found";
+        breadcrumbName.textContent = "Product not found";
+        bestSellerTag.style.display = 'none';
+        categoryTag.style.display = 'none';
+        return;
+    }
+
+    const data = snap.data();
+
+    // Set product name in title and breadcrumb
+    const name = data.name || "Unnamed Product";
+    nameEl.textContent = name;
+    breadcrumbName.textContent = name;
+
+    // Price and tags
+    document.getElementById('productPrice').textContent = data.price || "$0.00";
+    bestSellerTag.style.display = data.bestSeller ? 'inline-block' : 'none';
+    if (data.category) {
+        categoryTag.textContent = data.category;
+        categoryTag.style.display = 'inline-block';
+        currentCategory = data.category;
+    } else {
+        categoryTag.style.display = 'none';
+    }
+
+    // Images gallery
+    const images = [data.mainUrl, ...(Array.isArray(data.images) ? data.images : [])].filter(Boolean);
+    mainImg.src = images[0] || '';
+    thumbnails.innerHTML = '';
+    images.forEach((url, i) => {
+        const thumb = document.createElement('img');
+        thumb.src = url;
+        if (i === 0) thumb.classList.add('active');
+        thumb.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (mainImg.src === url) return;
+            mainImg.classList.add('fade-out');
+            setTimeout(() => {
+                mainImg.src = url;
+                mainImg.classList.remove('fade-out');
+            }, 400);
+            Array.from(thumbnails.children).forEach(img => img.classList.remove('active'));
+            thumb.classList.add('active');
+        });
+        thumbnails.appendChild(thumb);
+    });
+
+    // Product details with Show more/Show less
+    const fullText = data.details || "(No details available)";
+    const lines = fullText.split('\n');
+    const maxLines = 3;
+    let expanded = false;
+
+    function renderDetails() {
+        detailsEl.innerHTML = '';
+        const textSpan = document.createElement('span');
+        textSpan.textContent = (!expanded && lines.length > maxLines) 
+            ? lines.slice(0, maxLines).join('\n') + '...' 
+            : fullText;
+        detailsEl.appendChild(textSpan);
+
+        if (lines.length > maxLines) {
+            const link = document.createElement('span');
+            link.textContent = expanded ? ' Show less' : ' Show more';
+            link.className = 'show-more-link';
+            link.style.cursor = 'pointer';
+            link.addEventListener('click', () => {
+                expanded = !expanded;
+                renderDetails();
+            });
+            detailsEl.appendChild(link);
+        }
+    }
+    renderDetails();
+
+    // Load extra fields table
+    if (Array.isArray(data.extraFields)) {
+        extraFieldsTableBody.innerHTML = '';
+        data.extraFields.forEach(field => {
+            const tr = document.createElement('tr');
+            const keyTd = document.createElement('td');
+            const valueTd = document.createElement('td');
+            keyTd.textContent = field.key;
+            valueTd.textContent = field.value;
+            tr.appendChild(keyTd);
+            tr.appendChild(valueTd);
+            extraFieldsTableBody.appendChild(tr);
+        });
+    }
+
+    // Load related products
+    loadRelatedProducts();
+}
+
+// ================= Load Related Products =================
+async function loadRelatedProducts() {
+    if (!currentCategory) return;
+    const productsRef = collection(db, 'Products');
+    const q = query(productsRef, where('category', '==', currentCategory));
+    const snapshot = await getDocs(q);
+
+    const allRelated = [];
+    snapshot.forEach(docSnap => {
+        if (docSnap.id !== id) allRelated.push({ id: docSnap.id, ...docSnap.data() });
+    });
+
+    const available = allRelated.filter(p => p.available !== false);
+    const shuffled = available.sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, 4);
+
+    relatedList.innerHTML = '';
+    selected.forEach(prod => {
+        const div = document.createElement('div');
+        div.className = 'product-card';
+        div.innerHTML = `
+            <img src="${prod.mainUrl || ''}" alt="${prod.name}">
+            <div class="card-content">
+                <div class="title">${prod.name}</div>
+                <div class="card-buttons">
+                    <button class="view-btn">View</button>
+                    <button class="contact-btn">Contact</button>
+                </div>
+            </div>
+        `;
+        div.querySelector('.view-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.location.href = `./productDetails.html?id=${prod.id}`;
+        });
+        div.querySelector('.contact-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            alert('Contact us for this product!');
+        });
+        div.addEventListener('click', () => {
+            window.location.href = `./productDetails.html?id=${prod.id}`;
+        });
+        relatedList.appendChild(div);
+    });
+}
+
+// ================= Quantity Buttons =================
+document.getElementById('decrease-btn').addEventListener('click', () => {
+    if (quantity > 1) {
+        quantity--;
+        document.getElementById('quantity-value').textContent = quantity;
+    }
+});
+document.getElementById('increase-btn').addEventListener('click', () => {
+    quantity++;
+    document.getElementById('quantity-value').textContent = quantity;
+});
+
+// ================= Contact Button =================
+document.getElementById('contactBtn').addEventListener('click', () => {
+    const message = document.createElement('div');
+    message.textContent = 'Thank you for your interest! We will contact you soon.';
+    message.style.cssText = `
+        position: fixed; 
+        top: 20px; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        background: #28a745; 
+        color: white; 
+        padding: 15px 30px; 
+        border-radius: 6px; 
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
+        z-index: 1000;
+    `;
+    document.body.appendChild(message);
+    setTimeout(() => message.remove(), 3000);
+});
+
+// ================= Fullscreen Image =================
+mainImg.addEventListener('click', () => {
+    if (mainImg.requestFullscreen) mainImg.requestFullscreen();
+    else if (mainImg.webkitRequestFullscreen) mainImg.webkitRequestFullscreen();
+    else if (mainImg.msRequestFullscreen) mainImg.msRequestFullscreen();
+});
+
+// ================= Initialize =================
+loadProduct();
+
+</script>
 </body>
 </html>

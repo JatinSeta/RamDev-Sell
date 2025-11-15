@@ -114,30 +114,33 @@ function deleteText() {
 }
 
 type();
-
-// Function to load bestsellers from Firestore
 import { db } from "../firebase-config.js";
-import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-// Get references to the DOM elements
 const bestsellerList = document.getElementById('bestsellerList');
 const bestsellerLoader = document.getElementById('bestsellerLoader');
 
-// Function to load bestsellers from Firestore
-// Function to load bestsellers from Firestore
 async function loadBestsellers() {
   try {
-    // Show loader before fetching
+    // Debug: Check Firestore instance
+    console.log("Firestore instance:", db);
+    if (!db) throw new Error("Firestore 'db' is undefined!");
+
+    // Show loader
     if (bestsellerLoader) bestsellerLoader.style.display = 'flex';
 
     // Clear previous items
     bestsellerList.innerHTML = '';
 
-    // Query products from Firestore
-    const q = query(collection(db, 'Products'), where('bestSeller', '==', true));
+    // Firestore query
+    const productsRef = collection(db, "Products");  // ✅ This must be Firestore instance
+    console.log("Products collection ref:", productsRef);
+
+    const q = query(productsRef, where("bestSeller", "==", true));
     const snap = await getDocs(q);
 
-    // If empty
+    console.log("Query snapshot:", snap);
+
     if (snap.empty) {
       bestsellerList.innerHTML = '<div>No best seller products yet.</div>';
       return;
@@ -148,15 +151,13 @@ async function loadBestsellers() {
     mainCards.forEach(card => bestsellerList.appendChild(card));
 
   } catch (err) {
-    console.error(err);
+    console.error("Error loading bestsellers:", err);
     bestsellerList.innerHTML = '<div>Error loading best sellers.</div>';
   } finally {
-    // Hide loader after fetching
     if (bestsellerLoader) bestsellerLoader.style.display = 'none';
   }
 }
 
-// Create two main cards with 4 images each
 function createMainCards(snap) {
   const cards = [];
   let count = 0;
@@ -172,19 +173,19 @@ function createMainCards(snap) {
     for (let i = 0; i < 4 && count < totalDocs; i++) {
       const docSnap = snap.docs[count];
       const data = docSnap.data();
-      
-      // Create the anchor tag for navigation
-      const anchor = document.createElement('a');
-      anchor.href = `./Products/productDetails.html?id=${docSnap.id}`;
-      
+
+      // Create the image element
       const img = document.createElement('img');
       img.src = data.mainUrl || 'https://via.placeholder.com/150';
       img.alt = data.name || `Product ${count + 1}`;
+      img.style.cursor = 'pointer'; // Show pointer on hover
 
-      // Append the image to the anchor tag
+      // Wrap the image in an anchor tag
+      const anchor = document.createElement('a');
+      anchor.href = `./Products/productDetails.html?id=${docSnap.id}`;
       anchor.appendChild(img);
+
       cardImages.appendChild(anchor);
-      
       count++;
     }
 
@@ -203,6 +204,5 @@ function createMainCards(snap) {
 }
 
 
+// Load bestsellers on page load
 loadBestsellers();
-
-

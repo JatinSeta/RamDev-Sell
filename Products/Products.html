@@ -24,115 +24,103 @@
   </div>
 
   <!-- Navbar -->
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="nav-left">
-            <a href="../index.html" class="logo">
-                <img src="../Imges/Logo.png" alt="Ramdev logo" />
-            </a>
-        </div>
-
-        <div class="nav-center">
-            <form class="search-form" role="search">
-                <input type="search" placeholder="Search products..." aria-label="Search products">
-                <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
-            </form>
-        </div>
-
-        <div class="nav-right">
-            <ul class="nav-links">
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="../About/About.html">About</a></li>
-                <li><a href="./Products.html">Products</a></li>
-                <li><a href="../Contact/Contact.html">Contact</a></li>
-            </ul>
-            <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
-                <img src="../Imges/Menu.png" alt="menu" data-closed="../Imges/Menu.png" data-open="../Imges/close.png" />
-            </button>
-        </div>
-    </nav>
-
-    <!-- Mobile menu -->
-    <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
-        <div class="mobile-inner">
-            <a href="../index.html">Home</a>
-            <a href="../About/About.html">About</a>
-            <a href="./Products.html">Products</a>
-            <a href="../Contact/Contact.html">Contact</a>
-        </div>
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="../index.html" class="logo">
+        <img src="../Imges/Logo.png" alt="Ramdev logo" />
+      </a>
     </div>
+    <div class="nav-center">
+      <form class="search-form" role="search">
+        <input type="search" placeholder="Search products..." aria-label="Search products">
+        <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+      </form>
+    </div>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../About/About.html">About</a></li>
+        <li><a href="./Products.html">Products</a></li>
+        <li><a href="../Contact/Contact.html">Contact</a></li>
+      </ul>
+      <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
+        <img src="../Imges/Menu.png" alt="menu" data-closed="../Imges/Menu.png" data-open="../Imges/close.png" />
+      </button>
+    </div>
+  </nav>
 
-    <!-- Menu backdrop -->
-    <div id="menuBackdrop" class="menu-backdrop" aria-hidden="true"></div>
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+    <div class="mobile-inner">
+      <a href="../index.html">Home</a>
+      <a href="../About/About.html">About</a>
+      <a href="./Products.html">Products</a>
+      <a href="../Contact/Contact.html">Contact</a>
+    </div>
+  </div>
 
+  <!-- Menu backdrop -->
+  <div id="menuBackdrop" class="menu-backdrop" aria-hidden="true"></div>
+
+  <!-- Main Content -->
   <div id="mainContent" style="display:none;">
     <section class="hero">
       <div class="hero-container">
-          <h1>All Products</h1>
-          <p class="hero-sub">Turning ideas into reality with top-quality hardware and electrical supplies.</p>
+        <h1>All Products</h1>
+        <p class="hero-sub">Turning ideas into reality with top-quality hardware and electrical supplies.</p>
       </div>
       <div class="hero-image"></div>
     </section>
 
     <div class="products-wrapper">
-   
-
       <div class="container">
         <div id="productsList" class="products-list"></div>
-
+        <div id="pagination" class="pagination"></div>
       </div>
-      <div class="products-wrapper">
-  <div class="container">
-    <div id="productsList" class="products-list"></div>
-    <div id="pagination" class="pagination"></div>
-  </div>
-</div>
-
     </div>
   </div>
 
   <!-- Contact Modal -->
-<div id="contactModal" class="contact-modal" style="display:none;">
-  <div class="contact-modal-content">
-    <span id="closeModal" class="close-modal">&times;</span>
-    <div class="contact-header">
-      <div class="contact-logo">
-        <img src="../Imges/Logo.png" alt="Company Logo">
+  <div id="contactModal" class="contact-modal" style="display:none;">
+    <div class="contact-modal-content">
+      <span id="closeModal" class="close-modal">&times;</span>
+      <div class="contact-header">
+        <div class="contact-logo">
+          <img src="../Imges/Logo.png" alt="Company Logo">
+        </div>
+        <div class="contact-info">
+          <p>Mobile: +1234567890</p>
+          <p>Email: contact@company.com</p>
+        </div>
       </div>
-      <div class="contact-info">
-        <p>Mobile: +1234567890</p>
-        <p>Email: contact@company.com</p>
-      </div>
+
+      <h2 class="form-title">Product Inquiry Form</h2>
+
+      <form class="contact-form" id="contactForm">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="company">Company Name</label>
+        <input type="text" id="company" name="company" required>
+
+        <label for="mobile">Mobile Number</label>
+        <input type="tel" id="mobile" name="mobile" required>
+
+        <label for="product">Product Name</label>
+        <input type="text" id="product" name="product" required readonly>
+
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" name="quantity" required>
+
+        <label for="file">Attach File</label>
+        <input type="file" id="file" name="file">
+
+        <button type="submit">Submit</button>
+      </form>
     </div>
-
-    <h2 class="form-title">Product Inquiry Form</h2>
-
-    <form class="contact-form" id="contactForm">
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" required>
-
-      <label for="company">Company Name</label>
-      <input type="text" id="company" name="company" required>
-
-      <label for="mobile">Mobile Number</label>
-      <input type="tel" id="mobile" name="mobile" required>
-
-      <label for="product">Product Name</label>
-      <input type="text" id="product" name="product" required readonly>
-
-      <label for="quantity">Quantity</label>
-      <input type="number" id="quantity" name="quantity" required>
-
-      <label for="file">Attach File</label>
-      <input type="file" id="file" name="file">
-
-      <button type="submit">Submit</button>
-    </form>
   </div>
-</div>
 
-
-
+  <!-- Scripts -->
   <script type="module" src="./Products.js"></script>
   <script type="module" src="../index.js"></script>
 </body>

@@ -1,7 +1,6 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-// Your Firebase project configuration (from Firebase Console)
 const firebaseConfig = {
   apiKey: "AIzaSyAkQ-ZSrxaQNLRMe6ogXUHpgax4tzfHSiA",
   authDomain: "ramdev-hardware.firebaseapp.com",
@@ -12,11 +11,5 @@ const firebaseConfig = {
   measurementId: "G-E47CXNVPJP"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Initialize Firestore (optional)
-const db = getFirestore(app);
-
-// Export them so other files can use
-export { app, db };
+export const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);

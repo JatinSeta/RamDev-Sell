@@ -1,69 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Panel | RamDev Sales Corporation</title>
-  <link rel="stylesheet" href="AdminPanel.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Sidebar Admin</title>
+  
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="./AdminPanel.css">
 </head>
 
 <body>
-  <div class="container">
-    <h1>Admin Panel</h1>
 
-    <form id="dataForm">
-      <label>Product Name:</label>
-      <input type="text" id="name" placeholder="Enter Product Name" required />
-
-      <label>Product Details (Max 500 characters):</label>
-      <textarea id="details" placeholder="Enter product details" required></textarea>
-      <div id="wordCount">0 / 500 characters</div>
-
-      <label>Image URLs:</label>
-      <input type="url" id="url1" class="image-url" placeholder="Main Image URL" required />
-      <input type="url" id="url2" class="image-url" placeholder="Second Image URL" required />
-      <div id="extraUrls"></div>
-      <button type="button" id="addUrlBtn">Add More Images</button>
-
-      <div id="previewContainer" style="display:none;">
-        <div class="preview-section">
-          <button type="button" id="prevBtn" class="nav-btn">⮜</button>
-          <img id="mainPreview" alt="Main Preview" />
-          <button type="button" id="nextBtn" class="nav-btn">⮞</button>
-        </div>
-        <div id="thumbnails" class="thumbnails"></div>
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <div class="top-section">
+      <div class="logo">
+        <img src="../Imges/Logo.png" alt="Logo">
       </div>
-      <label>Additional Table Fields</label>
-<div id="keyValueContainer"></div>
-<button type="button" id="addFieldBtn">Add Table Field</button>
+    </div>
 
-      <label>Category:</label>
-      <select id="category" required>
-        <option value="">Select Category</option>
-        <option value="Hardware">Hardware</option>
-        <option value="Electrical">Electrical</option>
-      </select>
+    <div class="menu">
+      <a href="#" class="menu-item" data-section="addProductSection">
+        <span class="icon"><i class="fa-solid fa-plus"></i></span>
+        <span class="text">Add Product</span>
+      </a>
 
-      <button type="submit" class="submit-btn">Save Product</button>
-    </form>
+      <a href="#" class="menu-item" data-section="allProductsSection">
+        <span class="icon"><i class="fa-solid fa-box"></i></span>
+        <span class="text">All Products</span>
+      </a>
+          <a href="#" class="menu-item" data-section="bestSellersSection">
+      <span class="icon"><i class="fa-solid fa-star"></i></span>
+      <span class="text">Best Sellers</span>
+    </a>
+<a href="#" class="menu-item" data-section="ordersSection">
+    <span class="icon"><i class="fa-solid fa-list"></i></span>
+    <span class="text">Orders</span>
 
-    <hr />
+  </a>
+
+    </div>
+
+    <div class="bottom-section">
+      <a href="#" class="menu-item signout">
+        <span class="icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+        <span class="text">Log Out</span>
+      </a>
+    </div>
+  </div>
+<div id="overlay"></div>
+
+<div class="mobile-toggle-btn">
+    <i class="fa-solid fa-bars"></i>
+</div>
+
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+ <section id="addProductSection" class="admin-section">
+      <div class="container">
+        <h1>Add Product</h1>
+        <form id="dataForm">
+          <label>Product Name:</label>
+          <input type="text" id="name" placeholder="Enter Product Name" required>
+
+          <label>Product Details (Max 500 Characters):</label>
+          <textarea id="details" placeholder="Enter product details" required></textarea>
+          <div id="wordCount">0 / 500 characters</div>
+
+          <label>Image URLs:</label>
+          <input type="url" id="url1" class="image-url" placeholder="Main Image URL" required>
+          <input type="url" id="url2" class="image-url" placeholder="Second Image URL" required>
+          <div id="extraUrls"></div>
+          <button type="button" id="addUrlBtn">Add More Images</button>
+
+          <!-- Image Preview -->
+          <div id="previewContainer" style="display:none; margin-top:20px;">
+            <img id="mainPreview" style="width:200px;height:200px;object-fit:cover;border:1px solid #ccc;border-radius:10px;">
+            <div id="thumbnails" style="display:flex;gap:10px;margin-top:10px;"></div>
+          </div>
+
+          <label>Additional Table Fields</label>
+          <div id="keyValueContainer"></div>
+          <button type="button" id="addFieldBtn">Add Table Field</button>
+
+          <label>Category:</label>
+          <select id="category" required>
+            <option value="">Select Category</option>
+            <option value="Hardware">Hardware</option>
+            <option value="Electrical">Electrical</option>
+          </select>
+
+          <button type="submit" class="submit-btn">Save Product</button>
+        </form>
+      </div>
+    </section>
+
+<section id="allProductsSection" class="admin-section" style="display:none;">
+    <h2>All Products</h2>
+    <div id="searchContainer" class="search-container">
+        <input type="text" id="searchInput" placeholder="Search products...">
+        <button id="selectBSBtn">Select Best Sellers</button>
+    </div>
+    <div id="productsList" class="products-grid"></div>
+</section>
+
+
+
+    <!-- Best Sellers Section -->
+    <section id="bestSellersSection" class="admin-section" style="display:none;">
+      <h2>Best Sellers</h2>
+      <div id="bestSellersList" class="products-grid"></div>
+    </section>
+<section id="ordersSection" class="admin-section">
+  <h2>Orders</h2>
+
+  <input type="text" id="orderSearchInput" placeholder="Search orders..." style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+
+  <div class="orders-list" id="ordersList">
+    <!-- JS will insert grouped orders here -->
   </div>
 
-  <section class="best-sellers-section">
-    <h2>Best Sellers</h2>
-    <div id="bestSellersList" class="products-grid"></div>
-    <button>Best Sellers</button>
-  </section>
-      <div id="searchContainer">
-        <input type="text" id="searchInput" placeholder="Search products...">
+  <!-- Modal -->
+  <div id="inquiryModal" class="modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <h3>Order Details</h3>
+      <p><strong>Company:</strong> <span id="modalCompany"></span></p>
+      <p><strong>Name:</strong> <span id="modalName"></span></p>
+      <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+      <p><strong>Mobile:</strong> <span id="modalMobile"></span></p>
+      <p><strong>Product:</strong> <span id="modalProduct"></span></p>
+      <p><strong>Quantity:</strong> <span id="modalQuantity"></span></p>
+      <p><strong>Date:</strong> <span id="modalDate"></span></p>
     </div>
-  <section class="products-section">
-    <h2>All Products</h2>
-    <div id="productsList" class="products-grid"></div>
-  </section>
+  </div>
+</section>
 
-  <script type="module" src="AdminPanel.js"></script>
+
+
+  </div>
+
+
+  <!-- JS File -->
+  <script type="module" src="./AdminPanel.js"></script>
+
 </body>
 </html>

@@ -565,7 +565,7 @@
 }
 
 .contact-info p {
-  margin: 2px 0;
+  text-align: center;
   font-size: 14px;
   color: #555;
 }
@@ -606,9 +606,15 @@
   background-color: #007bff;
 }
 
-/* Form title */
-.form-title {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
+/* Product card details */
+.card-details {
+  font-size: 14px;
+  color: #555;
+  margin-top: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
