@@ -935,53 +935,102 @@ section {
 @media (max-width: 768px) {
   .orders-list { grid-template-columns: 1fr; }
 }
-/* Flex container for search input + button */
-.search-container {
-    display: flex;
-    gap: 10px;          /* space between input and button */
-    margin-bottom: 20px;
-    flex-wrap: wrap;     /* wrap on small screens */
-    align-items: stretch; /* ensures children stretch to same height */
+/* Overlay */
+#loginOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  display: none;
+  z-index: 999;
 }
 
-/* Search input takes remaining space */
-#searchInput {
-    flex: 1;             /* grow to fill available width */
-    min-width: 200px;
-    padding: 10px 15px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    outline: none;
-    transition: 0.3s;
+/* Modal container */
+#loginModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;           /* responsive width */
+  max-width: 500px;     /* max width on large screens */
+  height: auto;         /* height adjusts to content */
+  max-height: 80vh;     /* responsive max height */
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  overflow-y: auto;
+  display: none;
+  z-index: 1000;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-/* Button takes same height as input */
-#selectBSBtn {
-    padding: 0 20px;       /* horizontal padding only */
-    border: none;
-    border-radius: 10px;
-    background-color: #007bff;
-    color: #fff;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Close button */
+#loginModal .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
 }
 
-#selectBSBtn:hover {
-    background-color: #0056b3;
+/* Modal content */
+#loginModal .modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-/* Responsive: stack input + button on very small screens */
-@media (max-width: 480px) {
-    .search-container {
-        flex-direction: column;
-    }
-    #searchInput, #selectBSBtn {
-        width: 100%;
-    }
+/* Inputs */
+#loginModal input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+/* Submit button */
+#loginModal button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#loginModal button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive tweaks for very small screens */
+@media (max-width: 400px) {
+  #loginModal {
+    padding: 15px 20px;
+  }
+
+  #loginModal button[type="submit"] {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+#loginForm input,
+#loginForm button {
+  padding: 10px; /* Adjust the padding value as needed */
+  margin-bottom: 15px; /* Add some space below each element */
+  width: 100%; /* Make input fields and button fill the available width */
+  box-sizing: border-box; /* Ensure padding doesn't affect the width */
+}
+
+#loginForm input {
+  margin-bottom: 10px; /* Space between input fields */
+}
+
+#loginForm button {
+  margin-top: 10px; /* Space above the button */
 }

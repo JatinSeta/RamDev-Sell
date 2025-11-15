@@ -1,15 +1,24 @@
 import { db } from "../firebase-config.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
 // DOM elements
 const productsList = document.getElementById('productsList');
 const loader = document.getElementById('loader');
 const mainContent = document.getElementById('mainContent');
+
+// Modal elements
 const contactModal = document.getElementById('contactModal');
-const closeModalBtn = document.getElementById('closeModal');
 const contactForm = document.getElementById('contactForm');
 const productInput = document.getElementById('product');
+const closeModal = document.getElementById('closeModal');
 
-// Load products
+// Form Sections
+const formSection = document.getElementById("formSection");
+const thankYouSection = document.getElementById("thankYouSection");
+
+// ==========================
+// Load Products
+// ==========================
 async function loadProducts() {
   try {
     const productsRef = collection(db, "Products");
@@ -28,7 +37,7 @@ async function loadProducts() {
       const card = document.createElement('div');
       card.className = 'product-card';
 
-      // Best Seller badge
+      // Best Seller Badge
       if (product.bestSeller) {
         const badge = document.createElement('div');
         badge.className = 'best-seller-badge';
@@ -46,45 +55,35 @@ async function loadProducts() {
       title.className = 'card-title';
       title.textContent = product.name || "(no name)";
 
-      // Product category
-      const category = document.createElement('div');
-      category.className = 'card-category';
-      category.textContent = product.category || "Uncategorized";
-
-      // Product details
-      const details = document.createElement('p');
-      details.className = 'card-details';
-      details.textContent = product.details || "";
-
       // Buttons container
       const btnContainer = document.createElement('div');
       btnContainer.className = 'card-buttons';
 
-      // Contact Us button
+      // Contact Button
       const contactBtn = document.createElement('button');
       contactBtn.className = 'contact-btn';
       contactBtn.textContent = 'Contact Us';
       contactBtn.addEventListener('click', () => {
         productInput.value = product.name || "";
-        contactModal.style.display = 'block';
+        contactModal.style.display = 'flex';
+        formSection.style.display = 'block';
+        thankYouSection.style.display = 'none';  // Reset thank you section when opening the modal
       });
 
-      // View button
+      // View Button
       const viewBtn = document.createElement('button');
       viewBtn.className = 'view-btn';
       viewBtn.textContent = 'View';
       viewBtn.addEventListener('click', () => {
-        alert(`View product: ${product.name}`); // Replace with actual product page later
+        window.location.href = `../Products/productDetails.html?id=${product.id}`;
       });
 
       btnContainer.appendChild(contactBtn);
       btnContainer.appendChild(viewBtn);
 
-      // Append elements to card
+      // Add all to card
       card.appendChild(img);
       card.appendChild(title);
-      card.appendChild(category);
-      card.appendChild(details);
       card.appendChild(btnContainer);
 
       productsList.appendChild(card);
@@ -99,11 +98,77 @@ async function loadProducts() {
   }
 }
 
-// Close modal
-closeModalBtn.addEventListener('click', () => {
-  contactModal.style.display = 'none';
-  contactForm.reset();
+// ==========================
+// Prevent modal close on outside click
+// ==========================
+contactModal.addEventListener("click", (e) => {
+  e.stopPropagation(); // User cannot close modal by clicking outside
 });
+
+// ==========================
+// Submit Inquiry Form
+// ==========================
+contactForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById('name').value.trim();
+  const company = document.getElementById('company').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const product = document.getElementById('product').value.trim();
+  const message = document.getElementById('message').value.trim();
+
+  if (!name || !email || !phone || !message) {
+    alert("Please fill all required fields.");
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "Inquiries"), {
+      name,
+      company,
+      email,
+      phone,
+      product,
+      message,
+      createdAt: new Date()
+    });
+
+    // Show Thank You Message
+    formSection.style.display = "none";
+    thankYouSection.style.display = "block";
+
+    // Automatically close the modal after 3 seconds
+    setTimeout(() => {
+      contactModal.style.display = 'none';  // Close modal after 3 seconds
+      resetForm();  // Reset form fields when the modal closes
+    }, 3000);
+
+  } catch (err) {
+    alert("Error submitting inquiry: " + err.message);
+  }
+});
+
+// Reset form function
+function resetForm() {
+  // Clear the form fields
+  document.getElementById('contactForm').reset();
+
+  // Hide the thank you section and reset to form section
+  formSection.style.display = "block";
+  thankYouSection.style.display = "none";
+}
+
+
+// ==========================
+// Close Modal Button
+// ==========================
+closeModal.addEventListener('click', () => {
+  // Hide the modal when the close button is clicked
+  contactModal.style.display = 'none';
+  resetForm();  // Reset the form fields when modal is closed manually
+});
+
 
 // Initialize
 window.addEventListener("DOMContentLoaded", () => {

@@ -80,45 +80,39 @@
     </div>
   </div>
 
-  <!-- Contact Modal -->
-  <div id="contactModal" class="contact-modal" style="display:none;">
-    <div class="contact-modal-content">
-      <span id="closeModal" class="close-modal">&times;</span>
-      <div class="contact-header">
-        <div class="contact-logo">
-          <img src="../Imges/Logo.png" alt="Company Logo">
-        </div>
-        <div class="contact-info">
-          <p>Mobile: +1234567890</p>
-          <p>Email: contact@company.com</p>
-        </div>
-      </div>
+<!-- Contact Modal -->
+<div id="contactModal" class="contact-modal">
+  <div class="modal-content">
 
-      <h2 class="form-title">Product Inquiry Form</h2>
+    <!-- Close Button -->
+    <span id="closeModal" class="close-btn">&times;</span>
 
-      <form class="contact-form" id="contactForm">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" required>
+    <!-- Form Section -->
+    <div id="formSection">
+      <h2>Contact Us</h2>
 
-        <label for="company">Company Name</label>
-        <input type="text" id="company" name="company" required>
+      <form id="contactForm">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="text" id="company" placeholder="Company Name">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="tel" id="phone" placeholder="Phone Number" required>
+        <input type="text" id="product" placeholder="Product Name" readonly>
+        <textarea id="message" placeholder="Message" required></textarea>
 
-        <label for="mobile">Mobile Number</label>
-        <input type="tel" id="mobile" name="mobile" required>
-
-        <label for="product">Product Name</label>
-        <input type="text" id="product" name="product" required readonly>
-
-        <label for="quantity">Quantity</label>
-        <input type="number" id="quantity" name="quantity" required>
-
-        <label for="file">Attach File</label>
-        <input type="file" id="file" name="file">
-
-        <button type="submit">Submit</button>
+        <button type="submit" class="submit-btn">Submit</button>
       </form>
     </div>
+
+    <!-- Thank You Message -->
+    <div id="thankYouSection" class="thankyou-section" style="display:none;">
+  <h2>Thank You!</h2>
+  <p>Your inquiry has been submitted. We will contact you soon.</p>
+</div>
+
+
   </div>
+</div>
+
 
   <!-- Scripts -->
   <script type="module" src="./Products.js"></script>

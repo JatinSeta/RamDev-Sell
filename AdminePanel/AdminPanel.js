@@ -20,6 +20,19 @@ const mobileToggleBtn = document.querySelector('.mobile-toggle-btn');
 const sidebar = document.getElementById('sidebar');
 const selectBSBtn = document.querySelector('#selectBSBtn');
 
+// Orders elements
+const ordersList = document.getElementById("ordersList");
+const modal = document.getElementById("inquiryModal");
+const closeModalBtn = document.getElementById("closeModal");
+const modalCompany = document.getElementById("modalCompany");
+const modalName = document.getElementById("modalName");
+const modalEmail = document.getElementById("modalEmail");
+const modalMobile = document.getElementById("modalMobile");
+const modalProduct = document.getElementById("modalProduct");
+const modalQuantity = document.getElementById("modalQuantity");
+const modalDate = document.getElementById("modalDate");
+const orderSearchInput = document.getElementById("orderSearchInput");
+
 let fieldCount = 0;
 let currentLoadedImages = [];
 let previewIndex = 0;
@@ -30,80 +43,33 @@ let editingProductId = null;
 let selectingBestSellers = false;
 
 // ---------------- Sidebar toggle ----------------
-const menuItems = document.querySelectorAll('.menu-item[data-section]');
-const sections = document.querySelectorAll('.admin-section');
-
-// ---------------- Sidebar toggle ----------------
 mobileToggleBtn.addEventListener('click', () => {
     sidebar.classList.toggle('active');
 });
 
-// ---------------- Overlay click to close ----------------
 const overlay = document.getElementById('overlay');
 overlay.addEventListener('click', () => {
     sidebar.classList.remove('active');
 });
 
-// ---------------- Section switcher ----------------
+const menuItems = document.querySelectorAll('.menu-item[data-section]');
+const sections = document.querySelectorAll('.admin-section');
+
 function showSection(sectionId) {
-    sections.forEach(sec => {
-        sec.style.display = sec.id === sectionId ? 'block' : 'none';
-    });
-    menuItems.forEach(item => {
-        if(item.getAttribute('data-section') === sectionId){
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
-        }
-    });
-    // Close sidebar on mobile after clicking
+    sections.forEach(sec => sec.style.display = sec.id === sectionId ? 'block' : 'none');
+    menuItems.forEach(item => item.classList.toggle('active', item.getAttribute('data-section') === sectionId));
     if(window.innerWidth <= 768) sidebar.classList.remove('active');
 }
 
-// Attach click events
 menuItems.forEach(item => {
-    item.addEventListener('click', (e) => {
-        e.preventDefault();
-        const sectionId = item.getAttribute('data-section');
-        showSection(sectionId);
-    });
-});
-
-// ---------------- Default Section ----------------
-document.addEventListener('DOMContentLoaded', () => {
-    showSection('addProductSection'); // Default open
-});
-
-
-// ---------------- Section switcher ----------------
-document.querySelectorAll('.menu-item[data-section]').forEach(item => {
     item.addEventListener('click', e => {
         e.preventDefault();
-        const sectionId = item.getAttribute('data-section');
-
-        // Show selected section, hide others
-        document.querySelectorAll('.admin-section').forEach(sec => {
-            sec.style.display = sec.id === sectionId ? 'block' : 'none';
-        });
-
-        // Close sidebar on mobile after selecting
-        if(window.innerWidth <= 768){
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-        }
+        showSection(item.getAttribute('data-section'));
     });
 });
 
-// ---------------- Section switcher ----------------
-document.querySelectorAll('.menu-item[data-section]').forEach(item => {
-    item.addEventListener('click', (e) => {
-        e.preventDefault();
-        const sectionId = item.getAttribute('data-section');
-        document.querySelectorAll('.admin-section').forEach(sec => {
-            sec.style.display = sec.id === sectionId ? 'block' : 'none';
-        });
-        if (sidebar.classList.contains('active')) sidebar.classList.remove('active');
-    });
+document.addEventListener('DOMContentLoaded', () => {
+    showSection('addProductSection'); // default
 });
 
 // ---------------- Image Preview ----------------
@@ -156,9 +122,7 @@ function updatePreviews() {
     });
 }
 
-document.querySelectorAll('.image-url').forEach(input=>{
-    input.addEventListener('input', updatePreviews);
-});
+document.querySelectorAll('.image-url').forEach(input=> input.addEventListener('input', updatePreviews));
 
 addUrlBtn.addEventListener('click', ()=>{
     urlCount++;
@@ -195,8 +159,7 @@ addFieldBtn.addEventListener('click', ()=>{
 
 function getKeyValuePairs(){
     const rows=document.querySelectorAll('.key-value-row');
-    const list=[];
-    rows.forEach(r=>{
+    const list=[]; rows.forEach(r=>{
         const [k,v]=r.querySelectorAll('input');
         if(k.value.trim() && v.value.trim()) list.push({key:k.value,value:v.value});
     });
@@ -291,26 +254,19 @@ async function loadProducts(){
                 <button class="delete-btn"><i class="fa-solid fa-trash"></i></button>
             </div>
         `;
-
-        // Edit
         card.querySelector('.edit-btn').addEventListener('click', ()=>{ fillEditForm(productId,data); });
-
-        // Delete product
         card.querySelector('.delete-btn').addEventListener('click', async ()=>{
             if(confirm('Delete this product?')){
                 await deleteDoc(doc(db,'Products',productId));
                 loadProducts();
             }
         });
-
-        // Toggle BestSeller in selection mode
         card.querySelector('img').addEventListener('click', async ()=>{
             if(selectingBestSellers){
                 await updateDoc(doc(db,'Products',productId), { bestSeller: !data.bestSeller });
                 loadProducts();
             }
         });
-
         productsList.appendChild(card);
 
         // ----- BEST SELLERS CARD -----
@@ -325,16 +281,13 @@ async function loadProducts(){
                     <button class="remove-bs-btn"><i class="fa-solid fa-xmark"></i></button>
                 </div>
             `;
-
             bsCard.querySelector('.edit-btn').addEventListener('click', ()=>{ fillEditForm(productId,data); });
-
             bsCard.querySelector('.remove-bs-btn').addEventListener('click', async ()=>{
                 if(confirm('Remove from Best Sellers?')){
                     await updateDoc(doc(db,'Products',productId), { bestSeller: false });
                     loadProducts();
                 }
             });
-
             bestSellersList.appendChild(bsCard);
         }
     });
@@ -372,7 +325,7 @@ function fillEditForm(id,data){
     window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// ---------------- Search ----------------
+// ---------------- Search Products ----------------
 searchInput.addEventListener('input', ()=>{
     const q = searchInput.value.trim().toLowerCase().replace(/\s+/g,'');
     document.querySelectorAll('.product-card').forEach(card=>{
@@ -381,25 +334,11 @@ searchInput.addEventListener('input', ()=>{
     });
 });
 
-// ---------------- Initial load ----------------
 loadProducts();
 
 // ---------------- Orders Section ----------------
-const ordersList = document.getElementById("ordersList");
-const modal = document.getElementById("inquiryModal");
-const closeModalBtn = document.getElementById("closeModal");
 
-const modalCompany = document.getElementById("modalCompany");
-const modalName = document.getElementById("modalName");
-const modalEmail = document.getElementById("modalEmail");
-const modalMobile = document.getElementById("modalMobile");
-const modalProduct = document.getElementById("modalProduct");
-const modalQuantity = document.getElementById("modalQuantity");
-const modalDate = document.getElementById("modalDate");
-
-const orderSearchInput = document.getElementById("orderSearchInput");
-
-// ---------------- Load Orders ----------------
+// Load orders with persistent "New" badge
 async function loadOrders() {
     ordersList.innerHTML = "";
 
@@ -411,37 +350,32 @@ async function loadOrders() {
         const yesterday = new Date();
         yesterday.setDate(today.getDate() - 1);
 
-        const ordersByDate = {}; // { "Today": [], "Yesterday": [], "15 Nov 2025": [] }
+        const ordersByDate = {};
 
         qSnap.forEach(docSnap => {
             const data = docSnap.data();
             const createdAt = data.createdAt ? new Date(data.createdAt.seconds * 1000) : null;
             if (!createdAt) return;
 
-            let dateLabel = createdAt.toLocaleDateString(); // default
-
+            let dateLabel = createdAt.toLocaleDateString();
             if (createdAt.toDateString() === today.toDateString()) dateLabel = "Today";
             else if (createdAt.toDateString() === yesterday.toDateString()) dateLabel = "Yesterday";
             else dateLabel = createdAt.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
 
             if (!ordersByDate[dateLabel]) ordersByDate[dateLabel] = [];
-            ordersByDate[dateLabel].push({ ...data, createdAt });
+            ordersByDate[dateLabel].push({ id: docSnap.id, ...data, createdAt });
         });
 
-        // Sort keys so Today -> Yesterday -> Older Dates Descending
         const sortedKeys = Object.keys(ordersByDate).sort((a, b) => {
             if (a === "Today") return -1;
             if (b === "Today") return 1;
             if (a === "Yesterday") return -1;
             if (b === "Yesterday") return 1;
-
-            // For older dates: sort descending
             const dateA = new Date(ordersByDate[a][0].createdAt);
             const dateB = new Date(ordersByDate[b][0].createdAt);
             return dateB - dateA;
         });
 
-        // Render orders grouped by sorted dates
         sortedKeys.forEach(dateLabel => {
             const groupHeader = document.createElement("h3");
             groupHeader.textContent = dateLabel;
@@ -460,68 +394,158 @@ async function loadOrders() {
                 card.style.display = "flex";
                 card.style.justifyContent = "space-between";
                 card.style.alignItems = "center";
+                card.style.position = "relative";
 
                 card.innerHTML = `
                     <div>
                         <h4>${data.company || 'Unknown Company'}</h4>
                         <p><strong>Name:</strong> ${data.name || ''}</p>
                         <p><strong>Email:</strong> ${data.email || ''}</p>
-                        <p><strong>Mobile:</strong> ${data.mobile || ''}</p>
+                        <p><strong>Phone:</strong> ${data.phone || ''}</p>
                     </div>
                     <button class="view-btn" style="padding:5px 10px;background:#007bff;color:#fff;border:none;border-radius:4px;cursor:pointer;">View</button>
                 `;
 
-            card.querySelector(".view-btn").addEventListener("click", () => {
-    modalCompany.textContent = data.company || '';
-    modalName.textContent = data.name || '';
-    modalEmail.textContent = data.email || '';
-    modalMobile.textContent = data.mobile || '';
-    modalProduct.textContent = data.product || '';
-    modalQuantity.textContent = data.quantity || '';
-    modalDate.textContent = data.createdAt 
-        ? data.createdAt.toLocaleString(undefined, {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true
-        })
-        : '';
-    modal.style.display = "flex";
-});
+                // Show badge if order not seen
+                if (!data.seen) {
+                    const badge = document.createElement("span");
+                    badge.textContent = "New";
+                    badge.style.position = "absolute";
+                    badge.style.top = "10px";
+                    badge.style.right = "10px";
+                    badge.style.background = "#ff3b30";
+                    badge.style.color = "#fff";
+                    badge.style.padding = "2px 6px";
+                    badge.style.borderRadius = "12px";
+                    badge.style.fontSize = "12px";
+                    badge.style.fontWeight = "bold";
+                    card.appendChild(badge);
+                }
 
+                // View button opens modal & marks as seen
+                card.querySelector(".view-btn").addEventListener("click", async () => {
+                    modalCompany.textContent = data.company || '';
+                    modalName.textContent = data.name || '';
+                    modalEmail.textContent = data.email || '';
+                    modalMobile.textContent = data.mobile || '';
+                    modalProduct.textContent = data.product || '';
+                    modalQuantity.textContent = data.quantity || '';
+                    modalDate.textContent = data.createdAt 
+                        ? data.createdAt.toLocaleString(undefined, {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
+                            hour12: true
+                        })
+                        : '';
+                    modal.style.display = "flex";
+
+                    // Mark as seen
+                    try {
+                        await updateDoc(doc(db, "Inquiries", data.id), { seen: true });
+                        const badge = card.querySelector("span");
+                        if (badge) badge.remove();
+                    } catch(err) {
+                        console.error("Error marking order as seen:", err);
+                    }
+                });
 
                 ordersList.appendChild(card);
             });
         });
-
-    } catch (err) {
-        console.error("Error loading orders:", err);
-        showToast("Error loading orders", "error");
+    } catch(err) {
+        console.error(err);
     }
 }
 
+closeModalBtn.addEventListener("click", ()=>{ modal.style.display="none"; });
+window.addEventListener("click", e=>{ if(e.target==modal) modal.style.display="none"; });
 
-// ---------------- Modal Close ----------------
-closeModalBtn.addEventListener("click", () => modal.style.display = "none");
-window.addEventListener("click", (e) => {
-    if (e.target === modal) modal.style.display = "none";
-});
-
-// ---------------- Search Orders ----------------
-orderSearchInput.addEventListener("input", () => {
-    const q = orderSearchInput.value.trim().toLowerCase().replace(/\s+/g, '');
-    document.querySelectorAll(".inquiry-card").forEach(card => {
-        const company = (card.querySelector("h3")?.textContent.toLowerCase() || '').replace(/\s+/g, '');
-        const name = (card.querySelector("p:nth-of-type(1)")?.textContent.toLowerCase() || '').replace(/\s+/g, '');
-        const email = (card.querySelector("p:nth-of-type(2)")?.textContent.toLowerCase() || '').replace(/\s+/g, '');
-        const mobile = (card.querySelector("p:nth-of-type(3)")?.textContent.toLowerCase() || '').replace(/\s+/g, '');
-        const match = company.includes(q) || name.includes(q) || email.includes(q) || mobile.includes(q);
-        card.style.display = match ? "flex" : "none";
-    });
-});
-
-// ---------------- Initial Load ----------------
 loadOrders();
+const loginModal = document.getElementById("loginModal");
+const loginForm = document.getElementById("loginForm");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const errorMessage = document.getElementById("error-message");
+const closeLoginBtn = document.getElementById("closeModalBtn");
+
+// Optional: hide the close button if you don't want users to close modal manually
+closeLoginBtn.style.display = "none";
+
+// Example using Firebase Auth (Web v9 modular)
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+const auth = getAuth();
+
+loginForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    console.log("Logged in:", userCredential.user);
+
+    // Store login state in localStorage
+    localStorage.setItem('isLoggedIn', 'true');
+
+    // Remove login modal completely
+    if (loginModal) loginModal.remove();
+
+    // Remove overlay completely from DOM
+    const overlayEl = document.getElementById('loginOverlay');
+    if (overlayEl) overlayEl.remove();
+
+    // Ensure sidebar toggle works for mobile
+    sidebar.classList.remove('active');
+    mobileToggleBtn.style.display = "block";
+
+  } catch (error) {
+    console.error(error);
+    errorMessage.textContent = error.message;
+  }
+});
+
+const loginOverlay = document.getElementById('loginOverlay');
+
+function showLoginModal() {
+  // Check if user is logged in, if so, skip showing the modal
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  if (!isLoggedIn) {
+    loginModal.style.display = 'flex';
+    loginOverlay.style.display = 'block';
+  }
+}
+
+function hideLoginModal() {
+  loginModal.style.display = 'none';
+  loginOverlay.style.display = 'none';
+}
+
+closeLoginBtn.addEventListener('click', hideLoginModal);
+loginOverlay.addEventListener('click', hideLoginModal);
+
+// Example: show login modal on page load
+document.addEventListener('DOMContentLoaded', showLoginModal);
+
+// Function to handle logout
+function logout() {
+  // Remove the login state from localStorage
+  localStorage.removeItem('isLoggedIn');
+  
+  // Reload the page to reset the state and potentially show the login modal
+  window.location.reload();
+}
+
+// Event listener for "Log Out" click
+const logoutBtn = document.querySelector('.menu-item.signout');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', function (e) {
+    e.preventDefault(); // Prevent default link behavior (if any)
+    logout(); // Call logout function
+  });
+}
+
