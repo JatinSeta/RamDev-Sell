@@ -322,7 +322,7 @@
       text-align: center;
 
       /* Background image */
-      background-image: url('../Imges/Product\ Hero\ Sections.png'); /* path from CSS file */
+      background-image: url('../Imges/ProductHeroSections.png'); /* path from CSS file */
       background-size: cover;          /* cover entire section */
       background-position: center;     /* center the image */
       background-repeat: no-repeat;    /* prevent repeating */
@@ -563,6 +563,9 @@
   cursor: pointer;
 }
 
+.thankyou-section {
+  text-align: center;
+}
 
 .close-thankyou {
   margin-top: 15px;

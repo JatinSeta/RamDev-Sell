@@ -21,7 +21,12 @@
     <h2>Admin Login</h2>
     <div id="error-message" style="color:red;margin-bottom:10px;"></div>
     <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
+<div style="position: relative;">
+  <input type="password" id="password" placeholder="Password" required>
+ <i id="togglePassword" class="fa-solid fa-eye" 
+     style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+</div>
+
     <button type="submit">Login</button>
     <button type="button" id="closeModalBtn">Close</button>
   </form>
