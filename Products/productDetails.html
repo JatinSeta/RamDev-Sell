@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product View Page</title>
   <link rel="stylesheet" href="./productDetails.css">
- 
 </head>
 <body>
 
+<!-- Breadcrumb -->
 <nav class="breadcrumb-nav">
   <a href="../index.html" class="breadcrumb-home">Home</a> › 
   <a href="../Products/Products.html" class="breadcrumb-products">Products</a> › 
@@ -35,7 +35,7 @@
             <span class="category-tag" id="categoryTag">Category</span>
           </div>
         </div>
-        <div class="product-price" id="productPrice">$0.00</div>
+        <div class="product-price" id="productPrice">₹0.00</div>
         <div class="star-rating"><span class="stars">★★★★★</span> <span class="rating-text">(0/5.0)</span></div>
         <p class="product-description" id="productDetails">Loading details...</p>
         <div class="quantity-selector">
@@ -60,10 +60,7 @@
     <div class="extra-fields" id="extraFieldsContainer">
       <h2 class="section-title">About Product Details</h2>
       <table class="extra-fields-table" id="extraFieldsTable">
-      
-        <tbody>
-          <!-- Rows will be populated by JS -->
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
 
@@ -72,57 +69,52 @@
 
 <script type="module">
   import { db } from "../firebase-config.js";
-import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+  import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-// Get product ID from URL
-const params = new URLSearchParams(window.location.search);
-const id = params.get('id');
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
 
-// DOM Elements
-const breadcrumbName = document.getElementById('breadcrumbName');
-const nameEl = document.getElementById('productName');
-const mainImg = document.getElementById('mainImg');
-const thumbnails = document.getElementById('thumbnails');
-const detailsEl = document.getElementById('productDetails');
-const bestSellerTag = document.getElementById('bestSellerTag');
-const categoryTag = document.getElementById('categoryTag');
-const relatedList = document.getElementById('relatedList');
-const extraFieldsTableBody = document.getElementById('extraFieldsTable').querySelector('tbody');
+  const breadcrumbName = document.getElementById('breadcrumbName');
+  const nameEl = document.getElementById('productName');
+  const mainImg = document.getElementById('mainImg');
+  const thumbnails = document.getElementById('thumbnails');
+  const detailsEl = document.getElementById('productDetails');
+  const bestSellerTag = document.getElementById('bestSellerTag');
+  const categoryTag = document.getElementById('categoryTag');
+  const relatedList = document.getElementById('relatedList');
+  const extraFieldsTableBody = document.getElementById('extraFieldsTable').querySelector('tbody');
 
-let quantity = 1;
-let currentCategory = '';
+  let quantity = 1;
+  let currentCategory = '';
 
-// ================= Load Product =================
-async function loadProduct() {
+  async function loadProduct() {
     if (!id) {
-        nameEl.textContent = "No product selected";
-        breadcrumbName.textContent = "No product selected";
-        bestSellerTag.style.display = 'none';
-        categoryTag.style.display = 'none';
-        return;
+      nameEl.textContent = "No product selected";
+      breadcrumbName.textContent = "No product selected";
+      bestSellerTag.style.display = 'none';
+      categoryTag.style.display = 'none';
+      return;
     }
 
     const ref = doc(db, 'Products', id);
     const snap = await getDoc(ref);
 
     if (!snap.exists()) {
-        nameEl.textContent = "Product not found";
-        breadcrumbName.textContent = "Product not found";
-        bestSellerTag.style.display = 'none';
-        categoryTag.style.display = 'none';
-        return;
+      nameEl.textContent = "Product not found";
+      breadcrumbName.textContent = "Product not found";
+      bestSellerTag.style.display = 'none';
+      categoryTag.style.display = 'none';
+      return;
     }
 
     const data = snap.data();
-
-    // Set product name in title and breadcrumb
     const name = data.name || "Unnamed Product";
     nameEl.textContent = name;
     breadcrumbName.textContent = name;
 
-    // Price and tags
-    document.getElementById('productPrice').textContent = data.price || "$0.00";
+    document.getElementById('productPrice').textContent = data.price || "₹0.00";
     bestSellerTag.style.display = data.bestSeller ? 'inline-block' : 'none';
+
     if (data.category) {
         categoryTag.textContent = data.category;
         categoryTag.style.display = 'inline-block';
@@ -131,7 +123,7 @@ async function loadProduct() {
         categoryTag.style.display = 'none';
     }
 
-    // Images gallery
+    // Gallery images
     const images = [data.mainUrl, ...(Array.isArray(data.images) ? data.images : [])].filter(Boolean);
     mainImg.src = images[0] || '';
     thumbnails.innerHTML = '';
@@ -153,7 +145,7 @@ async function loadProduct() {
         thumbnails.appendChild(thumb);
     });
 
-    // Product details with Show more/Show less
+    // Product details with "show more"
     const fullText = data.details || "(No details available)";
     const lines = fullText.split('\n');
     const maxLines = 3;
@@ -181,7 +173,7 @@ async function loadProduct() {
     }
     renderDetails();
 
-    // Load extra fields table
+    // Extra fields table
     if (Array.isArray(data.extraFields)) {
         extraFieldsTableBody.innerHTML = '';
         data.extraFields.forEach(field => {
@@ -196,12 +188,10 @@ async function loadProduct() {
         });
     }
 
-    // Load related products
     loadRelatedProducts();
-}
+  }
 
-// ================= Load Related Products =================
-async function loadRelatedProducts() {
+  async function loadRelatedProducts() {
     if (!currentCategory) return;
     const productsRef = collection(db, 'Products');
     const q = query(productsRef, where('category', '==', currentCategory));
@@ -225,68 +215,64 @@ async function loadRelatedProducts() {
             <div class="card-content">
                 <div class="title">${prod.name}</div>
                 <div class="card-buttons">
-                    <button class="view-btn">View</button>
                     <button class="contact-btn">Contact</button>
                 </div>
             </div>
         `;
-        div.querySelector('.view-btn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            window.location.href = `./productDetails.html?id=${prod.id}`;
-        });
+
         div.querySelector('.contact-btn').addEventListener('click', (e) => {
             e.stopPropagation();
             alert('Contact us for this product!');
         });
+
         div.addEventListener('click', () => {
             window.location.href = `./productDetails.html?id=${prod.id}`;
         });
+
         relatedList.appendChild(div);
     });
-}
+  }
 
-// ================= Quantity Buttons =================
-document.getElementById('decrease-btn').addEventListener('click', () => {
-    if (quantity > 1) {
-        quantity--;
-        document.getElementById('quantity-value').textContent = quantity;
-    }
-});
-document.getElementById('increase-btn').addEventListener('click', () => {
-    quantity++;
-    document.getElementById('quantity-value').textContent = quantity;
-});
+  // Quantity controls
+  document.getElementById('decrease-btn').addEventListener('click', () => {
+      if (quantity > 1) {
+          quantity--;
+          document.getElementById('quantity-value').textContent = quantity;
+      }
+  });
+  document.getElementById('increase-btn').addEventListener('click', () => {
+      quantity++;
+      document.getElementById('quantity-value').textContent = quantity;
+  });
 
-// ================= Contact Button =================
-document.getElementById('contactBtn').addEventListener('click', () => {
-    const message = document.createElement('div');
-    message.textContent = 'Thank you for your interest! We will contact you soon.';
-    message.style.cssText = `
-        position: fixed; 
-        top: 20px; 
-        left: 50%; 
-        transform: translateX(-50%); 
-        background: #28a745; 
-        color: white; 
-        padding: 15px 30px; 
-        border-radius: 6px; 
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
-        z-index: 1000;
-    `;
-    document.body.appendChild(message);
-    setTimeout(() => message.remove(), 3000);
-});
+  // Contact button
+  document.getElementById('contactBtn').addEventListener('click', () => {
+      const message = document.createElement('div');
+      message.textContent = 'Thank you for your interest! We will contact you soon.';
+      message.style.cssText = `
+          position: fixed; 
+          top: 20px; 
+          left: 50%; 
+          transform: translateX(-50%); 
+          background: #28a745; 
+          color: white; 
+          padding: 15px 30px; 
+          border-radius: 6px; 
+          box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
+          z-index: 1000;
+      `;
+      document.body.appendChild(message);
+      setTimeout(() => message.remove(), 3000);
+  });
 
-// ================= Fullscreen Image =================
-mainImg.addEventListener('click', () => {
-    if (mainImg.requestFullscreen) mainImg.requestFullscreen();
-    else if (mainImg.webkitRequestFullscreen) mainImg.webkitRequestFullscreen();
-    else if (mainImg.msRequestFullscreen) mainImg.msRequestFullscreen();
-});
+  // Fullscreen image on click
+  mainImg.addEventListener('click', () => {
+      if (mainImg.requestFullscreen) mainImg.requestFullscreen();
+      else if (mainImg.webkitRequestFullscreen) mainImg.webkitRequestFullscreen();
+      else if (mainImg.msRequestFullscreen) mainImg.msRequestFullscreen();
+  });
 
-// ================= Initialize =================
-loadProduct();
-
+  loadProduct();
 </script>
 </body>
 </html>

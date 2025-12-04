@@ -45,21 +45,31 @@ async function loadProducts() {
         card.appendChild(badge);
       }
 
-      // Product image
+      // Product image (CLICKABLE)
       const img = document.createElement('img');
       img.src = product.mainUrl || "https://via.placeholder.com/150";
       img.alt = product.name || "Product";
+      img.style.cursor = "pointer";
 
-      // Product name
+      img.addEventListener('click', () => {
+        window.location.href = `../Products/productDetails.html?id=${product.id}`;
+      });
+
+      // Product name (CLICKABLE)
       const title = document.createElement('div');
       title.className = 'card-title';
       title.textContent = product.name || "(no name)";
+      title.style.cursor = "pointer";
+
+      title.addEventListener('click', () => {
+        window.location.href = `../Products/productDetails.html?id=${product.id}`;
+      });
 
       // Buttons container
       const btnContainer = document.createElement('div');
       btnContainer.className = 'card-buttons';
 
-      // Contact Button
+      // Contact Button ONLY
       const contactBtn = document.createElement('button');
       contactBtn.className = 'contact-btn';
       contactBtn.textContent = 'Contact Us';
@@ -67,21 +77,12 @@ async function loadProducts() {
         productInput.value = product.name || "";
         contactModal.style.display = 'flex';
         formSection.style.display = 'block';
-        thankYouSection.style.display = 'none';  // Reset thank you section when opening the modal
-      });
-
-      // View Button
-      const viewBtn = document.createElement('button');
-      viewBtn.className = 'view-btn';
-      viewBtn.textContent = 'View';
-      viewBtn.addEventListener('click', () => {
-        window.location.href = `../Products/productDetails.html?id=${product.id}`;
+        thankYouSection.style.display = 'none';
       });
 
       btnContainer.appendChild(contactBtn);
-      btnContainer.appendChild(viewBtn);
 
-      // Add all to card
+      // Build card
       card.appendChild(img);
       card.appendChild(title);
       card.appendChild(btnContainer);
@@ -102,7 +103,7 @@ async function loadProducts() {
 // Prevent modal close on outside click
 // ==========================
 contactModal.addEventListener("click", (e) => {
-  e.stopPropagation(); // User cannot close modal by clicking outside
+  e.stopPropagation();
 });
 
 // ==========================
@@ -138,10 +139,10 @@ contactForm.addEventListener("submit", async (e) => {
     formSection.style.display = "none";
     thankYouSection.style.display = "block";
 
-    // Automatically close the modal after 3 seconds
+    // Close modal after 3 sec
     setTimeout(() => {
-      contactModal.style.display = 'none';  // Close modal after 3 seconds
-      resetForm();  // Reset form fields when the modal closes
+      contactModal.style.display = 'none';
+      resetForm();
     }, 3000);
 
   } catch (err) {
@@ -151,24 +152,18 @@ contactForm.addEventListener("submit", async (e) => {
 
 // Reset form function
 function resetForm() {
-  // Clear the form fields
   document.getElementById('contactForm').reset();
-
-  // Hide the thank you section and reset to form section
   formSection.style.display = "block";
   thankYouSection.style.display = "none";
 }
-
 
 // ==========================
 // Close Modal Button
 // ==========================
 closeModal.addEventListener('click', () => {
-  // Hide the modal when the close button is clicked
   contactModal.style.display = 'none';
-  resetForm();  // Reset the form fields when modal is closed manually
+  resetForm();
 });
-
 
 // Initialize
 window.addEventListener("DOMContentLoaded", () => {
