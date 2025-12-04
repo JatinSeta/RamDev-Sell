@@ -112,7 +112,16 @@
     align-items: flex-start;
     gap: 6px;
   }
-
+  .title{
+        white-space: nowrap;         /* Prevent the text from wrapping to the next line */
+    overflow: hidden;            /* Hide the overflowing text */
+    text-overflow: ellipsis;     /* Add the ellipsis (...) */
+    width: 200px;                /* Set a width for the element (or max-width) */
+    display: block;              /* Ensure the element is a block-level element */
+    font-size: 18px;             /* Adjust font size as needed */
+    font-weight: bold;           /* Optional: Make the title bold */
+    color: #333; 
+  }
   .product-title {
     font-size: 28px;
     font-weight: 700;
@@ -333,7 +342,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
     margin-top: auto;
   }
 

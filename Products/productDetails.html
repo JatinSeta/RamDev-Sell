@@ -250,7 +250,7 @@ async function loadRelatedProducts() {
         if (docSnap.id !== id) allRelated.push({ id: docSnap.id, ...docSnap.data() });
     });
 
-    // Filter to only available products
+    // Filter only available products
     const available = allRelated.filter(p => p.available !== false);
 
     // Shuffle the available products
