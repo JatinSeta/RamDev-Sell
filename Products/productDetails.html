@@ -35,6 +35,7 @@
             <span class="category-tag" id="categoryTag">Category</span>
           </div>
         </div>
+        <div class="product-brand" id="productBrand">Brand: Not specified</div>
         <div class="product-price" id="productPrice">₹0.00</div>
         <div class="star-rating"><span class="stars">★★★★★</span> <span class="rating-text">(0/5.0)</span></div>
         <p class="product-description" id="productDetails">Loading details...</p>
@@ -86,6 +87,7 @@
 
   let quantity = 1;
   let currentCategory = '';
+  let productBrand = '';
 
   async function loadProduct() {
     if (!id) {
@@ -93,6 +95,7 @@
       breadcrumbName.textContent = "No product selected";
       bestSellerTag.style.display = 'none';
       categoryTag.style.display = 'none';
+      document.getElementById('productBrand').textContent = 'Brand: Not specified'; // Default value for brand
       return;
     }
 
@@ -104,6 +107,7 @@
       breadcrumbName.textContent = "Product not found";
       bestSellerTag.style.display = 'none';
       categoryTag.style.display = 'none';
+      document.getElementById('productBrand').textContent = 'Brand: Not specified'; // Default value for brand
       return;
     }
 
@@ -112,37 +116,40 @@
     nameEl.textContent = name;
     breadcrumbName.textContent = name;
 
-    document.getElementById('productPrice').textContent = data.price || "₹0.00";
+    document.getElementById('productPrice').textContent = `₹${data.price || "0.00"}`;
+    document.getElementById('productBrand').textContent = `Brand: ${data.brand || 'Not specified'}`; // Update brand here
     bestSellerTag.style.display = data.bestSeller ? 'inline-block' : 'none';
 
     if (data.category) {
-        categoryTag.textContent = data.category;
-        categoryTag.style.display = 'inline-block';
-        currentCategory = data.category;
+      categoryTag.textContent = data.category;
+      categoryTag.style.display = 'inline-block';
+      currentCategory = data.category;
     } else {
-        categoryTag.style.display = 'none';
+      categoryTag.style.display = 'none';
     }
+
+    productBrand = data.brand || 'Not specified'; // Set product brand
 
     // Gallery images
     const images = [data.mainUrl, ...(Array.isArray(data.images) ? data.images : [])].filter(Boolean);
     mainImg.src = images[0] || '';
     thumbnails.innerHTML = '';
     images.forEach((url, i) => {
-        const thumb = document.createElement('img');
-        thumb.src = url;
-        if (i === 0) thumb.classList.add('active');
-        thumb.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (mainImg.src === url) return;
-            mainImg.classList.add('fade-out');
-            setTimeout(() => {
-                mainImg.src = url;
-                mainImg.classList.remove('fade-out');
-            }, 400);
-            Array.from(thumbnails.children).forEach(img => img.classList.remove('active'));
-            thumb.classList.add('active');
-        });
-        thumbnails.appendChild(thumb);
+      const thumb = document.createElement('img');
+      thumb.src = url;
+      if (i === 0) thumb.classList.add('active');
+      thumb.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (mainImg.src === url) return;
+        mainImg.classList.add('fade-out');
+        setTimeout(() => {
+          mainImg.src = url;
+          mainImg.classList.remove('fade-out');
+        }, 400);
+        Array.from(thumbnails.children).forEach(img => img.classList.remove('active'));
+        thumb.classList.add('active');
+      });
+      thumbnails.appendChild(thumb);
     });
 
     // Product details with "show more"
@@ -152,47 +159,88 @@
     let expanded = false;
 
     function renderDetails() {
-        detailsEl.innerHTML = '';
-        const textSpan = document.createElement('span');
-        textSpan.textContent = (!expanded && lines.length > maxLines) 
-            ? lines.slice(0, maxLines).join('\n') + '...' 
-            : fullText;
-        detailsEl.appendChild(textSpan);
+      detailsEl.innerHTML = '';
+      const textSpan = document.createElement('span');
+      textSpan.textContent = (!expanded && lines.length > maxLines) 
+        ? lines.slice(0, maxLines).join('\n') + '...' 
+        : fullText;
+      detailsEl.appendChild(textSpan);
 
-        if (lines.length > maxLines) {
-            const link = document.createElement('span');
-            link.textContent = expanded ? ' Show less' : ' Show more';
-            link.className = 'show-more-link';
-            link.style.cursor = 'pointer';
-            link.addEventListener('click', () => {
-                expanded = !expanded;
-                renderDetails();
-            });
-            detailsEl.appendChild(link);
-        }
+      if (lines.length > maxLines) {
+        const link = document.createElement('span');
+        link.textContent = expanded ? ' Show less' : ' Show more';
+        link.className = 'show-more-link';
+        link.style.cursor = 'pointer';
+        link.addEventListener('click', () => {
+          expanded = !expanded;
+          renderDetails();
+        });
+        detailsEl.appendChild(link);
+      }
     }
     renderDetails();
 
     // Extra fields table
     if (Array.isArray(data.extraFields)) {
-        extraFieldsTableBody.innerHTML = '';
-        data.extraFields.forEach(field => {
-            const tr = document.createElement('tr');
-            const keyTd = document.createElement('td');
-            const valueTd = document.createElement('td');
-            keyTd.textContent = field.key;
-            valueTd.textContent = field.value;
-            tr.appendChild(keyTd);
-            tr.appendChild(valueTd);
-            extraFieldsTableBody.appendChild(tr);
-        });
+      extraFieldsTableBody.innerHTML = '';
+      data.extraFields.forEach(field => {
+        const tr = document.createElement('tr');
+        const keyTd = document.createElement('td');
+        const valueTd = document.createElement('td');
+        keyTd.textContent = field.key;
+        valueTd.textContent = field.value;
+        tr.appendChild(keyTd);
+        tr.appendChild(valueTd);
+        extraFieldsTableBody.appendChild(tr);
+      });
     }
 
-    loadRelatedProducts();
+     loadRelatedProducts()  // Load related products after product data is loaded
   }
 
-  async function loadRelatedProducts() {
+  // Quantity controls
+  document.getElementById('decrease-btn').addEventListener('click', () => {
+    if (quantity > 1) {
+      quantity--;
+      document.getElementById('quantity-value').textContent = quantity;
+    }
+  });
+
+  document.getElementById('increase-btn').addEventListener('click', () => {
+    quantity++;
+    document.getElementById('quantity-value').textContent = quantity;
+  });
+
+  // Contact button
+  document.getElementById('contactBtn').addEventListener('click', () => {
+    const message = document.createElement('div');
+    message.textContent = 'Thank you for your interest! We will contact you soon.';
+    message.style.cssText = `
+      position: fixed; 
+      top: 20px; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      background: #28a745; 
+      color: white; 
+      padding: 15px 30px; 
+      border-radius: 6px; 
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
+      z-index: 1000;
+    `;
+    document.body.appendChild(message);
+    setTimeout(() => message.remove(), 3000);
+  });
+
+  // Fullscreen image on click
+  mainImg.addEventListener('click', () => {
+    if (mainImg.requestFullscreen) mainImg.requestFullscreen();
+    else if (mainImg.webkitRequestFullscreen) mainImg.webkitRequestFullscreen();
+    else if (mainImg.msRequestFullscreen) mainImg.msRequestFullscreen();
+  });
+
+async function loadRelatedProducts() {
     if (!currentCategory) return;
+
     const productsRef = collection(db, 'Products');
     const q = query(productsRef, where('category', '==', currentCategory));
     const snapshot = await getDocs(q);
@@ -202,11 +250,19 @@
         if (docSnap.id !== id) allRelated.push({ id: docSnap.id, ...docSnap.data() });
     });
 
+    // Filter to only available products
     const available = allRelated.filter(p => p.available !== false);
+
+    // Shuffle the available products
     const shuffled = available.sort(() => 0.5 - Math.random());
+
+    // Select only 4 products
     const selected = shuffled.slice(0, 4);
 
+    // Clear the related products list
     relatedList.innerHTML = '';
+
+    // Add the selected products to the related list
     selected.forEach(prod => {
         const div = document.createElement('div');
         div.className = 'product-card';
@@ -220,59 +276,24 @@
             </div>
         `;
 
+        // Add an event listener for the "Contact" button
         div.querySelector('.contact-btn').addEventListener('click', (e) => {
             e.stopPropagation();
             alert('Contact us for this product!');
         });
 
+        // Add event listener to navigate to product details page on card click
         div.addEventListener('click', () => {
             window.location.href = `./productDetails.html?id=${prod.id}`;
         });
 
+        // Append the product card to the related list
         relatedList.appendChild(div);
     });
-  }
+}
 
-  // Quantity controls
-  document.getElementById('decrease-btn').addEventListener('click', () => {
-      if (quantity > 1) {
-          quantity--;
-          document.getElementById('quantity-value').textContent = quantity;
-      }
-  });
-  document.getElementById('increase-btn').addEventListener('click', () => {
-      quantity++;
-      document.getElementById('quantity-value').textContent = quantity;
-  });
-
-  // Contact button
-  document.getElementById('contactBtn').addEventListener('click', () => {
-      const message = document.createElement('div');
-      message.textContent = 'Thank you for your interest! We will contact you soon.';
-      message.style.cssText = `
-          position: fixed; 
-          top: 20px; 
-          left: 50%; 
-          transform: translateX(-50%); 
-          background: #28a745; 
-          color: white; 
-          padding: 15px 30px; 
-          border-radius: 6px; 
-          box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
-          z-index: 1000;
-      `;
-      document.body.appendChild(message);
-      setTimeout(() => message.remove(), 3000);
-  });
-
-  // Fullscreen image on click
-  mainImg.addEventListener('click', () => {
-      if (mainImg.requestFullscreen) mainImg.requestFullscreen();
-      else if (mainImg.webkitRequestFullscreen) mainImg.webkitRequestFullscreen();
-      else if (mainImg.msRequestFullscreen) mainImg.msRequestFullscreen();
-  });
-
-  loadProduct();
+  loadProduct();  // Load the product when the page is ready
+ 
 </script>
 </body>
 </html>

@@ -440,7 +440,6 @@ button:hover {
   font-size: 18px;
   margin-top: 30px;
   margin-bottom: 10px;
-  border-bottom: 2px solid #ccc;
   padding-bottom: 5px;
   color: #007bff;
 }
@@ -459,6 +458,9 @@ button:hover {
   text-align: left;
   gap: 8px;
 }
+
+
+
 
 .inquiry-card:hover {
   transform: translateY(-3px);
@@ -496,6 +498,16 @@ button:hover {
 .inquiry-card .view-btn:hover {
   background-color: #0056b3;
 }
+.product-name {
+    display: inline-block;          /* Keeps the span inline, but allows width control */
+    max-width: 200px;               /* Sets a max width for the product name */
+    overflow: hidden;               /* Hides any overflowed text */
+    text-overflow: ellipsis;        /* Adds the ellipsis (...) when the text overflows */
+    white-space: nowrap;            /* Prevents the text from wrapping to a new line */
+    vertical-align: middle;         /* Ensures it's vertically aligned */
+}
+
+
 
 /* ---------------------------- */
 /* Modal */
@@ -827,3 +839,115 @@ button:hover {
         font-size: 13px;
     }
 }
+/* Container for price input with ₹ symbol */
+.price-input-container {
+    position: relative;
+    width: 200px;           /* Adjust width as needed */
+    margin-bottom: 15px;
+}
+
+/* Rupee symbol inside input */
+.price-input-container .rupee-symbol {
+    position: absolute;
+    left: 10px;             /* Distance from left edge */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #555;            /* Symbol color */
+    pointer-events: none;   /* So clicks go to input */
+}
+
+/* The input field itself */
+.price-input-container input {
+    width: 100%;
+    padding-left: 25px;     /* Make space for ₹ symbol */
+    padding-right: 10px;
+    height: 35px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Focus effect */
+.price-input-container input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0,123,255,0.3);
+}/* Modal overlay */
+#inquiryModal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease;
+}
+
+/* Modal content box */
+#inquiryModal .modal-content {
+    background-color: #fff;
+    margin: 20px;
+    padding: 25px 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    position: relative;
+    animation: slideDown 0.3s ease-out;
+}
+
+/* Close button */
+#inquiryModal .close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+#inquiryModal .close:hover {
+    color: #ff3b30;
+}
+
+/* Modal heading */
+#inquiryModal h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 22px;
+    color: #007bff;
+    text-align: center;
+}
+
+/* Modal paragraph styling */
+#inquiryModal p {
+    margin: 8px 0;
+    font-size: 15px;
+    color: #333;
+}
+#inquiryModal p strong {
+    color: #000;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    #inquiryModal .modal-content {
+        padding: 20px;
+    }
+}
+
+/* Animation for modal */
+@keyframes slideDown {
+    from {transform: translateY(-50px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+}
+

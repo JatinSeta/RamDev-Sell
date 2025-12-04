@@ -85,6 +85,14 @@
         <form id="dataForm">
           <label>Product Name:</label>
           <input type="text" id="name" placeholder="Enter Product Name" required>
+          <label>Brand:</label>
+<input type="text" id="brand" placeholder="Enter Brand Name" required>
+
+<label>Price:</label>
+<div class="price-input-container">
+  <span class="rupee-symbol">₹</span>
+  <input type="number" id="price" placeholder="Enter Price" min="0" step="0.01" required>
+</div>
 
           <label>Product Details (Max 500 Characters):</label>
           <textarea id="details" placeholder="Enter product details" required></textarea>
@@ -144,19 +152,27 @@
   </div>
 
   <!-- Modal -->
-  <div id="inquiryModal" class="modal">
-    <div class="modal-content">
-      <span id="closeModal" class="close">&times;</span>
-      <h3>Order Details</h3>
-      <p><strong>Company:</strong> <span id="modalCompany"></span></p>
-      <p><strong>Name:</strong> <span id="modalName"></span></p>
-      <p><strong>Email:</strong> <span id="modalEmail"></span></p>
-      <p><strong>Mobile:</strong> <span id="modalMobile"></span></p>
-      <p><strong>Product:</strong> <span id="modalProduct"></span></p>
-      <p><strong>Quantity:</strong> <span id="modalQuantity"></span></p>
-      <p><strong>Date:</strong> <span id="modalDate"></span></p>
+<div id="inquiryModal" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
+    <h3>Order Details</h3>
+    <p><strong>Company:</strong> <span id="modalCompany"></span></p>
+    <p><strong>Name:</strong> <span id="modalName"></span></p>
+    <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+    <p><strong>Mobile:</strong> <span id="modalMobile"></span></p>
+    <p><strong>Product:</strong> <span id="modalProduct"></span></p>
+    <p><strong>Quantity:</strong> <span id="modalQuantity"></span></p>
+    <p><strong>Date:</strong> <span id="modalDate"></span></p>
+
+    <!-- Action buttons -->
+    <div class="modal-buttons">
+      <button id="acceptOrderBtn" class="modal-btn accept">Accept Order</button>
+      <button  id="rewriteEmailBtn" class="modal-btn rewrite">Rewrite Email</button>
+      <button id="cancelOrderBtn" class="modal-btn cancel">Cancel Order</button>
     </div>
   </div>
+</div>
+
 </section>
 
 
