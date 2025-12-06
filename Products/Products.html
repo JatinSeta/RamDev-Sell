@@ -18,8 +18,8 @@
       <img src="../Imges/rotary-hammer.png" class="tool" alt="Rotary Hammer">
       <img src="../Imges/tools-kit.png" class="tool" alt="Tools Kit">
       <img src="../Imges/hammer.png" class="tool" alt="Hammer">
-      <img src="../Imges/screwdriver.png" class="tool" alt="Saw">
-      <img src="../Imges/voltmeter.png" class="tool" alt="Drill">
+      <img src="../Imges/screwdriver.png" class="tool" alt="Screwdriver">
+      <img src="../Imges/voltmeter.png" class="tool" alt="Voltmeter">
     </div>
   </div>
 
@@ -30,12 +30,15 @@
         <img src="../Imges/Logo.png" alt="Ramdev logo" />
       </a>
     </div>
+
     <div class="nav-center">
       <form class="search-form" role="search">
-        <input type="search" placeholder="Search products..." aria-label="Search products">
+        <input type="search" id="navSearch" placeholder="Search products..." aria-label="Search products">
         <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+        <div id="searchSuggestions" class="search-suggestions"></div>
       </form>
     </div>
+
     <div class="nav-right">
       <ul class="nav-links">
         <li><a href="../index.html">Home</a></li>
@@ -59,18 +62,18 @@
     </div>
   </div>
 
-  <!-- Menu backdrop -->
   <div id="menuBackdrop" class="menu-backdrop" aria-hidden="true"></div>
 
   <!-- Main Content -->
   <div id="mainContent" style="display:none;">
-    <section class="hero">
-      <div class="hero-container">
-        <h1>All Products</h1>
-        <p class="hero-sub">Turning ideas into reality with top-quality hardware and electrical supplies.</p>
-      </div>
-      <div class="hero-image"></div>
-    </section>
+   <section id="heroSection" class="hero">
+  <div class="hero-container">
+    <h1>All Products</h1>
+    <p class="hero-sub">Turning ideas into reality with top-quality hardware and electrical supplies.</p>
+  </div>
+  <div class="hero-image"></div>
+</section>
+
 
     <div class="products-wrapper">
       <div class="container">
@@ -80,43 +83,36 @@
     </div>
   </div>
 
-<!-- Contact Modal -->
-<div id="contactModal" class="contact-modal">
-  <div class="modal-content">
+  <!-- Contact Modal -->
+  <div id="contactModal" class="contact-modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close-btn">&times;</span>
 
-    <!-- Close Button -->
-    <span id="closeModal" class="close-btn">&times;</span>
+      <div id="formSection">
+        <h2>Inquiry Form</h2>
+        <form id="contactForm">
+          <input type="text" id="name" placeholder="Your Name" required>
+          <input type="text" id="company" placeholder="Company Name">
+          <input type="email" id="email" placeholder="Email" required>
+          <input type="tel" id="phone" placeholder="Phone Number" required>
+          <input type="number" id="quantity" placeholder="Quantity" required min="1">
+          <input type="text" id="product" placeholder="Product Name" readonly>
+          <textarea id="message" placeholder="Message" required></textarea>
+          <button type="submit" class="submit-btn">Submit</button>
+        </form>
+      </div>
 
-    <!-- Form Section -->
-    <div id="formSection">
-      <h2>Inquiry From</h2>
-      <br>
-      <form id="contactForm">
-        <input type="text" id="name" placeholder="Your Name" required>
-        <input type="text" id="company" placeholder="Company Name">
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="tel" id="phone" placeholder="Phone Number" required>
-        <input type="number" id="quantity" placeholder="Quantity" required min="1">
-        <input type="text" id="product" placeholder="Product Name" readonly>
-        <textarea id="message" placeholder="Message" required></textarea>
+      <div id="thankYouSection" class="thankyou-section" style="display:none;">
+        <h2>Thank You!</h2>
+        <p>Your inquiry has been submitted. We will contact you soon.</p>
+      </div>
 
-        <button type="submit" class="submit-btn">Submit</button>
-      </form>
     </div>
-
-    <!-- Thank You Message -->
-    <div id="thankYouSection" class="thankyou-section" style="display:none;">
-  <h2>Thank You!</h2>
-  <p>Your inquiry has been submitted. We will contact you soon.</p>
-</div>
-
-
   </div>
-</div>
-
 
   <!-- Scripts -->
   <script type="module" src="./Products.js"></script>
   <script type="module" src="../index.js"></script>
+
 </body>
 </html>

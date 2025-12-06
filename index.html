@@ -17,12 +17,13 @@
             </a>
         </div>
 
-        <div class="nav-center">
-            <form class="search-form" role="search">
-                <input type="search" placeholder="Search products..." aria-label="Search products">
-                <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
-            </form>
-        </div>
+       <div class="nav-center">
+    <form class="search-form" role="search" action="./Products/Products.html" method="get">
+        <input type="search" name="query" placeholder="Search products..." aria-label="Search products">
+        <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+    </form>
+</div>
+
 
         <div class="nav-right">
             <ul class="nav-links">
@@ -85,19 +86,7 @@
 <section id="bestsellers" class="bestsellers">
   <h2>Best Sellers</h2>
 
-  <!-- Loader inside the section only -->
-  <div id="bestsellerLoader" class="loader">
-    <img src="./Imges/engineer.png" class="center-img" alt="Engineer">
-    <div class="tools-circle">
-      <img src="./Imges/screw.png" class="tool" alt="Screw">
-      <img src="./Imges/copper-wire.png" class="tool" alt="Copper Wire">
-      <img src="./Imges/rotary-hammer.png" class="tool" alt="Rotary Hammer">
-      <img src="./Imges/tools-kit.png" class="tool" alt="Tools Kit">
-      <img src="./Imges/hammer.png" class="tool" alt="Hammer">
-      <img src="./Imges/screwdriver.png" class="tool" alt="Screwdriver">
-      <img src="./Imges/voltmeter.png" class="tool" alt="Voltmeter">
-    </div>
-  </div>
+ 
 
   <!-- Bestsellers will appear here -->
   <div id="bestsellerList" class="products-grid"></div>
