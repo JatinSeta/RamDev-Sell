@@ -17,12 +17,26 @@
             </a>
         </div>
 
-       <div class="nav-center">
+     <!-- Search bar in Index.html -->
+<div class="nav-center">
     <form class="search-form" role="search" action="./Products/Products.html" method="get">
-        <input type="search" name="query" placeholder="Search products..." aria-label="Search products">
-        <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+        <input 
+            type="search" 
+            name="query" 
+            id="homeSearch"
+            placeholder="Search products..." 
+            aria-label="Search products"
+            autocomplete="off"
+        >
+        <button type="submit" aria-label="Search">
+            <i class="fas fa-search"></i>
+        </button>
     </form>
+
+    <!-- 🔥 Search Suggestions Box -->
+    <div id="indexSearchSuggestions" class="suggestions-box"></div>
 </div>
+
 
 
         <div class="nav-right">
@@ -115,7 +129,7 @@
                                 <div class="app-contact-info">
                                     <div class="contact-item">
                                         <i class="fas fa-envelope"></i> 
-                                        <span>JatinSeta7@gmail.com</span>
+                                        <span>sales@ramdevsales.com</span>
                                     </div>
                                     <div class="contact-item">
                                         <i class="fa-solid fa-phone"></i>

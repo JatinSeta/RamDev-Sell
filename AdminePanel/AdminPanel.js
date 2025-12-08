@@ -31,6 +31,7 @@
     const modalProduct = document.getElementById("modalProduct");
     const modalQuantity = document.getElementById("modalQuantity");
     const modalDate = document.getElementById("modalDate");
+    const modalMessage = document.getElementById("modalMessge");
     const orderSearchInput = document.getElementById("orderSearchInput");
 
     let fieldCount = 0;
@@ -499,7 +500,8 @@
                     modalCompany.textContent = data.company || '';
                     modalName.textContent = data.name || '';
                     modalEmail.textContent = data.email || '';
-                    modalMobile.textContent = data.mobile || '';
+                    modalMobile.textContent = data.phone || '';
+                    modalMessage.textContent = data.message || '';
                     modalProduct.textContent = data.product || '';
                     modalQuantity.textContent = data.quantity || '';
                     modalDate.textContent = data.createdAt 

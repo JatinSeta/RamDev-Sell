@@ -17,17 +17,29 @@
             </div>
 
             <div class="nav-center">
-                <form class="search-form" role="search">
-                    <input type="search" placeholder="Search products..." aria-label="Search products">
-                    <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
-                </form>
-            </div>
+    <form class="search-form" role="search" action="./Products/Products.html" method="get">
+        <input 
+            type="search" 
+            name="query" 
+            id="homeSearch"
+            placeholder="Search products..." 
+            aria-label="Search products"
+            autocomplete="off"
+        >
+        <button type="submit" aria-label="Search">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+
+    <!-- 🔥 Search Suggestions Box -->
+    <div id="indexSearchSuggestions" class="suggestions-box"></div>
+</div>
 
             <div class="nav-right">
                 <ul class="nav-links">
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="../About/About.html">About</a></li>
-                    <li><a href="../Products/productDetails.html">Products</a></li>
+                    <li><a href="../Products/Products.html">Products</a></li>
                     <li><a href="./Contact.html">Contact</a></li>
                 </ul>
                 <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
@@ -146,6 +158,6 @@
       </details>
     </div>
   </section>
-  <script src="./Contact.js"></script>
+  <script type="module" src="./Contact.js"></script>
 </body>
 </html>

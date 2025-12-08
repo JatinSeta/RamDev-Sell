@@ -63,7 +63,7 @@ button, input, textarea {
   padding: 150px 20px;
   color: #fff;
   text-align: center;
-  border-radius: 15px;
+  /* border-radius: 15px; */
   overflow: hidden;
 }
 
@@ -905,4 +905,163 @@ textarea.app-form-control { min-height: 100px; resize: vertical; }
   }
 
 
+}
+/* ==================== Search Form ==================== */
+/* =========================
+   Search form container
+========================= */
+.nav-center {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.search-form {
+  display: flex;
+  width: 50%;
+  max-width: 600px;
+  min-width: 200px;
+  position: relative;
+}
+
+/* Search input */
+#homeSearch {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+/* Search button */
+.search-form button {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-form button i {
+  font-size: 14px;
+}
+
+/* =========================
+   Suggestions dropdown
+========================= */
+.suggestions-box {
+  position: absolute;
+  top: 100%;  
+  left: 50%;                   /* center relative to search bar */
+  transform: translateX(-50%);
+  width: 80%;                   /* smaller than search bar */
+  max-width: 50%;          
+  min-width: 180px;             /* ensure it’s not too small */
+  max-height: 250px;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+  display: none;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Individual suggestion */
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.2s, color 0.2s;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+/* Thumbnail image in suggestion */
+.suggestion-img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  flex-shrink: 0;
+}
+
+/* Text in suggestion */
+.suggestion-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  color: #555;
+}
+
+/* Optional icon in suggestion */
+.suggestion-icon {
+  margin-left: auto;
+  font-size: 14px;
+  color: #999;
+}
+
+/* =========================
+   Responsive adjustments
+========================= */
+@media (max-width: 1024px) {
+  .search-form {
+    width: 70%;
+  }
+
+  .suggestions-box {
+    width: 85%;
+    max-width: 350px;
+  }
+
+  .suggestion-img {
+    width: 28px;
+    height: 28px;
+    margin-right: 6px;
+  }
+
+  .suggestion-item {
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-form {
+    width: 90%;
+  }
+
+  .suggestions-box {
+    width: 90%;
+    max-width: 300px;
+  }
+
+  .suggestion-img {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+  }
+
+  .suggestion-item {
+    padding: 4px 6px;
+  }
 }

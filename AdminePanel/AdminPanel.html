@@ -79,52 +79,54 @@
   <!-- Main Content -->
   <div class="main-content">
 
- <section id="addProductSection" class="admin-section">
-      <div class="container">
-        <h1>Add Product</h1>
-        <form id="dataForm">
-          <label>Product Name:</label>
-          <input type="text" id="name" placeholder="Enter Product Name" required>
-          <label>Brand:</label>
-<input type="text" id="brand" placeholder="Enter Brand Name" required>
+  <section id="addProductSection" class="admin-section">
+        <div class="container">
+          <h1>Add Product</h1>
+          <form id="dataForm">
+            <label>Product Name:</label>
+            <input type="text" id="name" placeholder="Enter Product Name" required>
+            <label>Brand:</label>
+  <input type="text" id="brand" placeholder="Enter Brand Name" required>
 
-<label>Price:</label>
-<div class="price-input-container">
-  <span class="rupee-symbol">₹</span>
-  <input type="number" id="price" placeholder="Enter Price" min="0" step="0.01" required>
-</div>
+  <label>Price:</label>
+  <div class="price-input-container">
+    <span class="rupee-symbol">₹</span>
+    <input type="number" id="price" placeholder="Enter Price" min="0" step="0.01" required>
+  </div>
 
-          <label>Product Details (Max 500 Characters):</label>
-          <textarea id="details" placeholder="Enter product details" required></textarea>
-          <div id="wordCount">0 / 500 characters</div>
+          <label>Product Details (Max 2000 Characters):</label>
+<textarea id="details" placeholder="Enter product details" required></textarea>
+<div id="wordCount">0 / 750 characters</div>
+<button type="button" id="summarizeBtn">Summarize</button> <!-- New Button -->
+<textarea id="summary" placeholder="Summary will appear here" ></textarea> <!-- Optional summary field -->
 
-          <label>Image URLs:</label>
-          <input type="url" id="url1" class="image-url" placeholder="Main Image URL" required>
-          <input type="url" id="url2" class="image-url" placeholder="Second Image URL" required>
-          <div id="extraUrls"></div>
-          <button type="button" id="addUrlBtn">Add More Images</button>
+            <label>Image URLs:</label>
+            <input type="url" id="url1" class="image-url" placeholder="Main Image URL" required>
+            <input type="url" id="url2" class="image-url" placeholder="Second Image URL" required>
+            <div id="extraUrls"></div>
+            <button type="button" id="addUrlBtn">Add More Images</button>
 
-          <!-- Image Preview -->
-          <div id="previewContainer" style="display:none; margin-top:20px;">
-            <img id="mainPreview" style="width:200px;height:200px;object-fit:cover;border:1px solid #ccc;border-radius:10px;">
-            <div id="thumbnails" style="display:flex;gap:10px;margin-top:10px;"></div>
-          </div>
+            <!-- Image Preview -->
+            <div id="previewContainer" style="display:none; margin-top:20px;">
+              <img id="mainPreview" style="width:200px;height:200px;object-fit:cover;border:1px solid #ccc;border-radius:10px;">
+              <div id="thumbnails" style="display:flex;gap:10px;margin-top:10px;"></div>
+            </div>
 
-          <label>Additional Table Fields</label>
-          <div id="keyValueContainer"></div>
-          <button type="button" id="addFieldBtn">Add Table Field</button>
+            <label>Additional Table Fields</label>
+            <div id="keyValueContainer"></div>
+            <button type="button" id="addFieldBtn">Add Table Field</button>
 
-          <label>Category:</label>
-          <select id="category" required>
-            <option value="">Select Category</option>
-            <option value="Hardware">Hardware</option>
-            <option value="Electrical">Electrical</option>
-          </select>
+            <label>Category:</label>
+            <select id="category" required>
+              <option value="">Select Category</option>
+              <option value="Hardware">Hardware</option>
+              <option value="Electrical">Electrical</option>
+            </select>
 
-          <button type="submit" class="submit-btn">Save Product</button>
-        </form>
-      </div>
-    </section>
+            <button type="submit" class="submit-btn">Save Product</button>
+          </form>
+        </div>
+      </section>
 
 <section id="allProductsSection" class="admin-section" style="display:none;">
     <h2>All Products</h2>
@@ -133,7 +135,9 @@
         <button id="selectBSBtn">Select Best Sellers</button>
     </div>
     <div id="productsList" class="products-grid"></div>
+    <button id="loadMoreBtn" style="display:none;margin:20px auto;padding:10px 20px;cursor:pointer;">Load More Products</button>
 </section>
+
 
 
 
@@ -159,17 +163,14 @@
     <p><strong>Company:</strong> <span id="modalCompany"></span></p>
     <p><strong>Name:</strong> <span id="modalName"></span></p>
     <p><strong>Email:</strong> <span id="modalEmail"></span></p>
-    <p><strong>Mobile:</strong> <span id="modalMobile"></span></p>
+    <p><strong>Phone Number:</strong> <span id="modalMobile"></span></p>
     <p><strong>Product:</strong> <span id="modalProduct"></span></p>
     <p><strong>Quantity:</strong> <span id="modalQuantity"></span></p>
     <p><strong>Date:</strong> <span id="modalDate"></span></p>
+    <p><strong>Message:</strong> <span id="modalMessge"></span></p>
 
     <!-- Action buttons -->
-    <div class="modal-buttons">
-      <button id="acceptOrderBtn" class="modal-btn accept">Accept Order</button>
-      <button  id="rewriteEmailBtn" class="modal-btn rewrite">Rewrite Email</button>
-      <button id="cancelOrderBtn" class="modal-btn cancel">Cancel Order</button>
-    </div>
+   
   </div>
 </div>
 

@@ -15,7 +15,11 @@ function closeMenu() {
   if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
 
   try {
-    if (menuImg) menuImg.src = closedSrc || (menuImg.getAttribute && menuImg.getAttribute('src')) || './Images/Menu.png';
+    if (menuImg)
+      menuImg.src =
+        closedSrc ||
+        (menuImg.getAttribute && menuImg.getAttribute('src')) ||
+        './Images/Menu.png';
   } catch (err) {
     // ignore
   }
@@ -28,7 +32,10 @@ function closeMenu() {
 
 if (menuBtn && mobileMenu) {
   menuImg = menuBtn.querySelector('img');
-  closedSrc = menuImg?.dataset?.closed || menuImg?.getAttribute('src') || './Images/Menu.png';
+  closedSrc =
+    menuImg?.dataset?.closed ||
+    menuImg?.getAttribute('src') ||
+    './Images/Menu.png';
   openSrc = menuImg?.dataset?.open || './Images/close.png';
 
   const setMenuState = (isActive) => {
@@ -114,39 +121,30 @@ function deleteText() {
 }
 
 type();
+
+// ==================== FIREBASE IMPORTS ====================
 import { db } from "../firebase-config.js";
 import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
+// ==================== Homepage Best Sellers ====================
 const bestsellerList = document.getElementById('bestsellerList');
 const bestsellerLoader = document.getElementById('bestsellerLoader');
 
 async function loadBestsellers() {
   try {
-    // Debug: Check Firestore instance
-    console.log("Firestore instance:", db);
-    if (!db) throw new Error("Firestore 'db' is undefined!");
-
-    // Show loader
     if (bestsellerLoader) bestsellerLoader.style.display = 'flex';
 
-    // Clear previous items
     bestsellerList.innerHTML = '';
 
-    // Firestore query
-    const productsRef = collection(db, "Products");  // ✅ This must be Firestore instance
-    console.log("Products collection ref:", productsRef);
-
+    const productsRef = collection(db, "Products");
     const q = query(productsRef, where("bestSeller", "==", true));
     const snap = await getDocs(q);
-
-    console.log("Query snapshot:", snap);
 
     if (snap.empty) {
       bestsellerList.innerHTML = '<div>No best seller products yet.</div>';
       return;
     }
 
-    // Create cards
     const mainCards = createMainCards(snap);
     mainCards.forEach(card => bestsellerList.appendChild(card));
 
@@ -174,13 +172,11 @@ function createMainCards(snap) {
       const docSnap = snap.docs[count];
       const data = docSnap.data();
 
-      // Create the image element
       const img = document.createElement('img');
       img.src = data.mainUrl || 'https://via.placeholder.com/150';
       img.alt = data.name || `Product ${count + 1}`;
-      img.style.cursor = 'pointer'; // Show pointer on hover
+      img.style.cursor = 'pointer';
 
-      // Wrap the image in an anchor tag
       const anchor = document.createElement('a');
       anchor.href = `./Products/productDetails.html?id=${docSnap.id}`;
       anchor.appendChild(img);
@@ -203,6 +199,67 @@ function createMainCards(snap) {
   return cards;
 }
 
-
-// Load bestsellers on page load
 loadBestsellers();
+
+// ==================== Homepage Search Suggestions ====================
+const homeSearch = document.getElementById("homeSearch");
+const suggestionBox = document.getElementById("indexSearchSuggestions");
+
+let homeProducts = [];
+
+// Load all products once
+async function loadHomeProducts() {
+  const productsRef = collection(db, "Products");
+  const snap = await getDocs(productsRef);
+  homeProducts = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
+loadHomeProducts();
+
+// Live search suggestions
+homeSearch.addEventListener("input", () => {
+  const query = homeSearch.value.toLowerCase().trim();
+
+  if (query === "") {
+    suggestionBox.style.display = "none";
+    return;
+  }
+
+  const filtered = homeProducts
+    .filter(p =>
+      p.name.toLowerCase().includes(query) ||
+      (p.brand || "").toLowerCase().includes(query)
+    )
+    .slice(0, 6);
+
+  suggestionBox.innerHTML = "";
+
+  if (filtered.length === 0) {
+    suggestionBox.style.display = "none";
+    return;
+  }
+
+  filtered.forEach(product => {
+    const div = document.createElement("div");
+    div.className = "suggestion-item";
+
+    div.innerHTML = `
+      <img src="${product.mainUrl || "https://via.placeholder.com/40"}" class="suggestion-img">
+      <div class="suggestion-text">${product.name} (${product.brand || "No Brand"})</div>
+    `;
+
+    div.addEventListener("click", () => {
+      window.location.href = `./Products/Products.html?query=${product.name}`;
+    });
+
+    suggestionBox.appendChild(div);
+  });
+
+  suggestionBox.style.display = "block";
+});
+
+// Hide on outside click
+document.addEventListener("click", (e) => {
+  if (!suggestionBox.contains(e.target) && e.target !== homeSearch) {
+    suggestionBox.style.display = "none";
+  }
+});

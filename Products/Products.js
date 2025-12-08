@@ -1,7 +1,12 @@
+// =======================================
+// IMPORTS
+// =======================================
 import { db } from "../firebase-config.js";
 import { collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-// DOM Elements
+// =======================================
+// DOM ELEMENTS
+// =======================================
 const productsList = document.getElementById('productsList');
 const loader = document.getElementById('loader');
 const mainContent = document.getElementById('mainContent');
@@ -20,9 +25,9 @@ const searchSuggestions = document.getElementById('searchSuggestions');
 
 let allProductsData = [];
 
-// ==========================
-// Load Products
-// ==========================
+// =======================================
+// LOAD PRODUCTS
+// =======================================
 export async function loadProducts() {
   try {
     const productsRef = collection(db, "Products");
@@ -46,9 +51,9 @@ export async function loadProducts() {
   }
 }
 
-// ==========================
-// Render product cards
-// ==========================
+// =======================================
+// RENDER PRODUCT CARDS
+// =======================================
 function renderProducts(products) {
   productsList.innerHTML = '';
   const noMsg = document.getElementById('noProductsMsg');
@@ -108,23 +113,23 @@ function renderProducts(products) {
   });
 }
 
-// ==========================
-// Filter products by search
-// ==========================
+// =======================================
+// APPLY SEARCH FILTER
+// =======================================
 export function applySearchFilter(searchText) {
   searchText = searchText.toLowerCase().trim();
   const filtered = allProductsData.filter(p => 
-    p.name.toLowerCase().includes(searchText) || (p.brand || '').toLowerCase().includes(searchText)
+    p.name.toLowerCase().includes(searchText) || 
+    (p.brand || '').toLowerCase().includes(searchText)
   );
 
-if (searchText === '') {
-  heroSection.style.display = 'flex';
-  heroSection.classList.remove('hidden');
-  renderProducts(allProductsData);
-  hideSearchSuggestions();
-  return;
-}
-
+  if (searchText === '') {
+    heroSection.style.display = 'flex';
+    heroSection.classList.remove('hidden');
+    renderProducts(allProductsData);
+    hideSearchSuggestions();
+    return;
+  }
 
   heroSection.style.display = 'none';
 
@@ -146,15 +151,15 @@ if (searchText === '') {
   }
 }
 
-// ==========================
-// Search Suggestions
-// ==========================
+// =======================================
+// SEARCH SUGGESTIONS
+// =======================================
 function showSearchSuggestions(query) {
   searchSuggestions.innerHTML = '';
   const filtered = allProductsData
     .filter(p => p.name.toLowerCase().includes(query) || (p.brand || '').toLowerCase().includes(query))
     .sort((a, b) => a.name.localeCompare(b.name))
-    .slice(0, 5); // top 5
+    .slice(0, 5);
 
   filtered.forEach(product => {
     const suggestion = document.createElement('div');
@@ -190,28 +195,27 @@ function hideSearchSuggestions() {
   searchSuggestions.style.display = 'none';
 }
 
-// ==========================
-// Search input events
-// ==========================
+// =======================================
+// SEARCH INPUT EVENTS
+// =======================================
 navSearch.addEventListener('input', () => {
   const query = navSearch.value.toLowerCase().trim();
 
-if (query === '') {
-  renderProducts(allProductsData);
-  heroSection.style.display = 'flex';  // ensure display
-  heroSection.classList.remove('hidden');  // remove hidden class
-  hideSearchSuggestions();
-} else {
-  showSearchSuggestions(query);
-  heroSection.style.display = 'none';
-  heroSection.classList.add('hidden'); // optional
-}
-
+  if (query === '') {
+    renderProducts(allProductsData);
+    heroSection.style.display = 'flex';
+    heroSection.classList.remove('hidden');
+    hideSearchSuggestions();
+  } else {
+    showSearchSuggestions(query);
+    heroSection.style.display = 'none';
+    heroSection.classList.add('hidden');
+  }
 });
 
-// ==========================
-// Search form submit
-// ==========================
+// =======================================
+// SEARCH FORM SUBMIT (FROM INDEX + PRODUCTS PAGE)
+// =======================================
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const query = navSearch.value.toLowerCase().trim();
@@ -219,9 +223,9 @@ searchForm.addEventListener('submit', (e) => {
   hideSearchSuggestions();
 });
 
-// ==========================
-// Contact Modal
-// ==========================
+// =======================================
+// CONTACT FORM
+// =======================================
 contactModal.addEventListener("click", e => e.stopPropagation());
 
 contactForm.addEventListener("submit", async (e) => {
@@ -266,9 +270,18 @@ closeModal.addEventListener('click', () => {
   thankYouSection.style.display = "none";
 });
 
-// ==========================
-// Initialize
-// ==========================
+// =======================================
+// INITIALIZE + APPLY SEARCH FROM URL
+// =======================================
 window.addEventListener("DOMContentLoaded", async () => {
   await loadProducts();
+
+  // GET ?query= FROM URL (INDEX SEARCH)
+  const params = new URLSearchParams(window.location.search);
+  const searchQuery = params.get("query");
+
+  if (searchQuery) {
+    navSearch.value = searchQuery;
+    applySearchFilter(searchQuery.toLowerCase());
+  }
 });

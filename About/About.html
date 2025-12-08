@@ -17,18 +17,30 @@
         </div>
 
         <div class="nav-center">
-            <form class="search-form" role="search">
-                <input type="search" placeholder="Search products..." aria-label="Search products">
-                <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
-            </form>
-        </div>
+    <form class="search-form" role="search" action="../Products/Products.html" method="get">
+        <input 
+            type="search" 
+            name="query" 
+            id="homeSearch"
+            placeholder="Search products..." 
+            aria-label="Search products"
+            autocomplete="off"
+        >
+        <button type="submit" aria-label="Search">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+
+    <!-- 🔥 Search Suggestions Box -->
+    <div id="indexSearchSuggestions" class="suggestions-box"></div>
+</div>
 
         <div class="nav-right">
             <ul class="nav-links">
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="./About.html">About</a></li>
                 <li><a href="../Products/Products.html">Products</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="../Contact/Contact.html">Contact</a></li>
             </ul>
             <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
                 <img src="../Imges/Menu.png" alt="menu" data-closed="../Imges/Menu.png" data-open="../Imges/close.png" />
@@ -42,7 +54,7 @@
             <a href="../index.html">Home</a>
             <a href="./About.html">About</a>
             <a href="../Products/Products.html">Products</a>
-            <a href="#">Contact</a>
+            <a href="../Contact/Contact.html">Contact</a>
         </div>
     </div>
 
@@ -73,6 +85,6 @@
 
   
 
-    <script src="./About.js"></script>
+    <script type="module"  src="./About.js"></script>
 </body>
 </html>
