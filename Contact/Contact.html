@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us</title>
+  <link rel="stylesheet" href="./Contact.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+</head>
+<body>
+       <nav class="navbar">
+            <div class="nav-left">
+                <a href="#" class="logo">
+                    <img src="../Imges/Logo.png" alt="Ramdev logo" />
+                </a>
+            </div>
+
+            <div class="nav-center">
+    <form class="search-form" role="search" action="./Products/Products.html" method="get">
+        <input 
+            type="search" 
+            name="query" 
+            id="homeSearch"
+            placeholder="Search products..." 
+            aria-label="Search products"
+            autocomplete="off"
+        >
+        <button type="submit" aria-label="Search">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+
+    <!-- 🔥 Search Suggestions Box -->
+    <div id="indexSearchSuggestions" class="suggestions-box"></div>
+</div>
+
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../About/About.html">About</a></li>
+                    <li><a href="../Products/Products.html">Products</a></li>
+                    <li><a href="./Contact.html">Contact</a></li>
+                </ul>
+                <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
+                    <img src="../Imges/Menu.png" alt="menu" data-closed="../Imges/Menu.png" data-open="../Imges/close.png" />
+                </button>
+            </div>
+        </nav>
+        <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+            <a href="../index.html">Home</a>
+            <a href="../About/About.html">About</a>
+            <a href="../Products/Products.html">Products</a>
+            <a href="./Contact.html">Contact</a>
+        </div>
+<div id="menuBackdrop" class="menu-backdrop" aria-hidden="true"></div>
+        <div class="container">
+  <section class="top-section" aria-label="Contact Information and Form">
+    <div class="left-side">
+      <h1>Contact Us</h1>
+      <p class="description">
+        Email, call, or complete the form to learn how Snappy can solve your messaging problem.
+      </p>
+      <div class="contact-info">
+        <small>info@snappy.io</small><br />
+        <small>321-221-231</small><br />
+        <a href="#" class="support-link">Customer Support</a>
+      </div>
+
+      <div class="contact-sections">
+        <div class="contact-section">
+          <strong>Customer Support</strong>
+          <p>Our support team is available around the clock to address any concerns or queries you may have.</p>
+        </div>
+        <div class="contact-section">
+          <strong>Feedback and Suggestions</strong>
+          <p>We value your feedback and are continuously working to improve Snappy. Your input is crucial in shaping the future of Snappy.</p>
+        </div>
+        <div class="contact-section">
+          <strong>Media Inquiries</strong>
+          <p>For media-related questions or press inquiries, please contact us at media@snappyapp.com.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-side" aria-label="Contact Form">
+      <form id="contactForm" novalidate>
+        <div style="display:flex; gap:0.5rem;">
+          <input type="text" name="firstName" id="firstName" placeholder="First name" aria-label="First name" required />
+          <input type="text" name="lastName" id="lastName" placeholder="Last name" aria-label="Last name" required />
+        </div>
+        <input type="email" name="email" id="email" placeholder="Your email" aria-label="Your email" required />
+        <div class="phone-input-wrapper">
+          <select name="countryCode" id="countryCode" aria-label="Country code">
+            <option value="+62" selected>+62</option>
+            <option value="+1">+1</option>
+            <option value="+44">+44</option>
+            <option value="+91">+91</option>
+            <option value="+81">+81</option>
+            <!-- Add more as needed -->
+          </select>
+          <input type="text" name="phone" id="phone" placeholder="Phone number" aria-label="Phone number" />
+        </div>
+        <textarea name="message" id="message" placeholder="How can we help?" maxlength="120" aria-label="How can we help?"></textarea>
+        <button type="submit" class="submit-btn">Submit</button>
+        <p class="terms-text">
+          By contacting us, you agree to our <a href="#" target="_blank">Terms of service</a> and <a href="#" target="_blank">Privacy Policy</a>.
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <section class="map-location" aria-label="Our Location">
+    <div class="map-container" aria-hidden="true">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019151416669!2d-122.41941518468188!3d37.77492977975995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085808c0d2a204d%3A0xb1082eaa79d241cc!2s123%20Tech%20Boulevard%2C%20San%20Francisco%2C%20CA%2094123!5e0!3m2!1sen!2sus!4v1600000000000!5m2!1sen!2sus"
+        allowfullscreen="" loading="lazy"
+        title="Google Map showing Snappy Inc headquarters in San Francisco"
+      ></iframe>
+    </div>
+    <div class="location-details">
+      <p>Our Location</p>
+      <h3>Connecting Near and Far</h3>
+      <address>
+        <strong>Headquarters</strong><br />
+        Snappy Inc.<br />
+        San Francisco, USA<br />
+        123 Tech Boulevard, Suite 456<br />
+        San Francisco, CA 12345<br />
+        United States
+      </address>
+    </div>
+  </section>
+
+  <section class="faq-section" aria-label="Frequently Asked Questions">
+    <h2>Do you have any questions for us?</h2>
+    <p class="subtitle">If there are questions you want to ask. We will answer all your questions.</p>
+    <form id="faqForm" class="faq-form" novalidate>
+      <input type="email" name="faqEmail" id="faqEmail" placeholder="Enter your email" aria-label="Enter your email" required />
+      <button type="submit">Submit</button>
+    </form>
+    <div class="accordion">
+      <details>
+        <summary>What makes Snappy different from other messaging apps?</summary>
+        <p>Snappy offers seamless integration and faster messaging solutions tailored to your needs.</p>
+      </details>
+      <details>
+        <summary>How secure are my conversations on Snappy?</summary>
+        <p>We use end-to-end encryption to ensure your messages remain private and secure.</p>
+      </details>
+      <details>
+        <summary>Can I personalize my Snappy experience?</summary>
+        <p>Yes, you can customize themes, notifications, and more in your profile settings.</p>
+      </details>
+      <details>
+        <summary>What group features does Snappy offer?</summary>
+        <p>Snappy supports group chats, file sharing, and admin controls for managing groups efficiently.</p>
+      </details>
+    </div>
+  </section>
+  <script type="module" src="./Contact.js"></script>
+</body>
+</html>

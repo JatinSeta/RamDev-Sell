@@ -1,0 +1,139 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="./productDetails.css">
+    </head>
+    <body>
+        <a href="javascript:history.back()" class="back-button">⮜ Back</a>
+
+
+    <div class="container">
+    <div id="imageGallery">
+        <div class="thumbnails" id="thumbnails"></div>
+
+        <div class="main-image">
+        <img id="mainImg" src="" alt="Product Image" style="max-width:400px;">
+        </div>
+
+        <div class="details">
+        <h1 id="productName">Product Name</h1>
+       <p id="productDetails" style="overflow:hidden;"></p>
+    <span id="toggleDetails" class="toggle-link" style="display:none;">Show more</span>
+<a href="mailto:support@example.com?subject=Inquiry%20About%20Product" class="email-button">Contact via Email</a>
+
+        </div>
+    </div>
+    </div>
+
+    <script type="module">
+    import { db } from "../firebase-config.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    const nameEl = document.getElementById('productName');
+    const mainImg = document.getElementById('mainImg');
+    const thumbnails = document.getElementById('thumbnails');
+    const detailsEl = document.getElementById('productDetails');
+    const toggleBtn = document.getElementById('toggleDetails');
+
+    async function loadProduct() {
+    if (!id) {
+        nameEl.textContent = "No product selected";
+        return;
+    }
+
+    const ref = doc(db, 'Products', id);
+    const snap = await getDoc(ref);
+
+    if (!snap.exists()) {
+        nameEl.textContent = "Product not found";
+        return;
+    }
+
+    const data = snap.data();
+    nameEl.textContent = data.name || "(no name)";
+
+    // Images
+    const images = [data.mainUrl, ...(Array.isArray(data.images) ? data.images : [])];
+    mainImg.src = images[0] || '';
+
+    images.forEach((url, i) => {
+        const thumb = document.createElement('img');
+        thumb.src = url;
+        thumb.style.width = '60px';
+        thumb.style.height = '60px';
+        thumb.style.objectFit = 'cover';
+        thumb.style.cursor = 'pointer';
+        if (i === 0) thumb.style.border = '2px solid blue';
+        thumb.addEventListener('click', () => {
+        mainImg.src = url;
+        Array.from(thumbnails.children).forEach(img => img.style.border = 'none');
+        thumb.style.border = '2px solid blue';
+        });
+        thumbnails.appendChild(thumb);
+    });
+
+    // Details with Show More/Less
+const fullText = data.details || "(No details available)";
+const lines = fullText.split('\n');
+const maxLines = 3;
+
+let expanded = false;
+
+function renderDetails() {
+  detailsEl.innerHTML = ''; // clear previous content
+
+  if (!expanded && lines.length > maxLines) {
+    const truncated = lines.slice(0, maxLines).join('\n') + '...';
+    detailsEl.textContent = truncated;
+
+    const link = document.createElement('span');
+    link.textContent = ' Show more';
+    link.className = 'show-more-link';
+    link.addEventListener('click', () => {
+      expanded = true;
+      renderDetails();
+    });
+
+    detailsEl.appendChild(link);
+  } else {
+    detailsEl.textContent = fullText;
+
+    if (lines.length > maxLines) {
+      const link = document.createElement('span');
+      link.textContent = ' Show less';
+      link.className = 'show-more-link';
+      link.addEventListener('click', () => {
+        expanded = false;
+        renderDetails();
+      });
+      detailsEl.appendChild(link);
+    }
+  }
+}
+
+renderDetails();
+
+
+    }
+
+    loadProduct();
+    // Open main image in fullscreen on click
+    mainImg.addEventListener('click', () => {
+    if (mainImg.requestFullscreen) {
+        mainImg.requestFullscreen();
+    } else if (mainImg.webkitRequestFullscreen) { /* Safari */
+        mainImg.webkitRequestFullscreen();
+    } else if (mainImg.msRequestFullscreen) { /* IE11 */
+        mainImg.msRequestFullscreen();
+    }
+    });
+
+    </script>
+    </body>
+    </html>

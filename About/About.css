@@ -1,0 +1,519 @@
+/* ================================
+   RESET + BASE
+================================ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Poppins", Arial, sans-serif;
+  background: #f7f9fb;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* ================================
+   NAVBAR
+================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  background: #ffffff;
+  border-bottom: 1px solid #e6e9ee;
+  z-index: 2000;
+}
+
+.nav-left,
+.nav-center,
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.nav-left {
+  flex: 0 0 auto;
+}
+
+.nav-center {
+  flex: 1 1 auto;
+  justify-content: center;
+}
+
+.nav-right {
+  flex: 0 0 auto;
+  gap: 12px;
+}
+
+.logo img {
+  width: 42px;
+  height: auto;
+  display: block;
+}
+
+/* ================================
+   SEARCH FORM
+================================ */
+.search-form {
+  display: flex;
+  width: 60%;
+  max-width: 720px;
+}
+
+.search-form input[type="search"] {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #d6dbe6;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  outline: none;
+}
+
+.search-form button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border: 1px solid #d6dbe6;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  background: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.search-form button i {
+  font-size: 14px;
+}
+
+/* ================================
+   NAV LINKS (Desktop)
+================================ */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.nav-links a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 6px 8px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #007bff;
+}
+
+/* ================================
+   MENU BUTTON (Mobile)
+================================ */
+.menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  z-index: 2100;
+}
+
+.menu-btn img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+/* ================================
+   MOBILE MENU
+================================ */
+.mobile-menu {
+  position: fixed;
+  top: 70px;
+  left: 12px;
+  right: 12px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  z-index: 1900;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
+}
+
+.mobile-menu.active {
+  max-height: 420px;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 14px 18px;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid #f0f0f0;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.mobile-menu a:last-child {
+  border-bottom: none;
+}
+
+.mobile-menu a:hover {
+  background-color: #f7f9fb;
+  color: #007bff;
+}
+
+/* ================================
+   BACKDROP
+================================ */
+.menu-backdrop {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.28);
+  z-index: 1850;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.menu-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ================================
+   ABOUT SECTION
+================================ */
+.about-section {
+  padding-top: 100px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fbfdff 0%, #ffffff 100%);
+}
+
+.about-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.about-section h1 {
+  font-size: 32px;
+  color: #0b2b4a;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.about-content {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.about-text {
+  flex: 1 1 500px;
+  color: #4b647b;
+}
+
+.about-text p {
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.about-text .welcome {
+  font-size: 18px;
+  color: #0b2b4a;
+}
+
+.about-text .closing {
+  font-weight: 500;
+  color: #0b2b4a;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.about-image {
+  flex: 1 1 200px;
+  text-align: center;
+}
+
+.about-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+/* ================================
+   RESPONSIVE DESIGN
+================================ */
+
+/* ---------- Tablets ---------- */
+@media (max-width: 1024px) {
+  .search-form {
+    width: 75%;
+  }
+
+  .about-section h1 {
+    font-size: 28px;
+  }
+}
+
+/* ---------- Mobile (<=800px) ---------- */
+@media (max-width: 800px) {
+  .nav-links {
+    display: none;
+  }
+
+  .menu-btn {
+    display: inline-flex;
+  }
+
+  .search-form {
+    width: 80%;
+  }
+
+  .about-content {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .about-text {
+    text-align: center;
+  }
+
+  .about-image {
+    width: 100%;
+  }
+}
+
+/* ---------- Small Mobile (<=480px) ---------- */
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0 12px;
+    height: 60px;
+  }
+
+  .logo img {
+    width: 38px;
+  }
+
+  .search-form {
+    width: 90%;
+  }
+
+  .search-form input[type="search"] {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .search-form button {
+    padding: 8px;
+  }
+
+  .mobile-menu a {
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+
+  .about-section h1 {
+    font-size: 24px;
+  }
+
+  .about-content p {
+    font-size: 15px;
+  }
+
+  .about-text .welcome {
+    font-size: 16px;
+  }
+
+  .about-text .closing {
+    font-size: 15px;
+    padding: 16px;
+  }
+}
+
+
+
+.nav-center {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.search-form {
+  display: flex;
+  width: 50%;
+  max-width: 600px;
+  min-width: 200px;
+  position: relative;
+}
+
+/* Search input */
+#homeSearch {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+/* Search button */
+.search-form button {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-form button i {
+  font-size: 14px;
+}
+
+/* =========================
+   Suggestions dropdown
+========================= */
+.suggestions-box {
+  position: absolute;
+  top: 100%;  
+  left: 50%;                   /* center relative to search bar */
+  transform: translateX(-50%);
+  width: 80%;                   /* smaller than search bar */
+  max-width: 50%;          
+  min-width: 180px;             /* ensure it’s not too small */
+  max-height: 250px;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+  display: none;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Individual suggestion */
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.2s, color 0.2s;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+/* Thumbnail image in suggestion */
+.suggestion-img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  flex-shrink: 0;
+}
+
+/* Text in suggestion */
+.suggestion-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  color: #555;
+}
+
+/* Optional icon in suggestion */
+.suggestion-icon {
+  margin-left: auto;
+  font-size: 14px;
+  color: #999;
+}
+
+/* =========================
+   Responsive adjustments
+========================= */
+@media (max-width: 1024px) {
+  .search-form {
+    width: 70%;
+  }
+
+  .suggestions-box {
+    width: 85%;
+    max-width: 350px;
+  }
+
+  .suggestion-img {
+    width: 28px;
+    height: 28px;
+    margin-right: 6px;
+  }
+
+  .suggestion-item {
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-form {
+    width: 90%;
+  }
+
+  .suggestions-box {
+    width: 90%;
+    max-width: 300px;
+  }
+
+  .suggestion-img {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+  }
+
+  .suggestion-item {
+    padding: 4px 6px;
+  }
+}

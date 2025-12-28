@@ -1,0 +1,190 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Ramdev Hardware</title>
+        <link rel="stylesheet" href="./index.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   
+    </head>
+    <body>
+          <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="./index.html" class="logo">
+                <img src="../Imges/Logo.png" alt="Ramdev logo" />
+            </a>
+        </div>
+
+     <!-- Search bar in Index.html -->
+<div class="nav-center">
+    <form class="search-form" role="search" action="./Products/Products.html" method="get">
+        <input 
+            type="search" 
+            name="query" 
+            id="homeSearch"
+            placeholder="Search products..." 
+            aria-label="Search products"
+            autocomplete="off"
+        >
+        <button type="submit" aria-label="Search">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+
+    <!-- 🔥 Search Suggestions Box -->
+    <div id="indexSearchSuggestions" class="suggestions-box"></div>
+</div>
+
+
+
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./About/About.html">About</a></li>
+                <li><a href="./Products/Products.html">Products</a></li>
+                <li><a href="./Contact/Contact.html">Contact</a></li>
+            </ul>
+            <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
+                <img src="../Imges/Menu.png" alt="menu" data-closed="../Imges/Menu.png" data-open="../Imges/close.png" />
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+        <div class="mobile-inner">
+            <a href="./index.html">Home</a>
+            <a href="./About/About.html">About</a>
+            <a href="./Products/Products.html">Products</a>
+            <a href="./Contact/Contact.html">Contact</a>
+        </div>
+    </div>
+
+    <!-- Menu backdrop -->
+    <div id="menuBackdrop" class="menu-backdrop" aria-hidden="true"></div>
+
+      <main class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-container">
+          <h1>
+            <span id="animatedText" class="typing"></span>
+          </h1>
+          <p class="hero-sub">
+            Everything you need — from precision hand tools to modular electronic components — curated for reliability and performance.
+          </p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="./Products/Products.html">Shop Now</a>
+          </div>
+        </div>
+      </main>
+
+<section id="about" class="about-us">
+        <div class="about-container">
+            <div class="about-text">
+                <p>
+                    At Ramdev Hardware, we are committed to providing high-quality tools and electronic components to professionals and hobbyists alike. 
+                    With years of expertise and a passion for precision, we ensure every product meets strict standards of reliability and performance.
+                </p>
+                <p>
+                    Our mission is to empower our customers with the right tools and products to bring their projects to life, whether it's construction, DIY, or electronics.
+                </p>
+                <a href="./About/About.html" class="btn btn-primary">Learn More</a>
+            </div>
+            <div class="about-image">
+                <img src="./Imges/AboutUs.png" alt="About Ramdev Hardware">
+            </div>
+        </div>
+    </section>
+<section id="bestsellers" class="bestsellers">
+  <h2>Best Sellers</h2>
+
+ 
+
+  <!-- Bestsellers will appear here -->
+  <div id="bestsellerList" class="products-grid"></div>
+</section>
+
+    <section class="Contact-Us">
+            <div class="background">
+                <div class="container">
+                    <div class="screen">
+                    <div class="screen-header">
+    <div class="screen-header-left">
+            <i class="fab fa-instagram"></i>
+            <i class="fa-brands fa-twitter"></i>
+            <i class="fa-brands fa-facebook"></i>
+    </div>
+    <div class="screen-header-right">
+        <h6>Follow Us</h6>
+    </div>
+    </div>
+
+                        <div class="screen-body">
+                            <div class="screen-body-item left">
+                                <div class="app-title">
+                                    <span>CONTACT US</span>
+                                </div>
+                                <div class="app-contact-info">
+                                    <div class="contact-item">
+                                        <i class="fas fa-envelope"></i> 
+                                        <span>sales@ramdevsales.com</span>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="fa-solid fa-phone"></i>
+                                        <span>+91 7621 888 426</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="screen-body-item">
+                                <div class="app-form">
+                                    <div class="app-form-group">
+                                        <input class="app-form-control" placeholder="NAME" >
+                                    </div>
+                                    <div class="app-form-group">
+                                        <input class="app-form-control" placeholder="EMAIL">
+                                    </div>
+                                    <div class="app-form-group textarea">
+                                        <textarea class="app-form-control" placeholder="MESSAGE"></textarea>
+                                    </div>
+                                    <div class="app-form-group buttons">
+                                        <button class="app-form-button">SEND</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="more-details-button" onclick="location.href='../Contact/Contact.html'">More Details</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+<section class="why-choose-section">
+  <h2 class="section-title">Why Choose Us</h2>
+  <div class="choose-container">
+
+    <div class="choose-card">
+      <img src="./Imges/Animation Bar/delivery-truck.gif" alt="Fast Delivery" class="choose-gif">
+      <h3>Fast Delivery</h3>
+      <p>We ensure your products reach you quickly and safely, on time every time.</p>
+    </div>
+
+    <div class="choose-card">
+      <img src="./Imges/Animation Bar/quality.gif" alt="Quality Products" class="choose-gif">
+      <h3>Quality Products</h3>
+      <p>All our items meet strict quality standards to guarantee reliability and performance.</p>
+    </div>
+
+    <div class="choose-card">
+      <img src="./Imges/Animation Bar/contact.gif" alt="Dedicated Support" class="choose-gif">
+      <h3>Dedicated Support</h3>
+      <p>Our team is always ready to help you with any queries or technical assistance.</p>
+    </div>
+
+  </div>
+</section>
+
+
+        <script type="module" src="./index.js"></script>
+    </body>
+    </html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - RamDev Sales Corporation</title>
+    <link rel="stylesheet" href="./About.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="../index.html" class="logo">
+                <img src="../Imges/Logo.png" alt="Ramdev logo" />
+            </a>
+        </div>
+
+        <div class="nav-center">
+    <form class="search-form" role="search" action="../Products/Products.html" method="get">
+        <input 
+            type="search" 
+            name="query" 
+            id="homeSearch"
+            placeholder="Search products..." 
+            aria-label="Search products"
+            autocomplete="off"
+        >
+        <button type="submit" aria-label="Search">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+
+    <!-- 🔥 Search Suggestions Box -->
+    <div id="indexSearchSuggestions" class="suggestions-box"></div>
+</div>
+
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="./About.html">About</a></li>
+                <li><a href="../Products/Products.html">Products</a></li>
+                <li><a href="../Contact/Contact.html">Contact</a></li>
+            </ul>
+            <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
+                <img src="../Imges/Menu.png" alt="menu" data-closed="../Imges/Menu.png" data-open="../Imges/close.png" />
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+        <div class="mobile-inner">
+            <a href="../index.html">Home</a>
+            <a href="./About.html">About</a>
+            <a href="../Products/Products.html">Products</a>
+            <a href="../Contact/Contact.html">Contact</a>
+        </div>
+    </div>
+
+    <!-- Menu backdrop -->
+    <div id="menuBackdrop" class="menu-backdrop" aria-hidden="true"></div>
+
+  
+<main class="about-section">
+    <div class="wave-background"></div>
+    <div class="about-container">
+        <div class="about-content">
+            <div class="about-text">
+                <p class="welcome">Welcome to RamDev Sales Corporation, your trusted partner in high-quality electrical and hardware solutions. With years of experience in the industry, we pride ourselves on delivering reliable products and exceptional service to meet the diverse needs of our customers.</p>
+                
+                <p class="mission">At RamDev Sales Corporation, we are committed to providing a wide range of electrical components, hardware tools, and accessories designed for both residential and commercial applications. Our mission is to ensure our clients receive durable, efficient, and cost-effective solutions to power their projects and operations.</p>
+                
+                <p class="values">Driven by quality, innovation, and customer satisfaction, we strive to build long-term relationships with our clients by offering expert guidance, timely support, and products that meet the highest industry standards.</p>
+                
+                <p class="closing">Choose RamDev Sales Corporation – where your electrical and hardware needs are handled with professionalism, reliability, and care.</p>
+            </div>
+            <div class="about-image">
+                <img src="../Imges/AboutUs.png" alt="About Us Image">
+            </div>
+        </div>
+    </div>
+</main>
+
+
+  
+
+    <script type="module"  src="./About.js"></script>
+</body>
+</html>
