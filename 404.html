@@ -58,7 +58,6 @@
   </div>
 
   <script>
-    // Go back to previous page or fallback to homepage
     function goBack() {
       if (window.history.length > 1) {
         history.back();
@@ -67,7 +66,6 @@
       }
     }
 
-    // Check internet connection
     function checkInternet() {
       const img = document.getElementById("statusImg");
       const msg = document.getElementById("msg");
@@ -92,7 +90,7 @@
     // Initial check
     checkInternet();
 
-    // Auto update on network change
+    // Listen for network changes
     window.addEventListener("online", checkInternet);
     window.addEventListener("offline", checkInternet);
   </script>
