@@ -84,31 +84,71 @@
   </div>
 
   <!-- Contact Modal -->
-  <div id="contactModal" class="contact-modal">
-    <div class="modal-content">
-      <span id="closeModal" class="close-btn">&times;</span>
+<div id="contactModal" class="contact-modal"> 
+  <div class="modal-content">
+    <span id="closeModal" class="close-btn">&times;</span>
 
-      <div id="formSection">
-        <h2>Inquiry Form</h2>
-        <form id="contactForm">
-          <input type="text" id="name" placeholder="Your Name" required>
-          <input type="text" id="company" placeholder="Company Name">
-          <input type="email" id="email" placeholder="Email" required>
-          <input type="tel" id="phone" placeholder="Phone Number" required>
-          <input type="number" id="quantity" placeholder="Quantity" required min="1">
-          <input type="text" id="product" placeholder="Product Name" readonly>
-          <textarea id="message" placeholder="Message" required></textarea>
-          <button type="submit" class="submit-btn">Submit</button>
-        </form>
-      </div>
+    <div id="formSection">
+      <h2>Inquiry Form</h2>
+      <form id="contactForm">
 
-      <div id="thankYouSection" class="thankyou-section" style="display:none;">
-        <h2>Thank You!</h2>
-        <p>Your inquiry has been submitted. We will contact you soon.</p>
-      </div>
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="text" id="company" placeholder="Company Name">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="tel" id="phone" placeholder="Phone Number" required>
 
+        <!-- Quantity input with plus/minus buttons -->
+        <div class="quantity-wrapper">
+          <button type="button" class="quantity-btn" id="minusBtn">-</button>
+          <input type="number" id="quantity" placeholder="Quantity" required min="1" value="1">
+          <button type="button" class="quantity-btn" id="plusBtn">+</button>
+        </div>
+
+        <input type="text" id="product" placeholder="Product Name" readonly disabled>
+        <textarea id="message" placeholder="Your Message (Optional)"></textarea>
+
+        <!-- Terms & Conditions -->
+   <div class="terms-wrapper">
+  <label class="custom-checkbox">
+    <input type="checkbox" id="terms" required>
+    <span class="checkmark">✓</span>
+    I accept the 
+    <span id="openTerms" style="color:#007bff; cursor:pointer;">Terms & Conditions</span>
+  </label>
+</div>
+
+
+        <button type="submit" class="submit-btn">Submit</button>
+      </form>
+    </div>
+
+    <div id="thankYouSection" class="thankyou-section" style="display:none;">
+      <h2>Thank You!</h2>
+      <p>Your inquiry has been submitted. We will contact you soon.</p>
+    </div>
+
+    <!-- Full Terms & Conditions -->
+  <div id="termsModal" class="contact-modal">
+  <div class="modal-content">
+    <span id="closeTerms" class="close-btn">&times;</span>
+    <div class="conditions">
+      <h3>Payment & Delivery Terms</h3>
+      <ol>
+        <li>After our team responds, you must reply with the item details and contact number.</li>
+        <li>Our team will email you a 70% payment option.</li>
+        <li>For product delivery, you need to pay 30% to the delivery person via UPI.</li>
+        <li>If your product is defective (not damaged), you must provide a video and call our team.</li>
+        <li>After verification of the video/photo, we will send a replacement product.</li>
+        <li>If you cancel your order, we return 60% of your payment within 2-3 days (10% deducted).</li>
+      </ol>
     </div>
   </div>
+</div>
+
+
+  </div>
+</div>
+
 
   <!-- Scripts -->
   <script type="module" src="./Products.js"></script>

@@ -38,7 +38,7 @@
     let currentLoadedImages = [];
     let previewIndex = 0;
     let urlCount = 2;
-    const MAX_CHARS = 500;
+    const MAX_CHARS = 1000;
     let editMode = false;
     let editingProductId = null;
     let selectingBestSellers = false;
@@ -179,7 +179,7 @@
     }
 
     // ---------------- Form Submit ----------------
-   form.addEventListener('submit', async e => {
+ form.addEventListener('submit', async e => {
     e.preventDefault();
     
     const name = document.getElementById('name').value.trim();
@@ -188,12 +188,14 @@
     const price = parseFloat(document.getElementById('price').value); // Get price value
     const brand = document.getElementById('brand').value.trim(); // Get brand value
     const images = getCurrentImages();
+    const minQuantity = parseInt(document.getElementById('minQuantity').value); // Get maximum quantity
     const extraFields = getKeyValuePairs();
     
     if (!category) return showToast('Select a category', 'error');
     if (images.length < 2) return showToast('At least 2 images required', 'error');
     if (isNaN(price) || price <= 0) return showToast('Enter a valid price', 'error');
     if (!brand) return showToast('Enter a brand name', 'error');
+    if (isNaN(minQuantity) || minQuantity <= 0) return showToast('Enter a valid maximum quantity', 'error');
     
     const mainImage = images[0];
     const otherImages = images.slice(1);
@@ -202,12 +204,12 @@
         if (editMode && editingProductId) {
             const docRef = doc(db, 'Products', editingProductId);
             await updateDoc(docRef, {
-                name, details, category, brand, price, mainUrl: mainImage, images: otherImages, extraFields, updatedAt: serverTimestamp()
+                name, details, category, brand, price, minQuantity, mainUrl: mainImage, images: otherImages, extraFields, updatedAt: serverTimestamp()
             });
             showToast('Product updated!');
         } else {
             await addDoc(collection(db, 'Products'), {
-                name, details, category, brand, price, mainUrl: mainImage, images: otherImages, extraFields, bestSeller: false, createdAt: serverTimestamp()
+                name, details, category, brand, price, minQuantity, mainUrl: mainImage, images: otherImages, extraFields, bestSeller: false, createdAt: serverTimestamp()
             });
             showToast('Product added!');
         }
@@ -218,6 +220,7 @@
         showToast('Error saving product', 'error');
     }
 });
+
 
     // ---------------- Reset Form ----------------
   function resetForm() {
@@ -246,79 +249,82 @@
     });
 
     // ---------------- Load Products ----------------
-    async function loadProducts(){
-        productsList.innerHTML='';
-        bestSellersList.innerHTML='';
+  async function loadProducts() {
+    productsList.innerHTML = '';
+    bestSellersList.innerHTML = '';
 
-        const qSnap = await getDocs(query(collection(db,"Products"), orderBy("createdAt","desc")));
+    const qSnap = await getDocs(query(collection(db, "Products"), orderBy("createdAt", "desc")));
 
-        qSnap.forEach(docSnap => {
-            const data = docSnap.data();
-            const productId = docSnap.id;
+    qSnap.forEach(docSnap => {
+        const data = docSnap.data();
+        const productId = docSnap.id;
 
-            // ----- ALL PRODUCTS CARD -----
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            card.innerHTML = `
-                <div class="bs-tag ${data.bestSeller ? 'visible' : ''}">Best Seller</div>
-                <img src="${data.mainUrl}" alt="Product">
-                <h3>${data.name}</h3>
-                <div class="product-actions">
-                    <button class="edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button class="delete-btn"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            `;
+        // ----- ALL PRODUCTS CARD -----
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+            <div class="bs-tag ${data.bestSeller ? 'visible' : ''}">Best Seller</div>
+            <img src="${data.mainUrl}" alt="Product">
+            <h3>${data.name}</h3>
+            <p>Max Quantity: ${data.minQuantity}</p>  <!-- Display minQuantity -->
+            <div class="product-actions">
+                <button class="edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="delete-btn"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        `;
 
-            // Edit product - open Add Product section automatically
-            card.querySelector('.edit-btn').addEventListener('click', ()=>{
-                showSection('addProductSection');
-                fillEditForm(productId,data);
-            });
+        // Edit product - open Add Product section automatically
+        card.querySelector('.edit-btn').addEventListener('click', () => {
+            showSection('addProductSection');
+            fillEditForm(productId, data);
+        });
 
-            // Delete product
-            card.querySelector('.delete-btn').addEventListener('click', async ()=>{
-                if(confirm('Delete this product?')){
-                    await deleteDoc(doc(db,'Products',productId));
-                    loadProducts();
-                }
-            });
-
-            // Toggle Best Seller
-            card.querySelector('img').addEventListener('click', async ()=>{
-                if(selectingBestSellers){
-                    await updateDoc(doc(db,'Products',productId), { bestSeller: !data.bestSeller });
-                    loadProducts();
-                }
-            });
-
-            productsList.appendChild(card);
-
-            // ----- BEST SELLERS CARD -----
-            if(data.bestSeller){
-                const bsCard = document.createElement('div');
-                bsCard.className = 'product-card';
-                bsCard.innerHTML = `
-                    <img src="${data.mainUrl}" alt="Product">
-                    <h3>${data.name}</h3>
-                    <div class="product-actions">
-                        <button class="edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button class="remove-bs-btn"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                `;
-                bsCard.querySelector('.edit-btn').addEventListener('click', ()=>{
-                    showSection('addProductSection');
-                    fillEditForm(productId,data);
-                });
-                bsCard.querySelector('.remove-bs-btn').addEventListener('click', async ()=>{
-                    if(confirm('Remove from Best Sellers?')){
-                        await updateDoc(doc(db,'Products',productId), { bestSeller: false });
-                        loadProducts();
-                    }
-                });
-                bestSellersList.appendChild(bsCard);
+        // Delete product
+        card.querySelector('.delete-btn').addEventListener('click', async () => {
+            if (confirm('Delete this product?')) {
+                await deleteDoc(doc(db, 'Products', productId));
+                loadProducts();
             }
         });
-    }
+
+        // Toggle Best Seller
+        card.querySelector('img').addEventListener('click', async () => {
+            if (selectingBestSellers) {
+                await updateDoc(doc(db, 'Products', productId), { bestSeller: !data.bestSeller });
+                loadProducts();
+            }
+        });
+
+        productsList.appendChild(card);
+
+        // ----- BEST SELLERS CARD -----
+        if (data.bestSeller) {
+            const bsCard = document.createElement('div');
+            bsCard.className = 'product-card';
+            bsCard.innerHTML = `
+                <img src="${data.mainUrl}" alt="Product">
+                <h3>${data.name}</h3>
+                <p>Max Quantity: ${data.minQuantity}</p>  <!-- Display minQuantity -->
+                <div class="product-actions">
+                    <button class="edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button class="remove-bs-btn"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            `;
+            bsCard.querySelector('.edit-btn').addEventListener('click', () => {
+                showSection('addProductSection');
+                fillEditForm(productId, data);
+            });
+            bsCard.querySelector('.remove-bs-btn').addEventListener('click', async () => {
+                if (confirm('Remove from Best Sellers?')) {
+                    await updateDoc(doc(db, 'Products', productId), { bestSeller: false });
+                    loadProducts();
+                }
+            });
+            bestSellersList.appendChild(bsCard);
+        }
+    });
+}
+
 
     // ---------------- Fill Edit Form ----------------
    function fillEditForm(id, data) {

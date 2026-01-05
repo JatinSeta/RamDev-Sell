@@ -232,7 +232,6 @@
     border-radius: 6px;
     cursor: pointer;
     width: 100%;
-    max-width: 300px;
     text-align: center;
     transition: background-color 0.3s;
   }
@@ -266,6 +265,21 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     margin-left: 5px;
   }
+.product-brand {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  border-radius: 20px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  margin-left: 5px;
+}
+.product-brand.black {
+  background: linear-gradient(45deg, #444, #000);
+  color: #ffffff;
+}
+
 
   /* ===============================
     RELATED PRODUCTS
@@ -334,8 +348,7 @@
     font-weight: 600;
     color: #333;
     text-align: center;
-    margin-bottom: 15px;
-    min-height: 40px;
+ 
   }
 
   .card-buttons {
@@ -449,4 +462,58 @@
   @media (max-width: 768px) { #breadcrumbName { max-width: 50%; } }
   @media (max-width: 480px) { #breadcrumbName { max-width: 40%; } }
   
+  /* Responsive product-brand.black tag */
+.product-brand.black {
+    background: linear-gradient(45deg, #444, #000);
+    color: #fff;
+    display: inline-block;
+    padding: 4px 12px; /* default padding */
+    font-size: 0.85rem;
+    font-weight: bold;
+    border-radius: 20px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    margin-left: 5px;
+    transition: padding 0.3s, font-size 0.3s;
+}
+
+@media (max-width: 900px) {
+    .product-brand.black {
+        font-size: 0.75rem;
+        padding: 3px 10px;
+    }
+    .product-title{
+      font-size: 26px;
+    }
+    .product-description{
+      font-size: 14px;  
+    }
+}
+
+@media (max-width: 600px) {
+    .product-brand.black {
+        font-size: 0.65rem;
+        padding: 2px 8px;
+    }
+    .product-title{
+      font-size: 24px;
+    }
+    .product-description{
+      font-size: 12px;
+    }
+    .quantity-selector{
+      justify-content: center;
+    }
   
+}
+
+@media (max-width: 400px) {
+    .product-brand.black {
+        font-size: 0.8rem;
+        padding: 3px 7px;
+        margin: 5px 0;
+    }
+    .product-title{
+      font-size: 22px;
+    }
+}

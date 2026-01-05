@@ -23,7 +23,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 18px;
+    padding: 0px;
     background: #ffffff;
     border-bottom: 1px solid #e6e9ee;
     z-index: 2000;
@@ -138,14 +138,14 @@
   /* ================================
     MOBILE MENU
   ================================ */
-  .mobile-menu {
+ .mobile-menu {
     position: fixed;
-    top: 70px;
-    left: 12px;
-    right: 12px;
+    top: 60px; 
+    left: 0;   /* align to left edge */
+    right: 0;  /* align to right edge */
+    width: 100%; /* full width */
     background: #fff;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-    border-radius: 10px;
     z-index: 1900;
     overflow: hidden;
     max-height: 0;
@@ -153,7 +153,7 @@
     pointer-events: none;
     transform: translateY(-10px);
     transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
-  }
+}
 
   .mobile-menu.active {
     max-height: 420px;
@@ -218,8 +218,8 @@
   /* Products grid */
   .products-list {
     display: grid;
+    width: 100%;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
   }
 
   /* Card */
@@ -244,8 +244,8 @@
 
   /* Card image */
   .product-card img {
-    width: 200px;
-    height: 200px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: 5px;
   }
@@ -605,61 +605,178 @@
     /* important to position badge inside card */
   }
 
-  /* Contact Modal */
-  .contact-modal {
+/* ================== Modal Overlay ================== */
+.contact-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100%; /* full screen overlay */
     background: rgba(0, 0, 0, 0.6);
-    display: none;
+    display: none; /* hidden by default */
     justify-content: center;
     align-items: center;
     z-index: 3000;
-  }
+    padding: 0; /* optional, no extra padding */
+}
 
-  .modal-content {
+/* ================== Modal Content ================== */
+.contact-modal .modal-content {
     background: #fff;
-    padding: 25px;
+    padding: 15px;
     width: 90%;
     max-width: 450px;
     border-radius: 10px;
     position: relative;
-  }
+    overflow-y: auto; /* scroll if content too tall */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
 
-  .close-btn {
+/* ================== Close Button ================== */
+.close-btn {
     position: absolute;
     top: 10px;
     right: 15px;
     font-size: 24px;
     cursor: pointer;
-  }
+}
 
-  #contactForm input,
-  #contactForm textarea {
+/* ================== Form Inputs ================== */
+#contactForm input,
+#contactForm textarea {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 12px;
+    font-size: 13px;
+    padding: 5px 8px;
+    margin-bottom: 8px;
     border: 1px solid #ccc;
     border-radius: 6px;
-  }
+    box-sizing: border-box;
+    height: 30px; /* small height */
+}
 
-  .submit-btn {
+#contactForm textarea {
+    min-height: 50px; /* slightly taller for messages */
+    resize: vertical;
+}
+
+/* ================== Quantity Buttons ================== */
+.quantity-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.quantity-wrapper input[type="number"] {
+    width: 50px;
+    text-align: center;
+    font-size: 13px;
+    padding: 4px;
+    height: 28px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.quantity-btn {
+      width: 45px;
+    height: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #007BFF;
+    color: #fff;
+    border: 1px solid #007BFF;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.quantity-btn:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.quantity-btn:active {
+    transform: scale(0.95);
+}
+
+/* ================== Submit Button ================== */
+.submit-btn {
     width: 100%;
-    padding: 12px;
-    background: #007bff;
-    color: white;
+    font-size: 13px;
+    padding: 8px 10px;
+    background-color: #007BFF;
+    color: #fff;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-  }
+    transition: background-color 0.2s;
+    margin-top: 5px;
+}
 
-  .thankyou-section {
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+/* ================== Terms & Conditions ================== */
+.terms-wrapper {
+    font-size: 12px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    user-select: none;
+    color: #333;
+}
+
+.custom-checkbox input {
+    display: none; /* hide default checkbox */
+}
+
+.custom-checkbox .checkmark {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #333;
     text-align: center;
-  }
+    line-height: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #fff;
+    transition: all 0.2s;
+}
 
-  .close-thankyou {
+.custom-checkbox input:checked + .checkmark {
+    background-color: #007BFF; /* green when checked */
+    color: white;
+    border-color: #007BFF;
+}
+
+.custom-checkbox a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.custom-checkbox a:hover {
+    text-decoration: underline;
+}
+
+/* ================== Thank You Section ================== */
+.thankyou-section {
+    text-align: center;
+    padding: 20px;
+    background-color: #f0f8ff;
+    border-radius: 8px;
+    margin: 0 20px;
+}
+
+.close-thankyou {
     margin-top: 15px;
     padding: 10px 20px;
     background: #28a745;
@@ -667,16 +784,11 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
-  }
+}
 
-  /* Thank You section styles */
-  .thankyou-section {
-    text-align: center;
-    padding: 20px;
-    background-color: #f0f8ff;
-    border-radius: 8px;
-    margin: 0 20px;
-  }
+/* =============================
+   SEARCH SUGGESTIONS
+============================= */
 
 
   .search-form {
@@ -796,3 +908,337 @@
   }
 }
 
+.contact-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 3000;
+  overflow-y: auto;
+}
+
+.contact-modal .modal-content {
+  background: #fff;
+  padding: 25px 30px;
+  width: 100%;
+  max-width: 450px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  margin: auto;
+}
+
+/* CLOSE BUTTON */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #ff0000;
+}
+
+/* ===========================
+   FORM ELEMENTS
+=========================== */
+#contactForm input,
+#contactForm textarea {
+  width: 100%;
+  padding: 10px 12px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+#contactForm textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* SUBMIT BUTTON */
+.submit-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
+/* ===========================
+   QUANTITY BUTTONS
+=========================== */
+.quantity-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+
+
+#quantity {
+  width: 60px;
+  text-align: center;
+  margin: 0 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* ===========================
+   TERMS & CONDITIONS
+=========================== */
+.terms-wrapper {
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.custom-checkbox input {
+  display: none;
+}
+
+.checkmark {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+  line-height: 16px;
+  font-weight: bold;
+  color: #28a745;
+  cursor: pointer;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.custom-checkbox input:checked + .checkmark {
+  background-color: #007BFF;
+  color: #fff;
+  border-color: #28a745;
+}
+
+.custom-checkbox a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.custom-checkbox a:hover {
+  text-decoration: underline;
+}
+
+/* TERMS DESCRIPTION BOX */
+.conditions {
+  /* padding: 12px 15px; */
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.conditions h3 {
+  margin-bottom: 8px;
+}
+
+.conditions ol {
+  padding-left: 20px;
+}
+
+.conditions li {
+  margin-bottom: 6px;
+}
+
+/* ===========================
+   THANK YOU SECTION
+=========================== */
+.thankyou-section {
+  text-align: center;
+  padding: 20px;
+}
+
+.thankyou-section h2 {
+  color: #28a745;
+  margin-bottom: 10px;
+}
+
+.thankyou-section p {
+  font-size: 14px;
+}
+
+
+/* =============================
+   PRODUCT CARDS
+============================= */
+.product-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px;
+  /* width: 200px; */
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  display: inline-block;
+  vertical-align: top;
+}
+
+.product-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.card-title {
+  font-weight: bold;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.card-buttons {
+  margin-top: 10px;
+}
+
+.contact-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.contact-btn:hover {
+  background-color: #1e7e34;
+}
+
+/* BEST SELLER BADGE */
+.best-seller-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+/* =============================
+   QUANTITY INPUT + BUTTONS
+============================= */
+.quantity-container {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.qty-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.qty-btn:hover {
+  background-color: #0056b3;
+}
+
+#quantity {
+  width: 60px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 0 5px;
+  padding: 6px;
+  font-size: 16px;
+  pointer-events: none; /* prevent manual typing */
+  background-color: #f9f9f9;
+}
+
+/* =============================
+   SEARCH SUGGESTIONS
+============================= */
+#searchSuggestions {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  max-width: 300px;
+  width: 100%;
+  z-index: 999;
+  display: none;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.suggestion-item:hover {
+  background: #f1f1f1;
+}
+
+.suggestion-img {
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.suggestion-text {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Show menu button and hide desktop links on small screens */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; /* hide desktop nav links */
+  }
+
+  .menu-btn {
+    display: flex; /* show the menu button */
+  }
+
+  .nav-center {
+    flex: 1 1 auto;
+    justify-content: flex-start; /* optional, to align search bar left */
+  }
+
+  .search-form {
+    width: 100%; /* make search bar full width */
+  }
+}

@@ -142,22 +142,21 @@ body {
    MOBILE MENU
 ================================ */
 .mobile-menu {
-  position: fixed;
-  top: 70px;
-  left: 12px;
-  right: 12px;
-  background: #fff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  border-radius: 10px;
-  z-index: 1900;
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-10px);
-  transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
+    position: fixed;
+    top: 60px; 
+    left: 0;   /* align to left edge */
+    right: 0;  /* align to right edge */
+    width: 100%; /* full width */
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    z-index: 1900;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
 }
-
 .mobile-menu.active {
   max-height: 420px;
   opacity: 1;
@@ -515,5 +514,24 @@ body {
 
   .suggestion-item {
     padding: 4px 6px;
+  }
+}
+/* Show menu button and hide desktop links on small screens */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; /* hide desktop nav links */
+  }
+
+  .menu-btn {
+    display: flex; /* show the menu button */
+  }
+
+  .nav-center {
+    flex: 1 1 auto;
+    justify-content: flex-start; /* optional, to align search bar left */
+  }
+
+  .search-form {
+    width: 100%; /* make search bar full width */
   }
 }

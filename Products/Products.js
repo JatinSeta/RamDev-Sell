@@ -13,26 +13,33 @@ const mainContent = document.getElementById('mainContent');
 const heroSection = document.getElementById('heroSection');
 
 const contactModal = document.getElementById('contactModal');
-const contactForm = document.getElementById('contactForm');
 const productInput = document.getElementById('product');
 const closeModal = document.getElementById("closeModal");
 const formSection = document.getElementById("formSection");
 const thankYouSection = document.getElementById("thankYouSection");
+const contactForm = document.getElementById("contactForm");
+
+const quantityInput = document.getElementById("quantity");
+const minusBtn = document.getElementById("minusBtn");
+const plusBtn = document.getElementById("plusBtn");
 
 const navSearch = document.getElementById('navSearch');
 const searchForm = document.querySelector('.search-form');
 const searchSuggestions = document.getElementById('searchSuggestions');
 
+// =======================================
+// STATE
+// =======================================
 let allProductsData = [];
+let selectedProductMinQty = 1;
+let selectedProductMaxQty = 200;
 
 // =======================================
-// LOAD PRODUCTS
+// LOAD PRODUCTS FROM FIREBASE
 // =======================================
 export async function loadProducts() {
   try {
-    const productsRef = collection(db, "Products");
-    const snap = await getDocs(productsRef);
-
+    const snap = await getDocs(collection(db, "Products"));
     allProductsData = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
     if (allProductsData.length === 0) {
@@ -41,7 +48,6 @@ export async function loadProducts() {
     }
 
     renderProducts(allProductsData);
-
   } catch (err) {
     console.error("Error loading products:", err);
     productsList.innerHTML = "<div>Error loading products.</div>";
@@ -56,19 +62,10 @@ export async function loadProducts() {
 // =======================================
 function renderProducts(products) {
   productsList.innerHTML = '';
-  const noMsg = document.getElementById('noProductsMsg');
-  if (noMsg) noMsg.remove();
 
   products.forEach(product => {
     const card = document.createElement('div');
     card.className = 'product-card';
-
-    if (product.bestSeller) {
-      const badge = document.createElement('div');
-      badge.className = 'best-seller-badge';
-      badge.textContent = 'Best Seller';
-      card.appendChild(badge);
-    }
 
     const img = document.createElement('img');
     img.src = product.mainUrl || "https://via.placeholder.com/150";
@@ -86,106 +83,156 @@ function renderProducts(products) {
       window.location.href = `./productDetails.html?id=${product.id}`;
     });
 
-    const brand = document.createElement('div');
-    brand.className = 'product-brand';
-    brand.textContent = product.brand || "";
-
     const btnContainer = document.createElement('div');
     btnContainer.className = 'card-buttons';
 
     const contactBtn = document.createElement('button');
     contactBtn.className = 'contact-btn';
     contactBtn.textContent = 'Contact Us';
-    contactBtn.addEventListener('click', () => {
-      productInput.value = product.name || "";
-      contactModal.style.display = 'flex';
-      formSection.style.display = 'block';
-      thankYouSection.style.display = 'none';
-    });
+    contactBtn.addEventListener('click', () => openContactModal(product));
 
     btnContainer.appendChild(contactBtn);
-    card.appendChild(img);
-    card.appendChild(title);
-    card.appendChild(brand);
-    card.appendChild(btnContainer);
-
+    card.append(img, title, btnContainer);
     productsList.appendChild(card);
   });
 }
 
 // =======================================
-// APPLY SEARCH FILTER
+// OPEN CONTACT MODAL
 // =======================================
-export function applySearchFilter(searchText) {
-  searchText = searchText.toLowerCase().trim();
-  const filtered = allProductsData.filter(p => 
-    p.name.toLowerCase().includes(searchText) || 
-    (p.brand || '').toLowerCase().includes(searchText)
-  );
+function openContactModal(product) {
+  productInput.value = product.name || "";
 
-  if (searchText === '') {
-    heroSection.style.display = 'flex';
-    heroSection.classList.remove('hidden');
-    renderProducts(allProductsData);
-    hideSearchSuggestions();
-    return;
-  }
+  // Use Firebase min/max
+  selectedProductMinQty = parseInt(product.minQuantity) || 1;
+  selectedProductMaxQty = parseInt(product.maxQuantity) || 100;
 
-  heroSection.style.display = 'none';
+  quantityInput.value = selectedProductMinQty;
+  quantityInput.min = selectedProductMinQty;
+  quantityInput.max = selectedProductMaxQty;
 
-  if (filtered.length > 0) {
-    renderProducts(filtered);
-  } else {
-    productsList.innerHTML = '';
-    let noMsg = document.getElementById('noProductsMsg');
-    if (!noMsg) {
-      noMsg = document.createElement('div');
-      noMsg.id = 'noProductsMsg';
-      noMsg.textContent = "No products found for your search.";
-      noMsg.style.textAlign = "center";
-      noMsg.style.marginTop = "20px";
-      noMsg.style.fontSize = "16px";
-      noMsg.style.color = "#555";
-      productsList.parentNode.appendChild(noMsg);
-    }
-  }
+  minusBtn.disabled = quantityInput.value <= selectedProductMinQty;
+  plusBtn.disabled = quantityInput.value >= selectedProductMaxQty;
+
+  contactModal.style.display = "flex";
+  formSection.style.display = "block";
+  thankYouSection.style.display = "none";
 }
 
 // =======================================
-// SEARCH SUGGESTIONS
+// CLOSE CONTACT MODAL
+// =======================================
+closeModal.addEventListener("click", () => {
+  contactModal.style.display = "none";
+  contactForm.reset();
+});
+
+// =======================================
+// QUANTITY PLUS / MINUS BUTTONS
+// =======================================
+function updateQuantity(change) {
+  let qty = parseInt(quantityInput.value) || selectedProductMinQty;
+  qty += change;
+
+  if (qty < selectedProductMinQty) qty = selectedProductMinQty;
+  if (qty > selectedProductMaxQty) qty = selectedProductMaxQty;
+
+  quantityInput.value = qty;
+  minusBtn.disabled = qty <= selectedProductMinQty;
+  plusBtn.disabled = qty >= selectedProductMaxQty;
+}
+
+minusBtn.addEventListener("click", () => updateQuantity(-1));
+plusBtn.addEventListener("click", () => updateQuantity(1));
+
+quantityInput.addEventListener("input", () => {
+  let val = parseInt(quantityInput.value) || selectedProductMinQty;
+  if (val < selectedProductMinQty) val = selectedProductMinQty;
+  if (val > selectedProductMaxQty) val = selectedProductMaxQty;
+
+  quantityInput.value = val;
+  minusBtn.disabled = val <= selectedProductMinQty;
+  plusBtn.disabled = val >= selectedProductMaxQty;
+});
+
+// =======================================
+// CONTACT FORM SUBMISSION
+// =======================================
+contactForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const company = document.getElementById("company").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const message = document.getElementById("message").value.trim();
+  const quantity = parseInt(quantityInput.value);
+  const acceptTerms = document.getElementById("acceptTerms");
+
+  if (!name || !email || !phone) {
+    alert("Please fill all required fields.");
+    return;
+  }
+
+  if (!acceptTerms.checked) {
+    alert("Please accept Terms & Conditions.");
+    return;
+  }
+
+  if (!/^\d{10}$/.test(phone)) {
+    alert("Phone number must be 10 digits.");
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "Inquiries"), {
+      name,
+      company,
+      email,
+      phone,
+      product: productInput.value,
+      quantity,
+      message,
+      termsAccepted: true,
+      createdAt: new Date()
+    });
+
+    formSection.style.display = "none";
+    thankYouSection.style.display = "block";
+
+    setTimeout(() => {
+      contactModal.style.display = "none";
+      contactForm.reset();
+      formSection.style.display = "block";
+      thankYouSection.style.display = "none";
+    }, 3000);
+
+  } catch (err) {
+    console.error("Firestore error:", err);
+    alert("Failed to submit inquiry.");
+  }
+});
+
+// =======================================
+// SEARCH FUNCTIONALITY
 // =======================================
 function showSearchSuggestions(query) {
   searchSuggestions.innerHTML = '';
+
   const filtered = allProductsData
     .filter(p => p.name.toLowerCase().includes(query) || (p.brand || '').toLowerCase().includes(query))
-    .sort((a, b) => a.name.localeCompare(b.name))
     .slice(0, 5);
 
   filtered.forEach(product => {
-    const suggestion = document.createElement('div');
-    suggestion.className = 'suggestion-item';
-
-    const img = document.createElement('img');
-    img.src = product.mainUrl || "https://via.placeholder.com/40";
-    img.alt = product.name;
-    img.className = 'suggestion-img';
-
-    const textDiv = document.createElement('div');
-    const text = `${product.name} (${product.brand || 'No Brand'})`;
-    textDiv.textContent = text.length > 30 ? text.slice(0, 27) + '...' : text;
-    textDiv.title = text;
-    textDiv.className = 'suggestion-text';
-
-    suggestion.appendChild(img);
-    suggestion.appendChild(textDiv);
-
-    suggestion.addEventListener('click', () => {
+    const div = document.createElement('div');
+    div.textContent = product.name;
+    div.className = 'suggestion-item';
+    div.onclick = () => {
       navSearch.value = product.name;
       applySearchFilter(product.name);
       hideSearchSuggestions();
-    });
-
-    searchSuggestions.appendChild(suggestion);
+    };
+    searchSuggestions.appendChild(div);
   });
 
   searchSuggestions.style.display = filtered.length ? 'block' : 'none';
@@ -195,93 +242,77 @@ function hideSearchSuggestions() {
   searchSuggestions.style.display = 'none';
 }
 
-// =======================================
-// SEARCH INPUT EVENTS
-// =======================================
+export function applySearchFilter(searchText) {
+  searchText = searchText.toLowerCase().trim();
+  const filtered = allProductsData.filter(p => 
+    p.name.toLowerCase().includes(searchText) || 
+    (p.brand || '').toLowerCase().includes(searchText)
+  );
+
+  if (!searchText) {
+    heroSection.style.display = 'flex';
+    renderProducts(allProductsData);
+    hideSearchSuggestions();
+    return;
+  }
+
+  heroSection.style.display = 'none';
+  if (filtered.length > 0) {
+    renderProducts(filtered);
+  } else {
+    productsList.innerHTML = "<div style='text-align:center;margin-top:20px;color:#555;'>No products found.</div>";
+  }
+}
+
+// Search input events
 navSearch.addEventListener('input', () => {
   const query = navSearch.value.toLowerCase().trim();
-
-  if (query === '') {
+  if (!query) {
     renderProducts(allProductsData);
     heroSection.style.display = 'flex';
-    heroSection.classList.remove('hidden');
     hideSearchSuggestions();
   } else {
     showSearchSuggestions(query);
     heroSection.style.display = 'none';
-    heroSection.classList.add('hidden');
   }
 });
 
-// =======================================
-// SEARCH FORM SUBMIT (FROM INDEX + PRODUCTS PAGE)
-// =======================================
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  const query = navSearch.value.toLowerCase().trim();
-  applySearchFilter(query);
+  applySearchFilter(navSearch.value);
   hideSearchSuggestions();
 });
 
 // =======================================
-// CONTACT FORM
-// =======================================
-contactModal.addEventListener("click", e => e.stopPropagation());
-
-contactForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const name = document.getElementById('name').value.trim();
-  const company = document.getElementById('company').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const product = document.getElementById('product').value.trim();
-  const message = document.getElementById('message').value.trim();
-  const quantity = document.getElementById('quantity').value.trim();
-
-  if (!name || !email || !phone || !message || !quantity) {
-    alert("Please fill all required fields.");
-    return;
-  }
-
-  try {
-    await addDoc(collection(db, "Inquiries"), {
-      name, company, email, phone, product, quantity, message, createdAt: new Date()
-    });
-
-    formSection.style.display = "none";
-    thankYouSection.style.display = "block";
-
-    setTimeout(() => {
-      contactModal.style.display = 'none';
-      contactForm.reset();
-      formSection.style.display = "block";
-      thankYouSection.style.display = "none";
-    }, 3000);
-
-  } catch (err) {
-    alert("Error submitting inquiry: " + err.message);
-  }
-});
-
-closeModal.addEventListener('click', () => {
-  contactModal.style.display = 'none';
-  contactForm.reset();
-  formSection.style.display = "block";
-  thankYouSection.style.display = "none";
-});
-
-// =======================================
-// INITIALIZE + APPLY SEARCH FROM URL
+// INIT
 // =======================================
 window.addEventListener("DOMContentLoaded", async () => {
   await loadProducts();
 
-  // GET ?query= FROM URL (INDEX SEARCH)
   const params = new URLSearchParams(window.location.search);
   const searchQuery = params.get("query");
-
   if (searchQuery) {
     navSearch.value = searchQuery;
-    applySearchFilter(searchQuery.toLowerCase());
+    applySearchFilter(searchQuery);
+  }
+});
+// Open Terms Modal
+const openTerms = document.getElementById("openTerms");
+const termsModal = document.getElementById("termsModal");
+const closeTerms = document.getElementById("closeTerms");
+
+openTerms.addEventListener("click", () => {
+  termsModal.style.display = "flex";
+});
+
+// Close Terms Modal
+closeTerms.addEventListener("click", () => {
+  termsModal.style.display = "none";
+});
+
+// Optional: Close modal if clicked outside content
+termsModal.addEventListener("click", (e) => {
+  if (e.target === termsModal) {
+    termsModal.style.display = "none";
   }
 });

@@ -83,6 +83,26 @@ body {
 .sidebar .bottom-section .menu-item {
   color: #000;
 }
+/* Minimum Quantity Input Field */
+label[for="minQuantity"] {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+#minQuantity {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+#minQuantity:focus {
+    border-color: #007bff;
+    outline: none;
+}
 
 .sidebar .menu-item .text {
   white-space: nowrap; /* prevent text from wrapping */
