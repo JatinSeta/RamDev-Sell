@@ -75,6 +75,10 @@
           <span class="icon"><i class="fa-solid fa-list"></i></span>
           <span class="text">Orders</span>
         </a>
+         <a href="#" class="menu-item" data-section="contactSection">
+          <span class="icon"><i class="fa-solid fa-envelope"></i></span>
+          <span class="text">Contact</span>
+        </a>
       </div>
       <div class="bottom-section">
         <a href="#" class="menu-item signout">
@@ -127,20 +131,14 @@
           <input type="number" id="minQuantity" placeholder="Minimum Quantity" min="1">
 
 
-            <label>Product Details (Max 2000 Characters):</label>
+            <label>Product Details (Max 1000 Characters):</label>
             <textarea
               id="details"
               placeholder="Enter product details"
               required
             ></textarea>
-            <div id="wordCount">0 / 750 characters</div>
-            <button type="button" id="summarizeBtn">Summarize</button>
-            <!-- New Button -->
-            <textarea
-              id="summary"
-              placeholder="Summary will appear here"
-            ></textarea>
-            <!-- Optional summary field -->
+            <div id="wordCount">0 / 1000 characters</div>
+
 
             <label>Image URLs:</label>
             <input
@@ -269,6 +267,14 @@
           </div>
         </div>
       </section>
+      <!-- Contact -->
+<section id="contactSection" class="admin-section" style="display: none;">
+  <h2>Contact Messages</h2>
+  <input type="text" id="contactSearchInput" placeholder="Search messages..." style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ccc;">
+  <div id="contactList"></div>
+</section>
+
+
     </div>
 
     <!-- JS File -->

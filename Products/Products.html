@@ -1,158 +1,192 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Products</title>
-  <link rel="stylesheet" href="./Products.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Products</title>
+      <link rel="stylesheet" href="./Products.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body>
 
-  <!-- Loader -->
-  <div id="loader" class="loader">
-    <img src="../Imges/engineer.png" class="center-img" alt="Engineer">
-    <div class="tools-circle">
-      <img src="../Imges/screw.png" class="tool" alt="Screw">
-      <img src="../Imges/copper-wire.png" class="tool" alt="Copper Wire">
-      <img src="../Imges/rotary-hammer.png" class="tool" alt="Rotary Hammer">
-      <img src="../Imges/tools-kit.png" class="tool" alt="Tools Kit">
-      <img src="../Imges/hammer.png" class="tool" alt="Hammer">
-      <img src="../Imges/screwdriver.png" class="tool" alt="Screwdriver">
-      <img src="../Imges/voltmeter.png" class="tool" alt="Voltmeter">
-    </div>
-  </div>
-
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="nav-left">
-      <a href="../index.html" class="logo">
-        <img src="../Imges/Logo.png" alt="Ramdev logo" />
-      </a>
-    </div>
-
-    <div class="nav-center">
-      <form class="search-form" role="search">
-        <input type="search" id="navSearch" placeholder="Search products..." aria-label="Search products">
-        <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
-        <div id="searchSuggestions" class="search-suggestions"></div>
-      </form>
-    </div>
-
-    <div class="nav-right">
-      <ul class="nav-links">
-        <li><a href="../index.html">Home</a></li>
-        <li><a href="../About/About.html">About</a></li>
-        <li><a href="./Products.html">Products</a></li>
-        <li><a href="../Contact/Contact.html">Contact</a></li>
-      </ul>
-      <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
-        <img src="../Imges/Menu.png" alt="menu" data-closed="../Imges/Menu.png" data-open="../Imges/close.png" />
-      </button>
-    </div>
-  </nav>
-
-  <!-- Mobile menu -->
-  <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
-    <div class="mobile-inner">
-      <a href="../index.html">Home</a>
-      <a href="../About/About.html">About</a>
-      <a href="./Products.html">Products</a>
-      <a href="../Contact/Contact.html">Contact</a>
-    </div>
-  </div>
-
-  <div id="menuBackdrop" class="menu-backdrop" aria-hidden="true"></div>
-
-  <!-- Main Content -->
-  <div id="mainContent" style="display:none;">
-   <section id="heroSection" class="hero">
-  <div class="hero-container">
-    <h1>All Products</h1>
-    <p class="hero-sub">Turning ideas into reality with top-quality hardware and electrical supplies.</p>
-  </div>
-  <div class="hero-image"></div>
-</section>
-
-
-    <div class="products-wrapper">
-      <div class="container">
-        <div id="productsList" class="products-list"></div>
-        <div id="pagination" class="pagination"></div>
+      <!-- Loader -->
+      <div id="loader" class="loader">
+        <img src="../Imges/engineer.png" class="center-img" alt="Engineer">
+        <div class="tools-circle">
+          <img src="../Imges/screw.png" class="tool" alt="Screw">
+          <img src="../Imges/copper-wire.png" class="tool" alt="Copper Wire">
+          <img src="../Imges/rotary-hammer.png" class="tool" alt="Rotary Hammer">
+          <img src="../Imges/tools-kit.png" class="tool" alt="Tools Kit">
+          <img src="../Imges/hammer.png" class="tool" alt="Hammer">
+          <img src="../Imges/screwdriver.png" class="tool" alt="Screwdriver">
+          <img src="../Imges/voltmeter.png" class="tool" alt="Voltmeter">
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Contact Modal -->
-<div id="contactModal" class="contact-modal"> 
-  <div class="modal-content">
-    <span id="closeModal" class="close-btn">&times;</span>
-
-    <div id="formSection">
-      <h2>Inquiry Form</h2>
-      <form id="contactForm">
-
-        <input type="text" id="name" placeholder="Your Name" required>
-        <input type="text" id="company" placeholder="Company Name">
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="tel" id="phone" placeholder="Phone Number" required>
-
-        <!-- Quantity input with plus/minus buttons -->
-        <div class="quantity-wrapper">
-          <button type="button" class="quantity-btn" id="minusBtn">-</button>
-          <input type="number" id="quantity" placeholder="Quantity" required min="1" value="1">
-          <button type="button" class="quantity-btn" id="plusBtn">+</button>
+      <!-- Navbar -->
+      <nav class="navbar">
+        <div class="nav-left">
+          <a href="../index.html" class="logo">
+            <img src="../Imges/Logo.png" alt="Ramdev logo" />
+          </a>
         </div>
 
-        <input type="text" id="product" placeholder="Product Name" readonly disabled>
-        <textarea id="message" placeholder="Your Message (Optional)"></textarea>
+        <div class="nav-center">
+          <form class="search-form" role="search">
+            <input type="search" id="navSearch" placeholder="Search products..." aria-label="Search products">
+            <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+            <div id="searchSuggestions" class="search-suggestions"></div>
+          </form>
+        </div>
 
-        <!-- Terms & Conditions -->
-   <div class="terms-wrapper">
-  <label class="custom-checkbox">
-    <input type="checkbox" id="terms" required>
-    <span class="checkmark">✓</span>
-    I accept the 
-    <span id="openTerms" style="color:#007bff; cursor:pointer;">Terms & Conditions</span>
-  </label>
-</div>
+        <div class="nav-right">
+          <ul class="nav-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../About/About.html">About</a></li>
+            <li><a href="./Products.html">Products</a></li>
+            <li><a href="../Contact/Contact.html">Contact</a></li>
+          </ul>
+          <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
+            <img src="../Imges/Menu.png" alt="menu" data-closed="../Imges/Menu.png" data-open="../Imges/close.png" />
+          </button>
+        </div>
+      </nav>
+
+      <!-- Mobile menu -->
+      <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+        <div class="mobile-inner">
+          <a href="../index.html">Home</a>
+          <a href="../About/About.html">About</a>
+          <a href="./Products.html">Products</a>
+          <a href="../Contact/Contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div id="menuBackdrop" class="menu-backdrop" aria-hidden="true"></div>
+
+      <!-- Main Content -->
+      <div id="mainContent" style="display:none;">
+      <section id="heroSection" class="hero">
+      <div class="hero-container">
+        <h1>All Products</h1>
+        <p class="hero-sub">Turning ideas into reality with top-quality hardware and electrical supplies.</p>
+      </div>
+      <div class="hero-image"></div>
+    </section>
 
 
-        <button type="submit" class="submit-btn">Submit</button>
-      </form>
-    </div>
+     <div class="products-wrapper">
+  <!-- Sidebar Filter -->
+  <div class="sidebar">
+    <h3>Filter Products</h3>
 
-    <div id="thankYouSection" class="thankyou-section" style="display:none;">
-      <h2>Thank You!</h2>
-      <p>Your inquiry has been submitted. We will contact you soon.</p>
-    </div>
+    <!-- Brand Search -->
+    <label for="brandSearch">Brand Name</label>
+    <input type="text" id="brandSearch" placeholder="Search by brand">
 
-    <!-- Full Terms & Conditions -->
-  <div id="termsModal" class="contact-modal">
-  <div class="modal-content">
-    <span id="closeTerms" class="close-btn">&times;</span>
-    <div class="conditions">
-      <h3>Payment & Delivery Terms</h3>
-      <ol>
-        <li>After our team responds, you must reply with the item details and contact number.</li>
-        <li>Our team will email you a 70% payment option.</li>
-        <li>For product delivery, you need to pay 30% to the delivery person via UPI.</li>
-        <li>If your product is defective (not damaged), you must provide a video and call our team.</li>
-        <li>After verification of the video/photo, we will send a replacement product.</li>
-        <li>If you cancel your order, we return 60% of your payment within 2-3 days (10% deducted).</li>
-      </ol>
-    </div>
+    <!-- Category Filter -->
+    <label for="categoryFilter">Category</label>
+    <select id="categoryFilter">
+      <option value="">All Categories</option>
+      <option value="Hardware">Hardware</option>
+      <option value="Electrical">Electrical</option>
+    </select>
+
+    <!-- Price Filter -->
+ <!-- Price Range -->
+<label for="priceRange">
+  Max Price: ₹<span id="priceValue">10000</span>
+</label>
+<input
+  type="range"
+  id="priceRange"
+  min="0"
+  max="10000"
+  step="100"
+  value="10000"
+/>
+
+    <button id="applyFilter">Apply Filter</button>
+  </div>
+
+  <!-- Products List -->
+  <div class="container">
+    <div id="productsList" class="products-list"></div>
+    <div id="pagination" class="pagination"></div>
   </div>
 </div>
+      </div>
+
+      <!-- Contact Modal -->
+    <div id="contactModal" class="contact-modal"> 
+      <div class="modal-content">
+        <span id="closeModal" class="close-btn">&times;</span>
+
+        <div id="formSection">
+          <h2>Inquiry Form</h2>
+          <form id="contactForm">
+
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="text" id="company" placeholder="Company Name">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="tel" id="phone" placeholder="Phone Number" required>
+
+            <!-- Quantity input with plus/minus buttons -->
+            <div class="quantity-wrapper">
+              <button type="button" class="quantity-btn" id="minusBtn">-</button>
+              <input type="number" id="quantity" placeholder="Quantity" required min="1" value="1">
+              <button type="button" class="quantity-btn" id="plusBtn">+</button>
+            </div>
+
+            <input type="text" id="product" placeholder="Product Name" readonly disabled>
+            <textarea id="message" placeholder="Your Message (Optional)"></textarea>
+
+            <!-- Terms & Conditions -->
+      <div class="terms-wrapper">
+      <label class="custom-checkbox">
+        <input type="checkbox" id="terms" required>
+        <span class="checkmark">✓</span>
+        I accept the 
+        <span id="openTerms" style="color:#007bff; cursor:pointer;">Terms & Conditions</span>
+      </label>
+    </div>
 
 
-  </div>
-</div>
+            <button type="submit" class="submit-btn">Submit</button>
+          </form>
+        </div>
+
+        <div id="thankYouSection" class="thankyou-section" style="display:none;">
+          <h2>Thank You!</h2>
+          <p>Your inquiry has been submitted. We will contact you soon.</p>
+        </div>
+
+        <!-- Full Terms & Conditions -->
+      <div id="termsModal" class="contact-modal">
+      <div class="modal-content">
+        <span id="closeTerms" class="close-btn">&times;</span>
+        <div class="conditions">
+          <h3>Payment & Delivery Terms</h3>
+          <ol>
+            <li>After our team responds, you must reply with the item details and contact number.</li>
+            <li>Our team will email you a 70% payment option.</li>
+            <li>For product delivery, you need to pay 30% to the delivery person via UPI.</li>
+            <li>If your product is defective (not damaged), you must provide a video and call our team.</li>
+            <li>After verification of the video/photo, we will send a replacement product.</li>
+            <li>If you cancel your order, we return 60% of your payment within 2-3 days (10% deducted).</li>
+          </ol>
+        </div>
+      </div>
+    </div>
 
 
-  <!-- Scripts -->
-  <script type="module" src="./Products.js"></script>
-  <script type="module" src="../index.js"></script>
+      </div>
+    </div>
 
-</body>
-</html>
+
+      <!-- Scripts -->
+      <script type="module" src="./Products.js"></script>
+      <script type="module" src="../index.js"></script>
+
+    </body>
+    </html>

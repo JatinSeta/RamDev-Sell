@@ -1094,3 +1094,14 @@ textarea.app-form-control { min-height: 100px; resize: vertical; }
   }
 }
 
+.screen-header-left .social-icon {
+    color: #fff; /* default icon color */
+    margin-right: 10px;
+    font-size: 20px;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.screen-header-left .social-icon:hover {
+    color: #007BFF; /* Instagram pink for hover, can customize */
+    transform: scale(1.2); /* icon grows slightly on hover */
+}

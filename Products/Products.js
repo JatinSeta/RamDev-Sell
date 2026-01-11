@@ -58,7 +58,7 @@ export async function loadProducts() {
 }
 
 // =======================================
-// RENDER PRODUCT CARDS
+// RENDER PRODUCT CARDS WITH BEST SELLER TAG
 // =======================================
 function renderProducts(products) {
   productsList.innerHTML = '';
@@ -67,35 +67,69 @@ function renderProducts(products) {
     const card = document.createElement('div');
     card.className = 'product-card';
 
+    // Product Image
     const img = document.createElement('img');
     img.src = product.mainUrl || "https://via.placeholder.com/150";
     img.alt = product.name || "Product";
     img.style.cursor = "pointer";
-    img.addEventListener('click', () => {
+    img.onclick = () => {
       window.location.href = `./productDetails.html?id=${product.id}`;
-    });
+    };
 
+    // Product Title
     const title = document.createElement('div');
     title.className = 'card-title';
     title.textContent = product.name || "(no name)";
-    title.style.cursor = "pointer";
-    title.addEventListener('click', () => {
+    title.onclick = () => {
       window.location.href = `./productDetails.html?id=${product.id}`;
-    });
+    };
 
+    // BEST SELLER RIBBON
+  if (product.bestSeller) {
+  const tag = document.createElement('span');
+  tag.className = 'simple-tag';
+  tag.textContent = 'Best Seller';
+  card.appendChild(tag);
+}
+const priceRange = document.getElementById('priceRange');
+const priceValue = document.getElementById('priceValue');
+const applyFilterBtn = document.getElementById('applyFilter');
+
+priceValue.textContent = priceRange.value;
+
+// Show price while sliding
+priceRange.addEventListener('input', () => {
+  priceValue.textContent = priceRange.value;
+});
+
+// Apply filter
+applyFilterBtn.addEventListener('click', () => {
+  const maxPrice = Number(priceRange.value);
+
+  const filteredProducts = allProducts.filter(product => {
+    return Number(product.price || 0) <= maxPrice;
+  });
+
+  renderProducts(filteredProducts);
+});
+
+
+    // Button
     const btnContainer = document.createElement('div');
     btnContainer.className = 'card-buttons';
 
     const contactBtn = document.createElement('button');
     contactBtn.className = 'contact-btn';
     contactBtn.textContent = 'Contact Us';
-    contactBtn.addEventListener('click', () => openContactModal(product));
+    contactBtn.onclick = () => openContactModal(product);
 
     btnContainer.appendChild(contactBtn);
+
     card.append(img, title, btnContainer);
     productsList.appendChild(card);
   });
 }
+
 
 // =======================================
 // OPEN CONTACT MODAL
@@ -316,3 +350,52 @@ termsModal.addEventListener("click", (e) => {
     termsModal.style.display = "none";
   }
 });
+// =======================================
+// SIDEBAR FILTERS
+// =======================================
+const brandSearchInput = document.getElementById("brandSearch");
+const categoryFilter = document.getElementById("categoryFilter");
+const priceFilter = document.getElementById("priceFilter");
+const applyFilterBtn = document.getElementById("applyFilter");
+
+// Function to apply sidebar filters
+function applySidebarFilters() {
+  let filtered = [...allProductsData];
+
+  // Filter by brand
+  const brandQuery = brandSearchInput.value.toLowerCase().trim();
+  if (brandQuery) {
+    filtered = filtered.filter(p => (p.brand || '').toLowerCase().includes(brandQuery));
+  }
+
+  // Filter by category
+  const categoryValue = categoryFilter.value;
+  if (categoryValue) {
+    filtered = filtered.filter(p => (p.category || '') === categoryValue);
+  }
+
+  // Filter by max price
+  const maxPrice = parseFloat(priceFilter.value);
+  if (!isNaN(maxPrice)) {
+    filtered = filtered.filter(p => parseFloat(p.price) <= maxPrice);
+  }
+
+  // Render filtered products
+  if (filtered.length > 0) {
+    renderProducts(filtered);
+  } else {
+    productsList.innerHTML = "<div style='text-align:center;margin-top:20px;color:#555;'>No products found.</div>";
+  }
+}
+
+// Event listener for the "Apply Filter" button
+applyFilterBtn.addEventListener("click", applySidebarFilters);
+
+// Optional: Allow "Enter" key in brand input to apply filter
+brandSearchInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    applySidebarFilters();
+  }
+});
+
