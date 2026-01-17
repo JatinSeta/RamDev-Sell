@@ -61,7 +61,7 @@ img {
 /* ================= SEARCH BAR ================= */
 .search-form {
   display: flex;
-  width: 50%;
+  width: 50%;           /* Default width on desktop */
   max-width: 600px;
   min-width: 200px;
   position: relative;
