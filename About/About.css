@@ -1,34 +1,44 @@
-/* ================================
-   RESET + BASE
-================================ */
+
+
+/* Nav Bar */
+/* ================= RESET ================= */
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  font-family: "Poppins", Arial, sans-serif;
+  font-family: Arial, sans-serif;
   background: #f7f9fb;
-  color: #333;
-  line-height: 1.5;
+  color: #555;
+  line-height: 1.6;
+  padding-top: 64px;
 }
 
-/* ================================
-   NAVBAR
-================================ */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ================= NAVBAR ================= */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 64px;
+  background: #fff;
+  border-bottom: 1px solid #e6e9ee;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 18px;
-  background: #ffffff;
-  border-bottom: 1px solid #e6e9ee;
   z-index: 2000;
 }
 
@@ -39,50 +49,35 @@ body {
   align-items: center;
 }
 
-.nav-left {
-  flex: 0 0 auto;
-}
-
 .nav-center {
-  flex: 1 1 auto;
+  flex: 1;
   justify-content: center;
-}
-
-.nav-right {
-  flex: 0 0 auto;
-  gap: 12px;
 }
 
 .logo img {
   width: 42px;
-  height: auto;
-  display: block;
 }
 
-/* ================================
-   SEARCH FORM
-================================ */
+/* ================= SEARCH ================= */
 .search-form {
   display: flex;
   width: 60%;
-  max-width: 720px;
+  max-width: 600px;
 }
 
-.search-form input[type="search"] {
+#homeSearch {
   flex: 1;
   padding: 10px 12px;
-  border: 1px solid #d6dbe6;
+  font-size: 14px;
+  border: 1px solid #ccc;
   border-right: none;
   border-radius: 6px 0 0 6px;
   outline: none;
 }
 
 .search-form button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 10px 12px;
-  border: 1px solid #d6dbe6;
+  border: 1px solid #ccc;
   border-left: none;
   border-radius: 0 6px 6px 0;
   background: #007bff;
@@ -90,114 +85,70 @@ body {
   cursor: pointer;
 }
 
-.search-form button i {
-  font-size: 14px;
-}
-
-/* ================================
-   NAV LINKS (Desktop)
-================================ */
+/* ================= NAV LINKS ================= */
 .nav-links {
   list-style: none;
   display: flex;
   gap: 18px;
-  align-items: center;
 }
 
 .nav-links a {
-  color: #333;
-  text-decoration: none;
   font-weight: 500;
-  padding: 6px 8px;
-  transition: 0.3s;
 }
 
-.nav-links a:hover {
-  color: #007bff;
-}
-
-/* ================================
-   MENU BUTTON (Mobile)
-================================ */
+/* ================= HAMBURGER ================= */
 .menu-btn {
   display: none;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 6px;
   width: 40px;
   height: 40px;
-  align-items: center;
-  justify-content: center;
-  z-index: 2100;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .menu-btn img {
   width: 24px;
-  height: 24px;
-  display: block;
 }
 
-/* ================================
-   MOBILE MENU
-================================ */
+/* ================= MOBILE MENU ================= */
 .mobile-menu {
   position: fixed;
-  top: 70px;
-  left: 12px;
-  right: 12px;
+  top: 64px;
+  left: 0;
+  right: 0;
   background: #fff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  border-radius: 10px;
-  z-index: 1900;
-  overflow: hidden;
   max-height: 0;
+  overflow: hidden;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-10px);
-  transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
+  transition: 0.3s ease;
+  z-index: 1900;
 }
 
 .mobile-menu.active {
-  max-height: 420px;
+  max-height: 500px;
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
 }
 
 .mobile-menu a {
   display: block;
-  padding: 14px 18px;
-  color: #333;
-  text-decoration: none;
-  border-bottom: 1px solid #f0f0f0;
-  font-weight: 500;
-  transition: background 0.2s;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
 }
 
-.mobile-menu a:last-child {
-  border-bottom: none;
-}
-
-.mobile-menu a:hover {
-  background-color: #f7f9fb;
-  color: #007bff;
-}
-
-/* ================================
-   BACKDROP
-================================ */
+/* ================= BACKDROP ================= */
 .menu-backdrop {
   position: fixed;
   top: 64px;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.28);
-  z-index: 1850;
+  background: rgba(0,0,0,0.3);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: 0.3s ease;
+  z-index: 1800;
 }
 
 .menu-backdrop.active {
@@ -205,11 +156,120 @@ body {
   pointer-events: auto;
 }
 
+/* ================= SUGGESTIONS ================= */
+.suggestions-box {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 360px;
+  background: #fff;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  display: none;
+  z-index: 3000;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestion-img {
+  width: 26px;
+  height: 26px;
+  object-fit: cover;
+  margin-right: 8px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 800px) {
+  .nav-links {
+    display: none;
+  }
+
+  .menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-form {
+    width: 85%;
+  }
+}
+
+/* ================= 344px FIX ================= */
+@media (max-width: 344px) {
+
+  body {
+    padding-top: 56px;
+  }
+
+  .navbar {
+    height: 56px;
+    padding: 0 8px;
+  }
+
+ .logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 50px;
+  height: auto;
+  object-fit: contain;
+
+  /* spacing */
+  margin: 0 6px 6px 6px; /* ← bottom margin added */
+}
+
+  .menu-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .search-form {
+    width: 100%;
+  }
+
+  #homeSearch {
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+
+  .search-form button {
+    padding: 6px 8px;
+  }
+
+  .mobile-menu {
+    top: 56px;
+  }
+
+  .menu-backdrop {
+    top: 56px;
+  }
+
+  .suggestions-box {
+    width: 95%;
+    font-size: 13px;
+  }
+
+  .suggestion-img {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+
 /* ================================
    ABOUT SECTION
 ================================ */
 .about-section {
-  padding-top: 100px;
   min-height: 100vh;
   background: linear-gradient(180deg, #fbfdff 0%, #ffffff 100%);
 }
@@ -515,5 +575,48 @@ body {
 
   .suggestion-item {
     padding: 4px 6px;
+  }
+}
+/* ---------- Extra Small Mobile (<=344px) ---------- */
+@media (max-width: 344px) {
+
+  .navbar {
+    height: 56px;
+    padding: 0 8px;
+  }
+
+  .logo img {
+    width: 32px;
+  }
+
+  .menu-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* Search bar */
+  .search-form {
+    width: 95%;
+    height: 34px;
+  }
+
+  .search-form input[type="search"] {
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+
+  .search-form button {
+    padding: 6px;
+  }
+
+  /* Mobile menu */
+  .mobile-menu a {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  /* Backdrop fix for small screens */
+  .menu-backdrop {
+    top: 56px;
   }
 }

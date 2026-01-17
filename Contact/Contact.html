@@ -10,13 +10,14 @@
 </head>
 <body>
        <nav class="navbar">
-            <div class="nav-left">
-                <a href="#" class="logo">
-                    <img src="../Imges/Logo.png" alt="Ramdev logo" />
-                </a>
-            </div>
+        <div class="nav-left">
+            <a href="./index.html" class="logo">
+                <img src="../Imges/Logo.png" alt="Ramdev logo" />
+            </a>
+        </div>
 
-            <div class="nav-center">
+     <!-- Search bar in Index.html -->
+<div class="nav-center">
     <form class="search-form" role="search" action="./Products/Products.html" method="get">
         <input 
             type="search" 
@@ -35,25 +36,34 @@
     <div id="indexSearchSuggestions" class="suggestions-box"></div>
 </div>
 
-            <div class="nav-right">
-                <ul class="nav-links">
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="../About/About.html">About</a></li>
-                    <li><a href="../Products/Products.html">Shop</a></li>
-                    <li><a href="./Contact.html">Contact</a></li>
-                </ul>
-                <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
-                    <img src="../Imges/Menu.png" alt="menu" data-closed="../Imges/Menu.png" data-open="../Imges/close.png" />
-                </button>
-            </div>
-        </nav>
-        <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+
+
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../About/About.html">About</a></li>
+                <li><a href="../Products/Products.html">Shop</a></li>
+                <li><a href="../Contact/Contact.html">Contact</a></li>
+            </ul>
+            <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
+                <img src="../Imges/Menu.png" alt="menu" data-closed="../Imges/Menu.png" data-open="../Imges/close.png" />
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+        <div class="mobile-inner">
             <a href="../index.html">Home</a>
             <a href="../About/About.html">About</a>
             <a href="../Products/Products.html">Shop</a>
-            <a href="./Contact.html">Contact</a>
+            <a href="../Contact/Contact.html">Contact</a>
         </div>
-<div id="menuBackdrop" class="menu-backdrop" aria-hidden="true"></div>
+    </div>
+
+    <!-- Menu backdrop -->
+    <div id="menuBackdrop" class="menu-backdrop" aria-hidden="true"></div>
+
         <div class="container">
   <section class="top-section" aria-label="Contact Information and Form">
     <div class="left-side">
