@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Products</title>
+  <title>Shop</title>
   <link rel="stylesheet" href="./Products.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -43,7 +43,7 @@
       <ul class="nav-links">
         <li><a href="../index.html">Home</a></li>
         <li><a href="../About/About.html">About</a></li>
-        <li><a href="./Products.html">Products</a></li>
+        <li><a href="./Products.html">Shop</a></li>
         <li><a href="../Contact/Contact.html">Contact</a></li>
       </ul>
       <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
@@ -57,7 +57,7 @@
     <div class="mobile-inner">
       <a href="../index.html">Home</a>
       <a href="../About/About.html">About</a>
-      <a href="./Products.html">Products</a>
+      <a href="./Products.html">Shop</a>
       <a href="../Contact/Contact.html">Contact</a>
     </div>
   </div>
@@ -74,6 +74,55 @@
   <div class="hero-image"></div>
 </section>
 
+    <!-- Filter Button -->
+    <button id="filterBtn" class="filter-btn" aria-label="Open filter menu" title="Open filter menu">
+      <i class="fas fa-filter"></i>
+      <span>Filter</span>
+    </button>
+
+    <!-- Filter Sidebar -->
+    <div id="filterSidebar" class="filter-sidebar" aria-hidden="true">
+      <div class="filter-header">
+        <h2>Filters</h2>
+        <button id="closeSidebar" class="close-sidebar-btn" aria-label="Close filter menu">&times;</button>
+      </div>
+      
+      <div class="filter-content">
+        <!-- Search Filter -->
+        <div class="filter-group">
+          <h3>Search Products</h3>
+          <input type="search" id="filterSearch" class="filter-search-input" placeholder="Search by name...">
+        </div>
+
+        <!-- Price Filter -->
+        <div class="filter-group">
+          <h3>Price Range</h3>
+          <input type="range" id="priceRange" min="0" max="10000" value="10000" class="price-slider">
+          <div class="price-display">₹0 - ₹10000</div>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="filter-group">
+          <h3>Category</h3>
+          <div id="categoryFilters" class="filter-options"></div>
+        </div>
+
+        <!-- Best Sellers Only -->
+        <div class="filter-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="bestSellersOnly">
+            <span>Best Sellers Only</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button id="resetFilters" class="reset-btn">Reset</button>
+      </div>
+    </div>
+
+    <!-- Filter Backdrop -->
+    <div id="filterBackdrop" class="filter-backdrop" aria-hidden="true"></div>
 
     <div class="products-wrapper">
       <div class="container">

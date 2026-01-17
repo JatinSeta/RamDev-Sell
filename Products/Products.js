@@ -23,7 +23,41 @@ const navSearch = document.getElementById('navSearch');
 const searchForm = document.querySelector('.search-form');
 const searchSuggestions = document.getElementById('searchSuggestions');
 
+// Filter Elements
+const filterBtn = document.getElementById('filterBtn');
+const filterSidebar = document.getElementById('filterSidebar');
+const filterBackdrop = document.getElementById('filterBackdrop');
+const closeSidebar = document.getElementById('closeSidebar');
+const resetFiltersBtn = document.getElementById('resetFilters');
+const priceRange = document.getElementById('priceRange');
+const priceDisplay = document.querySelector('.price-display');
+const bestSellersCheckbox = document.getElementById('bestSellersOnly');
+const filterSearchInput = document.getElementById('filterSearch');
+const categoryFiltersDiv = document.getElementById('categoryFilters');
+
 let allProductsData = [];
+
+// =======================================
+// AUTO-APPLY FILTERS FUNCTION
+// =======================================
+function applyFiltersAutomatically() {
+  const searchText = filterSearchInput.value.toLowerCase().trim();
+  const maxPrice = parseInt(priceRange.value) || 10000;
+  const selectedCategories = Array.from(document.querySelectorAll('.category-filter:checked')).map(cb => cb.value);
+  const bestSellersOnly = bestSellersCheckbox.checked;
+
+  let filteredProducts = allProductsData.filter(product => {
+    const price = product.price || 0;
+    const priceInRange = price <= maxPrice;
+    const searchMatches = product.name.toLowerCase().includes(searchText) || (product.brand || '').toLowerCase().includes(searchText);
+    const categoryMatches = selectedCategories.length === 0 || selectedCategories.includes(product.category);
+    const isBestSeller = !bestSellersOnly || product.bestSeller;
+
+    return priceInRange && searchMatches && categoryMatches && isBestSeller;
+  });
+
+  renderProducts(filteredProducts);
+}
 
 // =======================================
 // LOAD PRODUCTS
@@ -41,6 +75,7 @@ export async function loadProducts() {
     }
 
     renderProducts(allProductsData);
+    initializeFilters();
 
   } catch (err) {
     console.error("Error loading products:", err);
@@ -90,6 +125,10 @@ function renderProducts(products) {
     brand.className = 'product-brand';
     brand.textContent = product.brand || "";
 
+    const price = document.createElement('div');
+    price.className = 'product-price';
+    price.textContent = product.price ? `₹${product.price.toLocaleString('en-IN')}` : "Contact for Price";
+
     const btnContainer = document.createElement('div');
     btnContainer.className = 'card-buttons';
 
@@ -107,6 +146,7 @@ function renderProducts(products) {
     card.appendChild(img);
     card.appendChild(title);
     card.appendChild(brand);
+    card.appendChild(price);
     card.appendChild(btnContainer);
 
     productsList.appendChild(card);
@@ -268,6 +308,98 @@ closeModal.addEventListener('click', () => {
   contactForm.reset();
   formSection.style.display = "block";
   thankYouSection.style.display = "none";
+});
+
+// =======================================
+// FILTER SIDEBAR FUNCTIONALITY
+// =======================================
+function toggleFilterSidebar() {
+  filterSidebar.classList.toggle('active');
+  filterBackdrop.classList.toggle('active');
+  filterSidebar.setAttribute('aria-hidden', filterSidebar.classList.contains('active') ? 'false' : 'true');
+  filterBackdrop.setAttribute('aria-hidden', filterBackdrop.classList.contains('active') ? 'false' : 'true');
+}
+
+function closeFilterSidebar() {
+  filterSidebar.classList.remove('active');
+  filterBackdrop.classList.remove('active');
+  filterSidebar.setAttribute('aria-hidden', 'true');
+  filterBackdrop.setAttribute('aria-hidden', 'true');
+}
+
+// Filter Button Click
+filterBtn.addEventListener('click', toggleFilterSidebar);
+
+// Close Button Click
+closeSidebar.addEventListener('click', closeFilterSidebar);
+
+// Backdrop Click to Close
+filterBackdrop.addEventListener('click', closeFilterSidebar);
+
+// Price Slider Update
+priceRange.addEventListener('input', () => {
+  const maxPrice = parseInt(priceRange.value);
+  priceDisplay.textContent = `₹0 - ₹${maxPrice.toLocaleString()}`;
+});
+
+// Initialize Brand and Category Filters
+function initializeFilters() {
+  // Get maximum price from products data
+  const maxPriceFromData = Math.max(...allProductsData.map(p => p.price || 0), 10000);
+  
+  // Set price slider max value to actual max price (rounded up to nearest 1000)
+  const roundedMaxPrice = Math.ceil(maxPriceFromData / 1000) * 1000;
+  priceRange.max = roundedMaxPrice;
+  priceRange.value = roundedMaxPrice;
+  priceDisplay.textContent = `₹0 - ₹${roundedMaxPrice.toLocaleString()}`;
+
+  const categories = new Set();
+
+  allProductsData.forEach(product => {
+    if (product.category) categories.add(product.category);
+  });
+
+  // Populate Category Filters
+  categoryFiltersDiv.innerHTML = '';
+  categories.forEach(category => {
+    const label = document.createElement('label');
+    label.className = 'checkbox-label';
+    label.innerHTML = `
+      <input type="checkbox" value="${category}" class="category-filter">
+      <span>${category}</span>
+    `;
+    categoryFiltersDiv.appendChild(label);
+    
+    // Add event listener to category filter
+    label.querySelector('input').addEventListener('change', applyFiltersAutomatically);
+  });
+
+  // Add event listeners for auto-apply
+  filterSearchInput.addEventListener('input', applyFiltersAutomatically);
+  priceRange.addEventListener('input', () => {
+    const maxPrice = parseInt(priceRange.value);
+    priceDisplay.textContent = `₹0 - ₹${maxPrice.toLocaleString()}`;
+    applyFiltersAutomatically();
+  });
+  bestSellersCheckbox.addEventListener('change', applyFiltersAutomatically);
+}
+
+// Reset Filters
+resetFiltersBtn.addEventListener('click', () => {
+  const maxPriceFromData = Math.max(...allProductsData.map(p => p.price || 0), 10000);
+  const roundedMaxPrice = Math.ceil(maxPriceFromData / 1000) * 1000;
+  
+  filterSearchInput.value = '';
+  priceRange.value = roundedMaxPrice;
+  priceDisplay.textContent = `₹0 - ₹${roundedMaxPrice.toLocaleString()}`;
+  bestSellersCheckbox.checked = false;
+  
+  document.querySelectorAll('.category-filter').forEach(cb => {
+    cb.checked = false;
+  });
+
+  renderProducts(allProductsData);
+  closeFilterSidebar();
 });
 
 // =======================================
