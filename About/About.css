@@ -1,3 +1,6 @@
+
+/* Nav Bar */
+
 /* ================= RESET ================= */
 * {
   margin: 0;
@@ -10,7 +13,7 @@ body {
   background: #f7f9fb;
   color: #555;
   line-height: 1.6;
-  padding-top: 64px; /* space for fixed navbar */
+  padding-top: 64px;
 }
 
 a {
@@ -49,32 +52,26 @@ img {
 .nav-center {
   flex: 1;
   justify-content: center;
-  position: relative;
 }
 
 .logo img {
   width: 42px;
-  height: auto;
-  object-fit: contain;
 }
 
-/* ================= SEARCH BAR ================= */
+/* ================= SEARCH ================= */
 .search-form {
   display: flex;
-  width: 50%;           /* Default width on desktop */
+  width: 60%;
   max-width: 600px;
-  min-width: 200px;
-  position: relative;
-  transition: width 0.3s ease;
 }
 
 #homeSearch {
   flex: 1;
   padding: 10px 12px;
+  font-size: 14px;
   border: 1px solid #ccc;
   border-right: none;
   border-radius: 6px 0 0 6px;
-  font-size: 14px;
   outline: none;
 }
 
@@ -86,13 +83,6 @@ img {
   background: #007bff;
   color: #fff;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.search-form button i {
-  font-size: 14px;
 }
 
 /* ================= NAV LINKS ================= */
@@ -104,7 +94,6 @@ img {
 
 .nav-links a {
   font-weight: 500;
-  padding: 6px 8px;
 }
 
 /* ================= HAMBURGER ================= */
@@ -134,19 +123,18 @@ img {
   pointer-events: none;
   transition: 0.3s ease;
   z-index: 1900;
-  flex-direction: column;
+}
+
+.mobile-menu.active {
+  max-height: 500px;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .mobile-menu a {
   display: block;
   padding: 12px 16px;
   border-bottom: 1px solid #eee;
-}
-
-.mobile-menu.active {
-  max-height: 400px;
-  opacity: 1;
-  pointer-events: auto;
 }
 
 /* ================= BACKDROP ================= */
@@ -174,18 +162,240 @@ img {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  width: 80%;
+  width: 90%;
   max-width: 360px;
-  min-width: 180px;
+  background: #fff;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  display: none;
+  z-index: 3000;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestion-img {
+  width: 26px;
+  height: 26px;
+  object-fit: cover;
+  margin-right: 8px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 800px) {
+  .nav-links {
+    display: none;
+  }
+
+  .menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-form {
+    width: 85%;
+  }
+}
+
+/* ================= 344px FIX ================= */
+@media (max-width: 344px) {
+
+  body {
+    padding-top: 56px;
+  }
+
+  .navbar {
+    height: 56px;
+    padding: 0 8px;
+  }
+
+ .logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 50px;
+  height: auto;
+  object-fit: contain;
+
+  /* spacing */
+  margin: 0 6px 6px 6px; /* ← bottom margin added */
+}
+
+  .menu-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .search-form {
+    width: 100%;
+  }
+
+  #homeSearch {
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+
+  .search-form button {
+    padding: 6px 8px;
+  }
+
+  .mobile-menu {
+    top: 56px;
+  }
+
+  .menu-backdrop {
+    top: 56px;
+  }
+
+  .suggestions-box {
+    width: 95%;
+    font-size: 13px;
+  }
+
+  .suggestion-img {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+
+
+/* ---------- Mobile (<=800px) ---------- */
+@media (max-width: 800px) {
+  .nav-links {
+    display: none;
+  }
+
+  .menu-btn {
+    display: inline-flex;
+  }
+
+  .search-form {
+    width: 80%;
+  }
+
+  .about-content {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .about-text {
+    text-align: center;
+  }
+
+  .about-image {
+    width: 100%;
+  }
+}
+
+/* ---------- Small Mobile (<=480px) ---------- */
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0 12px;
+    height: 60px;
+  }
+
+  .logo img {
+    width: 38px;
+  }
+
+  .search-form {
+    width: 90%;
+  }
+
+  .search-form input[type="search"] {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .search-form button {
+    padding: 8px;
+  }
+
+  .mobile-menu a {
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+
+}
+
+
+
+.nav-center {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.search-form {
+  display: flex;
+  width: 50%;
+  max-width: 600px;
+  min-width: 200px;
+  position: relative;
+}
+
+/* Search input */
+#homeSearch {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+/* Search button */
+.search-form button {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-form button i {
+  font-size: 14px;
+}
+
+/* =========================
+   Suggestions dropdown
+========================= */
+.suggestions-box {
+  position: absolute;
+  top: 100%;  
+  left: 50%;                   /* center relative to search bar */
+  transform: translateX(-50%);
+  width: 80%;                   /* smaller than search bar */
+  max-width: 50%;          
+  min-width: 180px;             /* ensure it’s not too small */
   max-height: 250px;
   overflow-y: auto;
   background: #fff;
   border-radius: 0 0 6px 6px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   z-index: 1000;
-  display: none; /* toggle with JS */
+  display: none;
+  font-size: 14px;
+  color: #555;
 }
 
+/* Individual suggestion */
 .suggestion-item {
   display: flex;
   align-items: center;
@@ -198,10 +408,11 @@ img {
 }
 
 .suggestion-item:hover {
-  background: #f0f0f0;
+  background-color: #f0f0f0;
   color: #333;
 }
 
+/* Thumbnail image in suggestion */
 .suggestion-img {
   width: 30px;
   height: 30px;
@@ -212,6 +423,7 @@ img {
   flex-shrink: 0;
 }
 
+/* Text in suggestion */
 .suggestion-text {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -220,38 +432,99 @@ img {
   color: #555;
 }
 
-/* ================= RESPONSIVE ================= */
+/* Optional icon in suggestion */
+.suggestion-icon {
+  margin-left: auto;
+  font-size: 14px;
+  color: #999;
+}
+
+/* =========================
+   Responsive adjustments
+========================= */
 @media (max-width: 1024px) {
-  .search-form { width: 70%; }
-  .suggestions-box { width: 85%; max-width: 350px; }
-  .suggestion-img { width: 28px; height: 28px; margin-right: 6px; }
-  .suggestion-item { padding: 6px 8px; }
+  .search-form {
+    width: 70%;
+  }
+
+  .suggestions-box {
+    width: 85%;
+    max-width: 350px;
+  }
+
+  .suggestion-img {
+    width: 28px;
+    height: 28px;
+    margin-right: 6px;
+  }
+
+  .suggestion-item {
+    padding: 6px 8px;
+  }
 }
 
-@media (max-width: 800px) {
-  .nav-links { display: none; }
-  .menu-btn { display: flex; align-items: center; justify-content: center; }
-  .search-form { width: 80%; }
-}
+@media (max-width: 768px) {
+  .search-form {
+    width: 90%;
+  }
 
-@media (max-width: 480px) {
-  .navbar { height: 60px; padding: 0 12px; }
-  .logo img { width: 36px; }
-  .search-form { width: 90%; }
-  #homeSearch { font-size: 13px; padding: 6px 8px; }
-  .search-form button { padding: 6px 8px; }
-  .mobile-menu a { font-size: 14px; padding: 10px 14px; }
-}
+  .suggestions-box {
+    width: 90%;
+    max-width: 300px;
+  }
 
+  .suggestion-img {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+  }
+
+  .suggestion-item {
+    padding: 4px 6px;
+  }
+}
+/* ---------- Extra Small Mobile (<=344px) ---------- */
 @media (max-width: 344px) {
-  .navbar { height: 56px; padding: 0 8px; }
-  .logo img { width: 32px; }
-  .menu-btn { width: 34px; height: 34px; }
-  .search-form { width: 95%; height: 34px; }
-  #homeSearch { font-size: 12px; padding: 5px 6px; }
-  .search-form button { padding: 5px 6px; }
-  .mobile-menu a { font-size: 13px; padding: 10px 12px; }
-  .menu-backdrop { top: 56px; }
+
+  .navbar {
+    height: 56px;
+    padding: 0 8px;
+  }
+
+  .logo img {
+    width: 32px;
+  }
+
+  .menu-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* Search bar */
+  .search-form {
+    width: 95%;
+    height: 34px;
+  }
+
+  .search-form input[type="search"] {
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+
+  .search-form button {
+    padding: 6px;
+  }
+
+  /* Mobile menu */
+  .mobile-menu a {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  /* Backdrop fix for small screens */
+  .menu-backdrop {
+    top: 56px;
+  }
 }
 
 
