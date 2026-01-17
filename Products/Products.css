@@ -1675,6 +1675,84 @@ img {
 }
 
 
+/* ================================
+   ABOUT SECTION
+================================ */
+.about-section {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fbfdff 0%, #ffffff 100%);
+}
+
+.about-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.about-section h1 {
+  font-size: 32px;
+  color: #0b2b4a;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.about-content {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.about-text {
+  flex: 1 1 500px;
+  color: #4b647b;
+}
+
+.about-text p {
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.about-text .welcome {
+  font-size: 18px;
+  color: #0b2b4a;
+}
+
+.about-text .closing {
+  font-weight: 500;
+  color: #0b2b4a;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.about-image {
+  flex: 1 1 200px;
+  text-align: center;
+}
+
+.about-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+/* ================================
+   RESPONSIVE DESIGN
+================================ */
+
+/* ---------- Tablets ---------- */
+@media (max-width: 1024px) {
+  .search-form {
+    width: 75%;
+  }
+
+  .about-section h1 {
+    font-size: 28px;
+  }
+}
 
 /* ---------- Mobile (<=800px) ---------- */
 @media (max-width: 800px) {
@@ -1733,6 +1811,22 @@ img {
     font-size: 15px;
   }
 
+  .about-section h1 {
+    font-size: 24px;
+  }
+
+  .about-content p {
+    font-size: 15px;
+  }
+
+  .about-text .welcome {
+    font-size: 16px;
+  }
+
+  .about-text .closing {
+    font-size: 15px;
+    padding: 16px;
+  }
 }
 
 

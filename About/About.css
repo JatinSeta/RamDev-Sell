@@ -10,7 +10,7 @@ body {
   background: #f7f9fb;
   color: #555;
   line-height: 1.6;
-  padding-top: 64px;
+  padding-top: 64px; /* space for fixed navbar */
 }
 
 a {
@@ -35,7 +35,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+  padding: 0 18px;
   z-index: 2000;
 }
 
@@ -52,71 +52,47 @@ img {
   position: relative;
 }
 
-/* Logo */
 .logo img {
   width: 42px;
+  height: auto;
+  object-fit: contain;
 }
 
 /* ================= SEARCH BAR ================= */
 .search-form {
   display: flex;
-  width: 45%;          /* 🔹 SMALLER WIDTH */
-  max-width: 420px;
-  min-width: 220px;
+  width: 50%;           /* Default width on desktop */
+  max-width: 600px;
+  min-width: 200px;
+  position: relative;
+  transition: width 0.3s ease;
 }
 
 #homeSearch {
   flex: 1;
-  padding: 8px 10px;
-  font-size: 14px;
+  padding: 10px 12px;
   border: 1px solid #ccc;
   border-right: none;
   border-radius: 6px 0 0 6px;
+  font-size: 14px;
   outline: none;
 }
 
 .search-form button {
-  padding: 8px 12px;
+  padding: 10px 12px;
   border: 1px solid #ccc;
   border-left: none;
   border-radius: 0 6px 6px 0;
   background: #007bff;
   color: #fff;
   cursor: pointer;
-}
-
-/* ================= SUGGESTIONS ================= */
-.suggestions-box {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 420px;
-  background: #fff;
-  border-radius: 0 0 6px 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  display: none;
-  z-index: 3000;
-}
-
-.suggestion-item {
   display: flex;
   align-items: center;
-  padding: 8px 10px;
-  cursor: pointer;
+  justify-content: center;
 }
 
-.suggestion-item:hover {
-  background: #f0f0f0;
-}
-
-.suggestion-img {
-  width: 26px;
-  height: 26px;
-  object-fit: cover;
-  margin-right: 8px;
-  border-radius: 4px;
+.search-form button i {
+  font-size: 14px;
 }
 
 /* ================= NAV LINKS ================= */
@@ -128,6 +104,7 @@ img {
 
 .nav-links a {
   font-weight: 500;
+  padding: 6px 8px;
 }
 
 /* ================= HAMBURGER ================= */
@@ -157,38 +134,19 @@ img {
   pointer-events: none;
   transition: 0.3s ease;
   z-index: 1900;
-}
-
-.mobile-menu.active {
-  max-height: 500px;
-  opacity: 1;
-  pointer-events: auto;
+  flex-direction: column;
 }
 
 .mobile-menu a {
   display: block;
-  padding: 14px 18px;
+  padding: 12px 16px;
   border-bottom: 1px solid #eee;
-  font-size: 15px;
-}
-/* Search input */
-#navSearch {
-  width: 100%;
-  padding: 8px 12px;
-  font-size: 14px;
-  border-radius: 4px 0 0 4px;
-  border: 1px solid #ccc;
-  outline: none;
 }
 
-/* Search button */
-.search-form button {
-  padding: 8px 10px;
-  border: none;
-  background: #007bff;
-  color: white;
-  cursor: pointer;
-  border-radius: 0 4px 4px 0;
+.mobile-menu.active {
+  max-height: 400px;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* ================= BACKDROP ================= */
@@ -210,134 +168,91 @@ img {
   pointer-events: auto;
 }
 
+/* ================= SUGGESTIONS ================= */
+.suggestions-box {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 360px;
+  min-width: 180px;
+  max-height: 250px;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+  display: none; /* toggle with JS */
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.2s, color 0.2s;
+}
+
+.suggestion-item:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.suggestion-img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  flex-shrink: 0;
+}
+
+.suggestion-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  color: #555;
+}
+
 /* ================= RESPONSIVE ================= */
-
-/* Tablets */
 @media (max-width: 1024px) {
-  .search-form {
-    width: 55%;
-  }
+  .search-form { width: 70%; }
+  .suggestions-box { width: 85%; max-width: 350px; }
+  .suggestion-img { width: 28px; height: 28px; margin-right: 6px; }
+  .suggestion-item { padding: 6px 8px; }
 }
 
-/* Mobile */
 @media (max-width: 800px) {
-  .nav-links {
-    display: none;
-  }
-
-  .menu-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .search-form {
-    width: 80%;
-    max-width: none;
-  }
+  .nav-links { display: none; }
+  .menu-btn { display: flex; align-items: center; justify-content: center; }
+  .search-form { width: 80%; }
 }
 
-/* Small Mobile */
 @media (max-width: 480px) {
-  body {
-    padding-top: 56px;
-  }
-
-  .navbar {
-    height: 56px;
-    padding: 0 10px;
-  }
-
-  .logo img {
-    width: 36px;
-  }
-
-  .search-form {
-    width: 90%;
-  }
-
-  #homeSearch {
-    font-size: 13px;
-    padding: 6px 8px;
-  }
-
-  .search-form button {
-    padding: 6px 8px;
-  }
-
-  .mobile-menu {
-    top: 56px;
-  }
-
-  .menu-backdrop {
-    top: 56px;
-  }
+  .navbar { height: 60px; padding: 0 12px; }
+  .logo img { width: 36px; }
+  .search-form { width: 90%; }
+  #homeSearch { font-size: 13px; padding: 6px 8px; }
+  .search-form button { padding: 6px 8px; }
+  .mobile-menu a { font-size: 14px; padding: 10px 14px; }
 }
 
-/* Extra Small Mobile (344px) */
 @media (max-width: 344px) {
-  .search-form {
-    width: 95%;
-  }
-
-  .menu-btn {
-    width: 34px;
-    height: 34px;
-  }
+  .navbar { height: 56px; padding: 0 8px; }
+  .logo img { width: 32px; }
+  .menu-btn { width: 34px; height: 34px; }
+  .search-form { width: 95%; height: 34px; }
+  #homeSearch { font-size: 12px; padding: 5px 6px; }
+  .search-form button { padding: 5px 6px; }
+  .mobile-menu a { font-size: 13px; padding: 10px 12px; }
+  .menu-backdrop { top: 56px; }
 }
-/* ===============================
-   FINAL SEARCH BAR WIDTH CONTROL
-   (Overrides ALL previous rules)
-================================ */
-
-/* Desktop */
-.nav-center .search-form {
-  width: 45% !important;
-  max-width: 520px !important;
-  min-width: 220px !important;
-  margin: 0 auto;
-}
-
-/* Laptop / Tablet */
-@media (max-width: 1024px) {
-  .nav-center .search-form {
-    width: 65% !important;
-    max-width: 480px !important;
-  }
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .nav-center .search-form {
-    width: 85% !important;
-    max-width: none !important;
-  }
-}
-
-/* Small Mobile */
-@media (max-width: 480px) {
-  .nav-center .search-form {
-    width: 92% !important;
-  }
-}
-
-/* Extra Small Mobile (<=344px) */
-@media (max-width: 344px) {
-  .nav-center .search-form {
-    width: 95% !important;
-    height: 34px;
-  }
-
-  #homeSearch {
-    font-size: 13px;
-    padding: 6px 8px;
-  }
-
-  .search-form button {
-    padding: 6px 8px;
-  }
-}
-
 
 
 /* ================================
@@ -491,5 +406,206 @@ img {
   .about-text .closing {
     font-size: 15px;
     padding: 16px;
+  }
+}
+
+
+
+.nav-center {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.search-form {
+  display: flex;
+  width: 50%;
+  max-width: 600px;
+  min-width: 200px;
+  position: relative;
+}
+
+/* Search input */
+#homeSearch {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+/* Search button */
+.search-form button {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-form button i {
+  font-size: 14px;
+}
+
+/* =========================
+   Suggestions dropdown
+========================= */
+.suggestions-box {
+  position: absolute;
+  top: 100%;  
+  left: 50%;                   /* center relative to search bar */
+  transform: translateX(-50%);
+  width: 80%;                   /* smaller than search bar */
+  max-width: 50%;          
+  min-width: 180px;             /* ensure it’s not too small */
+  max-height: 250px;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+  display: none;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Individual suggestion */
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.2s, color 0.2s;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+/* Thumbnail image in suggestion */
+.suggestion-img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  flex-shrink: 0;
+}
+
+/* Text in suggestion */
+.suggestion-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  color: #555;
+}
+
+/* Optional icon in suggestion */
+.suggestion-icon {
+  margin-left: auto;
+  font-size: 14px;
+  color: #999;
+}
+
+/* =========================
+   Responsive adjustments
+========================= */
+@media (max-width: 1024px) {
+  .search-form {
+    width: 70%;
+  }
+
+  .suggestions-box {
+    width: 85%;
+    max-width: 350px;
+  }
+
+  .suggestion-img {
+    width: 28px;
+    height: 28px;
+    margin-right: 6px;
+  }
+
+  .suggestion-item {
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-form {
+    width: 90%;
+  }
+
+  .suggestions-box {
+    width: 90%;
+    max-width: 300px;
+  }
+
+  .suggestion-img {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+  }
+
+  .suggestion-item {
+    padding: 4px 6px;
+  }
+}
+/* ---------- Extra Small Mobile (<=344px) ---------- */
+@media (max-width: 344px) {
+
+  .navbar {
+    height: 56px;
+    padding: 0 8px;
+  }
+
+  .logo img {
+    width: 32px;
+  }
+
+  .menu-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* Search bar */
+  .search-form {
+    width: 95%;
+    height: 34px;
+  }
+
+  .search-form input[type="search"] {
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+
+  .search-form button {
+    padding: 6px;
+  }
+
+  /* Mobile menu */
+  .mobile-menu a {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  /* Backdrop fix for small screens */
+  .menu-backdrop {
+    top: 56px;
   }
 }
