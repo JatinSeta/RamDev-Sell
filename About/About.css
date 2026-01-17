@@ -285,6 +285,58 @@ img {
     height: 34px;
   }
 }
+/* ===============================
+   FINAL SEARCH BAR WIDTH CONTROL
+   (Overrides ALL previous rules)
+================================ */
+
+/* Desktop */
+.nav-center .search-form {
+  width: 45% !important;
+  max-width: 520px !important;
+  min-width: 220px !important;
+  margin: 0 auto;
+}
+
+/* Laptop / Tablet */
+@media (max-width: 1024px) {
+  .nav-center .search-form {
+    width: 65% !important;
+    max-width: 480px !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .nav-center .search-form {
+    width: 85% !important;
+    max-width: none !important;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .nav-center .search-form {
+    width: 92% !important;
+  }
+}
+
+/* Extra Small Mobile (<=344px) */
+@media (max-width: 344px) {
+  .nav-center .search-form {
+    width: 95% !important;
+    height: 34px;
+  }
+
+  #homeSearch {
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+
+  .search-form button {
+    padding: 6px 8px;
+  }
+}
 
 
 
