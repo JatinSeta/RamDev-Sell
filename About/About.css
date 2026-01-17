@@ -199,6 +199,22 @@ img {
   .search-form button { padding: 5px 6px; }
 }
 
+/* Mobile <= 800px */
+@media (max-width: 800px) {
+  .nav-links { display: none; }
+  .menu-btn { display: flex; }
+  .search-form { width: 160px; }
+}
+
+/* Mobile <= 480px */
+@media (max-width: 480px) {
+  .search-form { width: 140px; }
+}
+
+/* Extra Small <= 344px */
+@media (max-width: 344px) {
+  .search-form { width: 120px; }
+}
 
 /* ================================
    ABOUT SECTION
