@@ -254,6 +254,59 @@ img {
   .menu-backdrop { top: 56px; }
 }
 
+/* ================= SEARCH BAR ================= */
+.search-form {
+  display: flex;
+  width: 250px;      /* Set the width of the search bar */
+  max-width: 90%;    /* Make sure it doesn’t overflow on small screens */
+  min-width: 150px;  /* Minimum width for tiny screens */
+  position: relative;
+}
+
+#homeSearch {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+.search-form button {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1024px) {
+  .search-form {
+    width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-form {
+    width: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-form {
+    width: 140px;
+  }
+}
+
+@media (max-width: 344px) {
+  .search-form {
+    width: 120px;
+  }
+}
 
 /* ================================
    ABOUT SECTION
