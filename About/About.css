@@ -10,7 +10,7 @@ body {
   background: #f7f9fb;
   color: #555;
   line-height: 1.6;
-  padding-top: 64px;
+  padding-top: 64px; /* space for fixed navbar */
 }
 
 a {
@@ -65,6 +65,7 @@ img {
   max-width: 600px;
   min-width: 200px;
   position: relative;
+  transition: width 0.3s ease;
 }
 
 #homeSearch {
@@ -182,7 +183,7 @@ img {
   border-radius: 0 0 6px 6px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   z-index: 1000;
-  display: none;
+  display: none; /* toggle with JS */
 }
 
 .suggestion-item {
@@ -230,15 +231,15 @@ img {
 @media (max-width: 800px) {
   .nav-links { display: none; }
   .menu-btn { display: flex; align-items: center; justify-content: center; }
-  .search-form { width: 85%; }
+  .search-form { width: 80%; }
 }
 
 @media (max-width: 480px) {
   .navbar { height: 60px; padding: 0 12px; }
   .logo img { width: 36px; }
   .search-form { width: 90%; }
-  .search-form input[type="search"] { font-size: 14px; padding: 8px; }
-  .search-form button { padding: 8px; }
+  #homeSearch { font-size: 13px; padding: 6px 8px; }
+  .search-form button { padding: 6px 8px; }
   .mobile-menu a { font-size: 14px; padding: 10px 14px; }
 }
 
@@ -247,11 +248,12 @@ img {
   .logo img { width: 32px; }
   .menu-btn { width: 34px; height: 34px; }
   .search-form { width: 95%; height: 34px; }
-  .search-form input[type="search"] { font-size: 13px; padding: 6px 8px; }
-  .search-form button { padding: 6px; }
+  #homeSearch { font-size: 12px; padding: 5px 6px; }
+  .search-form button { padding: 5px 6px; }
   .mobile-menu a { font-size: 13px; padding: 10px 12px; }
   .menu-backdrop { top: 56px; }
 }
+
 
 /* ================================
    ABOUT SECTION
