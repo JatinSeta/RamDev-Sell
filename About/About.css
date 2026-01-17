@@ -171,6 +171,25 @@ img {
   border-bottom: 1px solid #eee;
   font-size: 15px;
 }
+/* Search input */
+#navSearch {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 4px 0 0 4px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+/* Search button */
+.search-form button {
+  padding: 8px 10px;
+  border: none;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0;
+}
 
 /* ================= BACKDROP ================= */
 .menu-backdrop {
