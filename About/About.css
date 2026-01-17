@@ -61,16 +61,14 @@ img {
 /* ================= SEARCH BAR ================= */
 .search-form {
   display: flex;
-  width: 50%;           /* Default width on desktop */
-  max-width: 600px;
-  min-width: 200px;
-  position: relative;
-  transition: width 0.3s ease;
+  width: 250px;
+  max-width: 90%;
+  min-width: 120px;
 }
 
 #homeSearch {
   flex: 1;
-  padding: 10px 12px;
+  padding: 8px 10px;
   border: 1px solid #ccc;
   border-right: none;
   border-radius: 6px 0 0 6px;
@@ -79,11 +77,11 @@ img {
 }
 
 .search-form button {
-  padding: 10px 12px;
+  padding: 8px 12px;
   border: 1px solid #ccc;
   border-left: none;
   border-radius: 0 6px 6px 0;
-  background: #007bff;
+  background-color: #007bff;
   color: #fff;
   cursor: pointer;
   display: flex;
@@ -132,7 +130,7 @@ img {
   overflow: hidden;
   opacity: 0;
   pointer-events: none;
-  transition: 0.3s ease;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
   z-index: 1900;
   flex-direction: column;
 }
@@ -159,7 +157,7 @@ img {
   background: rgba(0,0,0,0.3);
   opacity: 0;
   pointer-events: none;
-  transition: 0.3s ease;
+  transition: opacity 0.3s ease;
   z-index: 1800;
 }
 
@@ -168,76 +166,25 @@ img {
   pointer-events: auto;
 }
 
-/* ================= SUGGESTIONS ================= */
-.suggestions-box {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  max-width: 360px;
-  min-width: 180px;
-  max-height: 250px;
-  overflow-y: auto;
-  background: #fff;
-  border-radius: 0 0 6px 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  z-index: 1000;
-  display: none; /* toggle with JS */
-}
-
-.suggestion-item {
-  display: flex;
-  align-items: center;
-  padding: 8px 10px;
-  cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: background 0.2s, color 0.2s;
-}
-
-.suggestion-item:hover {
-  background: #f0f0f0;
-  color: #333;
-}
-
-.suggestion-img {
-  width: 30px;
-  height: 30px;
-  object-fit: cover;
-  border-radius: 4px;
-  margin-right: 8px;
-  border: 1px solid #ccc;
-  flex-shrink: 0;
-}
-
-.suggestion-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: 500;
-  color: #555;
-}
-
 /* ================= RESPONSIVE ================= */
-@media (max-width: 1024px) {
-  .search-form { width: 70%; }
-  .suggestions-box { width: 85%; max-width: 350px; }
-  .suggestion-img { width: 28px; height: 28px; margin-right: 6px; }
-  .suggestion-item { padding: 6px 8px; }
-}
-
 @media (max-width: 800px) {
-  .nav-links { display: none; }
-  .menu-btn { display: flex; align-items: center; justify-content: center; }
-  .search-form { width: 80%; }
+  .nav-links {
+    display: none;
+  }
+  .menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .search-form {
+    width: 160px;
+  }
 }
 
 @media (max-width: 480px) {
   .navbar { height: 60px; padding: 0 12px; }
   .logo img { width: 36px; }
-  .search-form { width: 90%; }
+  .search-form { width: 140px; }
   #homeSearch { font-size: 13px; padding: 6px 8px; }
   .search-form button { padding: 6px 8px; }
   .mobile-menu a { font-size: 14px; padding: 10px 14px; }
@@ -247,66 +194,11 @@ img {
   .navbar { height: 56px; padding: 0 8px; }
   .logo img { width: 32px; }
   .menu-btn { width: 34px; height: 34px; }
-  .search-form { width: 95%; height: 34px; }
+  .search-form { width: 120px; }
   #homeSearch { font-size: 12px; padding: 5px 6px; }
   .search-form button { padding: 5px 6px; }
-  .mobile-menu a { font-size: 13px; padding: 10px 12px; }
-  .menu-backdrop { top: 56px; }
 }
 
-/* ================= SEARCH BAR ================= */
-.search-form {
-  display: flex;
-  width: 250px;      /* Set the width of the search bar */
-  max-width: 90%;    /* Make sure it doesn’t overflow on small screens */
-  min-width: 150px;  /* Minimum width for tiny screens */
-  position: relative;
-}
-
-#homeSearch {
-  flex: 1;
-  padding: 8px 10px;
-  border: 1px solid #ccc;
-  border-right: none;
-  border-radius: 6px 0 0 6px;
-  font-size: 14px;
-  outline: none;
-}
-
-.search-form button {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-left: none;
-  border-radius: 0 6px 6px 0;
-  background-color: #007bff;
-  color: #fff;
-  cursor: pointer;
-}
-
-/* ================= RESPONSIVE ================= */
-@media (max-width: 1024px) {
-  .search-form {
-    width: 200px;
-  }
-}
-
-@media (max-width: 768px) {
-  .search-form {
-    width: 160px;
-  }
-}
-
-@media (max-width: 480px) {
-  .search-form {
-    width: 140px;
-  }
-}
-
-@media (max-width: 344px) {
-  .search-form {
-    width: 120px;
-  }
-}
 
 /* ================================
    ABOUT SECTION
