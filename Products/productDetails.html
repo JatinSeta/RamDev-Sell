@@ -10,35 +10,46 @@
 
 <!-- Breadcrumb -->
 <nav class="breadcrumb-nav">
-  <a href="../index.html" class="breadcrumb-home">Home</a> › 
-  <a href="../Products/Products.html" class="breadcrumb-products">Products</a> › 
+  <a href="../index.html">Home</a> › 
+  <a href="../Products/Products.html">Products</a> › 
   <span id="breadcrumbName">Product Name</span>
 </nav>
 
 <div class="container">
   <div class="product-section">
     <div class="product-content">
-      <!-- Gallery -->
+
+      <!-- GALLERY -->
       <div class="product-gallery">
-        <div class="main-image" id="mainImgContainer">
+        <div class="main-image">
           <img id="mainImg" src="" alt="Product Image">
         </div>
         <div class="thumbnail-container" id="thumbnails"></div>
       </div>
 
-      <!-- Product Info -->
+      <!-- PRODUCT INFO -->
       <div class="product-info">
         <div class="product-title-container">
           <h1 class="product-title" id="productName">Product Name</h1>
-          <div class="tags-container" style="margin-top:5px;">
+          <div class="tags-container">
             <span class="best-seller-tag" id="bestSellerTag">Best Seller</span>
             <span class="category-tag" id="categoryTag">Category</span>
+            <span class="product-brand" id="productBrand">Brand: Not specified</span>
           </div>
         </div>
-        <div class="product-brand" id="productBrand">Brand: Not specified</div>
+
         <div class="product-price" id="productPrice">₹0.00</div>
-        <div class="star-rating"><span class="stars">★★★★★</span> <span class="rating-text">(0/5.0)</span></div>
-        <p class="product-description" id="productDetails">Loading details...</p>
+
+        <div class="star-rating">
+          <span class="stars">★★★★★</span>
+          <span class="rating-text">(0/5.0)</span>
+        </div>
+
+        <!-- PRODUCT DESCRIPTION WITH READ MORE -->
+        <p id="productDetails">Loading details...</p>
+        <span id="readMore" style="cursor:pointer;color:blue;">... Read more</span>
+
+        <!-- QUANTITY -->
         <div class="quantity-selector">
           <span class="quantity-label">Quantity:</span>
           <div class="quantity-controls">
@@ -47,253 +58,177 @@
             <button class="quantity-btn" id="increase-btn">+</button>
           </div>
         </div>
+
         <button class="contact-btn" id="contactBtn">Contact Us</button>
       </div>
     </div>
 
-    <!-- Related products container -->
-    <div class="related-products" id="relatedProducts">
+    <!-- RELATED PRODUCTS -->
+    <div class="related-products">
       <h2 class="section-title">Related Products</h2>
       <div class="related-list" id="relatedList"></div>
     </div>
 
-    <!-- Extra fields table -->
-    <div class="extra-fields" id="extraFieldsContainer">
+    <!-- EXTRA DETAILS -->
+    <div class="extra-fields">
       <h2 class="section-title">About Product Details</h2>
-      <table class="extra-fields-table" id="extraFieldsTable">
-        <tbody></tbody>
+      <table class="extra-fields-table">
+        <tbody id="extraFieldsBody"></tbody>
       </table>
     </div>
-
   </div>
 </div>
 
+<!-- ================= JS ================= -->
 <script type="module">
   import { db } from "../firebase-config.js";
-  import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+  import { doc, getDoc, collection, getDocs, query, where } 
+    from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
   const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
+  const id = params.get("id");
 
-  const breadcrumbName = document.getElementById('breadcrumbName');
-  const nameEl = document.getElementById('productName');
-  const mainImg = document.getElementById('mainImg');
-  const thumbnails = document.getElementById('thumbnails');
-  const detailsEl = document.getElementById('productDetails');
-  const bestSellerTag = document.getElementById('bestSellerTag');
-  const categoryTag = document.getElementById('categoryTag');
-  const relatedList = document.getElementById('relatedList');
-  const extraFieldsTableBody = document.getElementById('extraFieldsTable').querySelector('tbody');
+  const breadcrumbName = document.getElementById("breadcrumbName");
+  const productName = document.getElementById("productName");
+  const productPrice = document.getElementById("productPrice");
+  const productBrand = document.getElementById("productBrand");
+  const bestSellerTag = document.getElementById("bestSellerTag");
+  const categoryTag = document.getElementById("categoryTag");
+  const productDetails = document.getElementById("productDetails");
+  const readMore = document.getElementById("readMore");
+  const mainImg = document.getElementById("mainImg");
+  const thumbnails = document.getElementById("thumbnails");
+  const relatedList = document.getElementById("relatedList");
+  const extraFieldsBody = document.getElementById("extraFieldsBody");
 
   let quantity = 1;
-  let currentCategory = '';
-  let productBrand = '';
+  let currentCategory = "";
+  let isExpanded = false;
 
   async function loadProduct() {
-    if (!id) {
-      nameEl.textContent = "No product selected";
-      breadcrumbName.textContent = "No product selected";
-      bestSellerTag.style.display = 'none';
-      categoryTag.style.display = 'none';
-      document.getElementById('productBrand').textContent = 'Brand: Not specified'; // Default value for brand
-      return;
-    }
+    if (!id) return;
 
-    const ref = doc(db, 'Products', id);
+    const ref = doc(db, "Products", id);
     const snap = await getDoc(ref);
 
-    if (!snap.exists()) {
-      nameEl.textContent = "Product not found";
-      breadcrumbName.textContent = "Product not found";
-      bestSellerTag.style.display = 'none';
-      categoryTag.style.display = 'none';
-      document.getElementById('productBrand').textContent = 'Brand: Not specified'; // Default value for brand
-      return;
-    }
+    if (!snap.exists()) return;
 
     const data = snap.data();
-    const name = data.name || "Unnamed Product";
-    nameEl.textContent = name;
-    breadcrumbName.textContent = name;
 
-    document.getElementById('productPrice').textContent = `₹${data.price || "0.00"}`;
-    document.getElementById('productBrand').textContent = `Brand: ${data.brand || 'Not specified'}`; // Update brand here
-    bestSellerTag.style.display = data.bestSeller ? 'inline-block' : 'none';
+    // Product basic info
+    productName.textContent = data.name || "Unnamed Product";
+    breadcrumbName.textContent = data.name || "Product";
+    productPrice.textContent = `₹${data.price || "0.00"}`;
+    productBrand.textContent = `Brand: ${data.brand || "Not specified"}`;
+    bestSellerTag.style.display = data.bestSeller ? "inline-block" : "none";
 
     if (data.category) {
       categoryTag.textContent = data.category;
-      categoryTag.style.display = 'inline-block';
+      categoryTag.style.display = "inline-block";
       currentCategory = data.category;
     } else {
-      categoryTag.style.display = 'none';
+      categoryTag.style.display = "none";
     }
 
-    productBrand = data.brand || 'Not specified'; // Set product brand
+    // Images
+    const images = [data.mainUrl, ...(data.images || [])].filter(Boolean);
+    mainImg.src = images[0] || "";
 
-    // Gallery images
-    const images = [data.mainUrl, ...(Array.isArray(data.images) ? data.images : [])].filter(Boolean);
-    mainImg.src = images[0] || '';
-    thumbnails.innerHTML = '';
-    images.forEach((url, i) => {
-      const thumb = document.createElement('img');
-      thumb.src = url;
-      if (i === 0) thumb.classList.add('active');
-      thumb.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (mainImg.src === url) return;
-        mainImg.classList.add('fade-out');
-        setTimeout(() => {
-          mainImg.src = url;
-          mainImg.classList.remove('fade-out');
-        }, 400);
-        Array.from(thumbnails.children).forEach(img => img.classList.remove('active'));
-        thumb.classList.add('active');
-      });
+    thumbnails.innerHTML = "";
+    images.forEach((img, i) => {
+      const thumb = document.createElement("img");
+      thumb.src = img;
+      if (i === 0) thumb.classList.add("active");
+
+      thumb.onclick = () => {
+        mainImg.src = img;
+        document.querySelectorAll(".thumbnail-container img").forEach(t => t.classList.remove("active"));
+        thumb.classList.add("active");
+      };
+
       thumbnails.appendChild(thumb);
     });
 
-    // Product details with "show more"
-    const fullText = data.details || "(No details available)";
-    const lines = fullText.split('\n');
-    const maxLines = 3;
-    let expanded = false;
+    // Description with Read More
+    const desc = data.details || "No description available.";
+    const previewLines = 5;
+    const descLines = desc.split("\n");
 
-    function renderDetails() {
-      detailsEl.innerHTML = '';
-      const textSpan = document.createElement('span');
-      textSpan.textContent = (!expanded && lines.length > maxLines) 
-        ? lines.slice(0, maxLines).join('\n') + '...' 
-        : fullText;
-      detailsEl.appendChild(textSpan);
-
-      if (lines.length > maxLines) {
-        const link = document.createElement('span');
-        link.textContent = expanded ? ' Show less' : ' Show more';
-        link.className = 'show-more-link';
-        link.style.cursor = 'pointer';
-        link.addEventListener('click', () => {
-          expanded = !expanded;
-          renderDetails();
-        });
-        detailsEl.appendChild(link);
-      }
+    if (descLines.length > previewLines) {
+      const shortDesc = descLines.slice(0, previewLines).join("\n");
+      productDetails.textContent = shortDesc;
+      readMore.style.display = "inline";
+      readMore.onclick = () => {
+        if (!isExpanded) {
+          productDetails.textContent = desc;
+          readMore.textContent = " Show less";
+          isExpanded = true;
+        } else {
+          productDetails.textContent = shortDesc;
+          readMore.textContent = "... Read more";
+          isExpanded = false;
+        }
+      };
+    } else {
+      productDetails.textContent = desc;
+      readMore.style.display = "none";
     }
-    renderDetails();
 
     // Extra fields table
-    if (Array.isArray(data.extraFields)) {
-      extraFieldsTableBody.innerHTML = '';
-      data.extraFields.forEach(field => {
-        const tr = document.createElement('tr');
-        const keyTd = document.createElement('td');
-        const valueTd = document.createElement('td');
-        keyTd.textContent = field.key;
-        valueTd.textContent = field.value;
-        tr.appendChild(keyTd);
-        tr.appendChild(valueTd);
-        extraFieldsTableBody.appendChild(tr);
-      });
-    }
+    extraFieldsBody.innerHTML = "";
+    (data.extraFields || []).forEach(f => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${f.key}</td><td>${f.value}</td>`;
+      extraFieldsBody.appendChild(tr);
+    });
 
-     loadRelatedProducts()  // Load related products after product data is loaded
+    loadRelatedProducts();
+  }
+
+  async function loadRelatedProducts() {
+    if (!currentCategory) return;
+
+    const q = query(collection(db, "Products"), where("category", "==", currentCategory));
+    const snap = await getDocs(q);
+    relatedList.innerHTML = "";
+
+    snap.forEach(docSnap => {
+      if (docSnap.id === id) return;
+
+      const p = docSnap.data();
+      const card = document.createElement("div");
+      card.className = "product-card";
+      card.innerHTML = `
+        <img src="${p.mainUrl || ""}">
+        <div class="card-content">
+          <div class="title">${p.name}</div>
+          <div class="card-buttons">
+            <button class="contact-btn">Contact</button>
+          </div>
+        </div>
+      `;
+      card.onclick = () => {
+        window.location.href = `./productDetails.html?id=${docSnap.id}`;
+      };
+      relatedList.appendChild(card);
+    });
   }
 
   // Quantity controls
-  document.getElementById('decrease-btn').addEventListener('click', () => {
-    if (quantity > 1) {
-      quantity--;
-      document.getElementById('quantity-value').textContent = quantity;
-    }
-  });
-
-  document.getElementById('increase-btn').addEventListener('click', () => {
-    quantity++;
-    document.getElementById('quantity-value').textContent = quantity;
-  });
+  document.getElementById("increase-btn").onclick = () => {
+    document.getElementById("quantity-value").textContent = ++quantity;
+  };
+  document.getElementById("decrease-btn").onclick = () => {
+    if (quantity > 1) document.getElementById("quantity-value").textContent = --quantity;
+  };
 
   // Contact button
-  document.getElementById('contactBtn').addEventListener('click', () => {
-    const message = document.createElement('div');
-    message.textContent = 'Thank you for your interest! We will contact you soon.';
-    message.style.cssText = `
-      position: fixed; 
-      top: 20px; 
-      left: 50%; 
-      transform: translateX(-50%); 
-      background: #28a745; 
-      color: white; 
-      padding: 15px 30px; 
-      border-radius: 6px; 
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
-      z-index: 1000;
-    `;
-    document.body.appendChild(message);
-    setTimeout(() => message.remove(), 3000);
-  });
+  document.getElementById("contactBtn").onclick = () => {
+    alert("Thank you! We will contact you soon.");
+  };
 
-  // Fullscreen image on click
-  mainImg.addEventListener('click', () => {
-    if (mainImg.requestFullscreen) mainImg.requestFullscreen();
-    else if (mainImg.webkitRequestFullscreen) mainImg.webkitRequestFullscreen();
-    else if (mainImg.msRequestFullscreen) mainImg.msRequestFullscreen();
-  });
-
-async function loadRelatedProducts() {
-    if (!currentCategory) return;
-
-    const productsRef = collection(db, 'Products');
-    const q = query(productsRef, where('category', '==', currentCategory));
-    const snapshot = await getDocs(q);
-
-    const allRelated = [];
-    snapshot.forEach(docSnap => {
-        if (docSnap.id !== id) allRelated.push({ id: docSnap.id, ...docSnap.data() });
-    });
-
-    // Filter only available products
-    const available = allRelated.filter(p => p.available !== false);
-
-    // Shuffle the available products
-    const shuffled = available.sort(() => 0.5 - Math.random());
-
-    // Select only 4 products
-    const selected = shuffled.slice(0, 4);
-
-    // Clear the related products list
-    relatedList.innerHTML = '';
-
-    // Add the selected products to the related list
-    selected.forEach(prod => {
-        const div = document.createElement('div');
-        div.className = 'product-card';
-        div.innerHTML = `
-            <img src="${prod.mainUrl || ''}" alt="${prod.name}">
-            <div class="card-content">
-                <div class="title">${prod.name}</div>
-                <div class="card-buttons">
-                    <button class="contact-btn">Contact</button>
-                </div>
-            </div>
-        `;
-
-        // Add an event listener for the "Contact" button
-        div.querySelector('.contact-btn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            alert('Contact us for this product!');
-        });
-
-        // Add event listener to navigate to product details page on card click
-        div.addEventListener('click', () => {
-            window.location.href = `./productDetails.html?id=${prod.id}`;
-        });
-
-        // Append the product card to the related list
-        relatedList.appendChild(div);
-    });
-}
-
-  loadProduct();  // Load the product when the page is ready
- 
+  loadProduct();
 </script>
+
 </body>
 </html>
