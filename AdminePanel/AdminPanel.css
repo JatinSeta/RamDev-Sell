@@ -950,4 +950,107 @@ button:hover {
     from {transform: translateY(-50px); opacity: 0;}
     to {transform: translateY(0); opacity: 1;}
 }
+/* Contact Section */
+#contactSection {
+  background-color: #f7f9fc;
+  padding: 25px 20px;
+  border-radius: 15px;
+  margin: 20px 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
+/* Search bar */
+#contactSearchInput {
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 30px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  margin-bottom: 25px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+#contactSearchInput:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 10px rgba(0,123,255,0.2);
+}
+
+/* Grid container for cards */
+#contactList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid layout */
+  gap: 25px; /* space between cards */
+  margin-top: 20px;
+}
+
+/* Individual contact card */
+.contact-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  padding: 20px 25px;
+  position: relative;
+  border-left: 6px solid #007bff;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Card hover effect */
+.contact-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+/* Card header */
+.contact-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.contact-card .card-header h4 {
+  margin: 0;
+  color: #007bff;
+  font-size: 18px;
+}
+
+.contact-card .card-header .timestamp {
+  font-size: 12px;
+  color: #555;
+}
+
+/* Card body */
+.contact-card .card-body p {
+  margin: 6px 0;
+  color: #333;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Icons for email and message */
+.contact-card .card-body p strong::before {
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.contact-card .card-body p.email strong::before {
+  content: "\2709"; /* envelope symbol */
+}
+
+.contact-card .card-body p.message strong::before {
+  content: "\1F4AC"; /* speech bubble symbol */
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  #contactList {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* 2 columns on medium screens */
+  }
+}
+
+@media (max-width: 600px) {
+  #contactList {
+    grid-template-columns: 1fr; /* 1 column on small screens */
+  }
+}

@@ -654,3 +654,75 @@
         togglePassword.classList.toggle("fa-eye");
         togglePassword.classList.toggle("fa-eye-slash");
     });
+
+  // ---------------- Contact Messages ----------------
+const contactList = document.getElementById("contactList");
+const contactSearchInput = document.getElementById("contactSearchInput");
+
+// Global contacts array
+let contactMessages = [];
+
+// Load messages from Firebase
+async function loadContactMessages() {
+    contactList.innerHTML = "<p style='text-align:center'>Loading...</p>";
+
+    try {
+        const contactsRef = collection(db, "ContactMessages");
+        const qSnap = await getDocs(query(contactsRef, orderBy("timestamp", "desc")));
+
+        contactMessages = qSnap.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+        displayContactMessages(contactMessages);
+    } catch (err) {
+        console.error("Error loading contact messages:", err);
+        contactList.innerHTML = "<p style='color:red;text-align:center'>Failed to load messages.</p>";
+    }
+}
+
+// Display contact cards
+function displayContactMessages(messages, searchTerm = "") {
+    contactList.innerHTML = ""; // Clear existing content
+
+    const filtered = messages.filter(msg => {
+        const term = searchTerm.toLowerCase();
+        return msg.name.toLowerCase().includes(term) ||
+               msg.email.toLowerCase().includes(term) ||
+               msg.message.toLowerCase().includes(term);
+    });
+
+    if (!filtered.length) {
+        contactList.innerHTML = "<p style='text-align:center'>No messages found.</p>";
+        return;
+    }
+
+    // Loop through filtered messages and create cards
+    filtered.forEach(msg => {
+        const card = document.createElement("div");
+        card.className = "contact-card"; // Add the class for styling
+
+        // Handling Firestore Timestamps
+        const timestamp = msg.timestamp ? new Date(msg.timestamp.seconds * 1000).toLocaleString() : 'N/A';
+
+        card.innerHTML = `
+            <div class="card-header">
+                <h4>${msg.name}</h4>
+                <span class="timestamp">${timestamp}</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Email:</strong> ${msg.email}</p>
+                <p><strong>Message:</strong> ${msg.message}</p>
+            </div>
+        `;
+
+        contactList.appendChild(card); // Append the card to the contact list
+    });
+}
+
+
+// Search bar functionality
+contactSearchInput.addEventListener("input", () => {
+    const term = contactSearchInput.value.trim();
+    displayContactMessages(contactMessages, term);
+});
+
+// Load contacts on DOM ready
+document.addEventListener("DOMContentLoaded", loadContactMessages);

@@ -103,59 +103,66 @@
   <div id="bestsellerList" class="products-grid"></div>
 </section>
 
-    <section class="Contact-Us">
-            <div class="background">
-                <div class="container">
-                    <div class="screen">
+<section class="Contact-Us">
+        <div class="background">
+            <div class="container">
+                <div class="screen">
                     <div class="screen-header">
-    <div class="screen-header-left">
-            <i class="fab fa-instagram"></i>
-            <i class="fa-brands fa-twitter"></i>
-            <i class="fa-brands fa-facebook"></i>
-    </div>
-    <div class="screen-header-right">
-        <h6>Follow Us</h6>
-    </div>
-    </div>
+                        <div class="screen-header-left">
+                            <a href="https://www.instagram.com/ramdevsalesco.1376?igsh=OW04MWZ1YTN6OWF3" target="_blank" class="instagram-contactus">
+  <i class="fab fa-instagram"></i>
+</a>
+                            <a href="https://x.com/" target="_blank" class="instagram-contactus">
+  <i class="fa-brands fa-twitter"></i>
+</a>
+                            <a href="https://www.facebook.com/" target="_blank" class="instagram-contactus">
+  <i class="fa-brands fa-facebook"></i>
+</a>
 
-                        <div class="screen-body">
-                            <div class="screen-body-item left">
-                                <div class="app-title">
-                                    <span>CONTACT US</span>
+                            
+                        </div>
+                        <div class="screen-header-right">
+                            <h6>Follow Us</h6>
+                        </div>
+                    </div>
+
+                    <div class="screen-body">
+                        <div class="screen-body-item left">
+                            <div class="app-title"><span>CONTACT US</span></div>
+                            <div class="app-contact-info">
+                                <div class="contact-item">
+                                    <i class="fas fa-envelope"></i> 
+                                    <span>sales@ramdevsales.com</span>
                                 </div>
-                                <div class="app-contact-info">
-                                    <div class="contact-item">
-                                        <i class="fas fa-envelope"></i> 
-                                        <span>sales@ramdevsales.com</span>
-                                    </div>
-                                    <div class="contact-item">
-                                        <i class="fa-solid fa-phone"></i>
-                                        <span>+91 7621 888 426</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="screen-body-item">
-                                <div class="app-form">
-                                    <div class="app-form-group">
-                                        <input class="app-form-control" placeholder="NAME" >
-                                    </div>
-                                    <div class="app-form-group">
-                                        <input class="app-form-control" placeholder="EMAIL">
-                                    </div>
-                                    <div class="app-form-group textarea">
-                                        <textarea class="app-form-control" placeholder="MESSAGE"></textarea>
-                                    </div>
-                                    <div class="app-form-group buttons">
-                                        <button class="app-form-button">SEND</button>
-                                    </div>
+                                <div class="contact-item">
+                                    <i class="fa-solid fa-phone"></i>
+                                    <span>+91 7621 888 426</span>
                                 </div>
                             </div>
                         </div>
-                        <button class="more-details-button" onclick="location.href='../Contact/Contact.html'">More Details</button>
+                        <div class="screen-body-item">
+                            <div class="app-form">
+                                <div class="app-form-group">
+                                    <input id="contactName" class="app-form-control" placeholder="NAME" required>
+                                </div>
+                                <div class="app-form-group">
+                                    <input id="contactEmail" class="app-form-control" placeholder="EMAIL" type="email" required>
+                                </div>
+                                <div class="app-form-group textarea">
+                                    <textarea id="contactMessage" class="app-form-control" placeholder="MESSAGE" required></textarea>
+                                </div>
+                                <div class="app-form-group buttons">
+                                    <button id="contactSubmitBtn" class="app-form-button">SEND</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <button class="more-details-button" onclick="location.href='./Contact/Contact.html'">More Details</button>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
+
 <section class="why-choose-section">
   <h2 class="section-title">Why Choose Us</h2>
   <div class="choose-container">
@@ -180,7 +187,9 @@
 
   </div>
 </section>
-
+    <div id="toast" class="toast-container">
+        <div id="toastMessage" class="toast-message"></div>
+    </div>
 
         <script type="module" src="./index.js"></script>
     </body>

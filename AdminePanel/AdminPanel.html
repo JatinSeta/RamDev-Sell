@@ -34,41 +34,48 @@
 
   <!-- Sidebar -->
   <div id="sidebar" class="sidebar">
-    <div class="top-section">
-      <div class="logo">
-        <img src="../Imges/Logo.png" alt="Logo">
-      </div>
+  <div class="top-section">
+    <div class="logo">
+      <img src="../Imges/Logo.png" alt="Logo">
     </div>
+  </div>
 
-    <div class="menu">
-      <a href="#" class="menu-item" data-section="addProductSection">
-        <span class="icon"><i class="fa-solid fa-plus"></i></span>
-        <span class="text">Add Product</span>
-      </a>
+  <div class="menu">
+    <a href="#" class="menu-item" data-section="addProductSection">
+      <span class="icon"><i class="fa-solid fa-plus"></i></span>
+      <span class="text">Add Product</span>
+    </a>
 
-      <a href="#" class="menu-item" data-section="allProductsSection">
-        <span class="icon"><i class="fa-solid fa-box"></i></span>
-        <span class="text">All Products</span>
-      </a>
-          <a href="#" class="menu-item" data-section="bestSellersSection">
+    <a href="#" class="menu-item" data-section="allProductsSection">
+      <span class="icon"><i class="fa-solid fa-box"></i></span>
+      <span class="text">All Products</span>
+    </a>
+
+    <a href="#" class="menu-item" data-section="bestSellersSection">
       <span class="icon"><i class="fa-solid fa-star"></i></span>
       <span class="text">Best Sellers</span>
     </a>
-<a href="#" class="menu-item" data-section="ordersSection">
-    <span class="icon"><i class="fa-solid fa-list"></i></span>
-    <span class="text">Orders</span>
 
-  </a>
+    <a href="#" class="menu-item" data-section="ordersSection">
+      <span class="icon"><i class="fa-solid fa-list"></i></span>
+      <span class="text">Orders</span>
+    </a>
 
-    </div>
-<div class="bottom-section">
-  <a href="#" class="menu-item signout">
-    <span class="icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
-    <span class="text">Log Out</span>
-  </a>
+    <!-- New Contact Us Section -->
+    <a href="#" class="menu-item" data-section="contactSection">
+      <span class="icon"><i class="fa-solid fa-envelope"></i></span>
+      <span class="text">Contact Us</span>
+    </a>
+  </div>
+
+  <div class="bottom-section">
+    <a href="#" class="menu-item signout">
+      <span class="icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+      <span class="text">Log Out</span>
+    </a>
+  </div>
 </div>
 
-  </div>
 <div id="overlay"></div>
 
 <div class="mobile-toggle-btn">
@@ -176,7 +183,13 @@
 
 </section>
 
-
+<!-- Contact Messages Section -->
+<section id="contactSection" class="admin-section" style="display:none;">
+  <h2>Contact Messages</h2>
+  <input type="text" id="contactSearchInput" placeholder="Search messages..." 
+         style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+  <div id="contactList"></div>
+</section>
 
   </div>
 

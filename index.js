@@ -3,7 +3,6 @@ const menuBtn = document.getElementById('menuBtn');
 const mobileMenu = document.getElementById('mobileMenu');
 const menuBackdrop = document.getElementById('menuBackdrop');
 
-// menu icon image swap: closed/open sources
 let menuImg, closedSrc, openSrc;
 
 function closeMenu() {
@@ -11,18 +10,11 @@ function closeMenu() {
 
   mobileMenu.classList.remove('active');
   mobileMenu.setAttribute('aria-hidden', 'true');
-
   if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
 
   try {
-    if (menuImg)
-      menuImg.src =
-        closedSrc ||
-        (menuImg.getAttribute && menuImg.getAttribute('src')) ||
-        './Images/Menu.png';
-  } catch (err) {
-    // ignore
-  }
+    if (menuImg) menuImg.src = closedSrc || (menuImg.getAttribute && menuImg.getAttribute('src')) || './Images/Menu.png';
+  } catch {}
 
   if (menuBackdrop) {
     menuBackdrop.classList.remove('active');
@@ -32,10 +24,7 @@ function closeMenu() {
 
 if (menuBtn && mobileMenu) {
   menuImg = menuBtn.querySelector('img');
-  closedSrc =
-    menuImg?.dataset?.closed ||
-    menuImg?.getAttribute('src') ||
-    './Images/Menu.png';
+  closedSrc = menuImg?.dataset?.closed || menuImg?.getAttribute('src') || './Images/Menu.png';
   openSrc = menuImg?.dataset?.open || './Images/close.png';
 
   const setMenuState = (isActive) => {
@@ -50,8 +39,7 @@ if (menuBtn && mobileMenu) {
   };
 
   menuBtn.addEventListener('click', () => {
-    const willBeActive = !mobileMenu.classList.contains('active');
-    setMenuState(willBeActive);
+    setMenuState(!mobileMenu.classList.contains('active'));
   });
 
   mobileMenu.addEventListener('click', (e) => {
@@ -64,150 +52,97 @@ if (menuBtn && mobileMenu) {
 }
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' || e.key === 'F11' || e.keyCode === 122) {
-    closeMenu();
-  }
+  if (e.key === 'Escape' || e.key === 'F11' || e.keyCode === 122) closeMenu();
 });
-
-document.addEventListener('fullscreenchange', closeMenu);
-document.addEventListener('webkitfullscreenchange', closeMenu);
-document.addEventListener('mozfullscreenchange', closeMenu);
-document.addEventListener('MSFullscreenChange', closeMenu);
-
-window.addEventListener('resize', () => {
-  try {
-    if (window.innerWidth > 800) closeMenu();
-  } catch (err) {}
-});
+['fullscreenchange','webkitfullscreenchange','mozfullscreenchange','MSFullscreenChange'].forEach(ev => document.addEventListener(ev, closeMenu));
+window.addEventListener('resize', () => { if(window.innerWidth > 800) closeMenu(); });
 
 // ==================== Animated Typing Text ====================
 const animatedText = document.getElementById('animatedText');
 const texts = [
-  "Welcome To Our Websites",
+  "Welcome To Our Website",
   "Power Your Projects with RamDev Sales Corporation"
 ];
+let textIndex = 0, charIndex = 0, typingSpeed = 100, deletingSpeed = 50, delayBetweenTexts = 1500;
 
-let textIndex = 0;
-let charIndex = 0;
-let typingSpeed = 100;
-let deletingSpeed = 50;
-let delayBetweenTexts = 1500;
+function randomDelay(base){ return base + Math.random()*50; }
 
-function randomDelay(base) {
-  return base + Math.random() * 50;
-}
-
-function type() {
+function type(){
   const currentText = texts[textIndex];
-  if (charIndex < currentText.length) {
+  if(charIndex < currentText.length){
     animatedText.textContent += currentText.charAt(charIndex);
     charIndex++;
     setTimeout(type, randomDelay(typingSpeed));
-  } else {
-    setTimeout(deleteText, delayBetweenTexts);
-  }
+  } else { setTimeout(deleteText, delayBetweenTexts); }
 }
 
-function deleteText() {
+function deleteText(){
   const currentText = texts[textIndex];
-  if (charIndex > 0) {
+  if(charIndex > 0){
     animatedText.textContent = currentText.substring(0, charIndex - 1);
     charIndex--;
     setTimeout(deleteText, randomDelay(deletingSpeed));
-  } else {
-    textIndex = (textIndex + 1) % texts.length;
-    setTimeout(type, 500);
-  }
+  } else { textIndex = (textIndex + 1) % texts.length; setTimeout(type, 500); }
 }
-
 type();
 
-// ==================== FIREBASE IMPORTS ====================
+// ==================== Firebase Imports ====================
 import { db } from "../firebase-config.js";
-import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-// ==================== Homepage Best Sellers ====================
-const bestsellerList = document.getElementById('bestsellerList');
-const bestsellerLoader = document.getElementById('bestsellerLoader');
+// ==================== Toast Notification Function ====================
+function showToast(message) {
+    const toastMessage = document.getElementById('toastMessage');
+    toastMessage.textContent = message;
+    toastMessage.classList.add('show');
 
-async function loadBestsellers() {
-  try {
-    if (bestsellerLoader) bestsellerLoader.style.display = 'flex';
-
-    bestsellerList.innerHTML = '';
-
-    const productsRef = collection(db, "Products");
-    const q = query(productsRef, where("bestSeller", "==", true));
-    const snap = await getDocs(q);
-
-    if (snap.empty) {
-      bestsellerList.innerHTML = '<div>No best seller products yet.</div>';
-      return;
-    }
-
-    const mainCards = createMainCards(snap);
-    mainCards.forEach(card => bestsellerList.appendChild(card));
-
-  } catch (err) {
-    console.error("Error loading bestsellers:", err);
-    bestsellerList.innerHTML = '<div>Error loading best sellers.</div>';
-  } finally {
-    if (bestsellerLoader) bestsellerLoader.style.display = 'none';
-  }
+    // Hide the toast after 3 seconds
+    setTimeout(() => {
+        toastMessage.classList.remove('show');
+    }, 3000);
 }
 
-function createMainCards(snap) {
-  const cards = [];
-  let count = 0;
-  const totalDocs = snap.docs.length;
+// ==================== Contact Form ====================
+const contactBtn = document.getElementById('contactSubmitBtn');
+const contactName = document.getElementById('contactName');
+const contactEmail = document.getElementById('contactEmail');
+const contactMessage = document.getElementById('contactMessage');
 
-  for (let cardIndex = 0; cardIndex < 2 && count < totalDocs; cardIndex++) {
-    const mainCard = document.createElement('div');
-    mainCard.className = 'bestseller-card';
+contactBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
 
-    const cardImages = document.createElement('div');
-    cardImages.className = 'card-images';
-
-    for (let i = 0; i < 4 && count < totalDocs; i++) {
-      const docSnap = snap.docs[count];
-      const data = docSnap.data();
-
-      const img = document.createElement('img');
-      img.src = data.mainUrl || 'https://via.placeholder.com/150';
-      img.alt = data.name || `Product ${count + 1}`;
-      img.style.cursor = 'pointer';
-
-      const anchor = document.createElement('a');
-      anchor.href = `./Products/productDetails.html?id=${docSnap.id}`;
-      anchor.appendChild(img);
-
-      cardImages.appendChild(anchor);
-      count++;
+    // Validate input fields
+    if (!contactName.value || !contactEmail.value || !contactMessage.value) {
+        showToast("Please fill in all fields!");
+        return;
     }
 
-    mainCard.appendChild(cardImages);
+    try {
+        // Save the contact message to Firebase Firestore
+        await addDoc(collection(db, "ContactMessages"), {
+            name: contactName.value,
+            email: contactEmail.value,
+            message: contactMessage.value,
+            timestamp: new Date().toISOString()
+        });
 
-    const exploreLink = document.createElement('a');
-    exploreLink.href = './Products/Products.html';
-    exploreLink.className = 'explore-all-link';
-    exploreLink.textContent = 'Explore All';
-    mainCard.appendChild(exploreLink);
+        // Show success toast and reset the form
+        showToast("Message sent successfully!");
+        contactName.value = '';
+        contactEmail.value = '';
+        contactMessage.value = '';
 
-    cards.push(mainCard);
-  }
-
-  return cards;
-}
-
-loadBestsellers();
+    } catch (err) {
+        console.error("Error sending message:", err);
+        showToast("Failed to send message. Please try again.");
+    }
+});
 
 // ==================== Homepage Search Suggestions ====================
 const homeSearch = document.getElementById("homeSearch");
 const suggestionBox = document.getElementById("indexSearchSuggestions");
-
 let homeProducts = [];
 
-// Load all products once
 async function loadHomeProducts() {
   const productsRef = collection(db, "Products");
   const snap = await getDocs(productsRef);
@@ -215,7 +150,6 @@ async function loadHomeProducts() {
 }
 loadHomeProducts();
 
-// Live search suggestions
 homeSearch.addEventListener("input", () => {
   const query = homeSearch.value.toLowerCase().trim();
 
@@ -257,7 +191,6 @@ homeSearch.addEventListener("input", () => {
   suggestionBox.style.display = "block";
 });
 
-// Hide on outside click
 document.addEventListener("click", (e) => {
   if (!suggestionBox.contains(e.target) && e.target !== homeSearch) {
     suggestionBox.style.display = "none";

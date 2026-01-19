@@ -912,3 +912,75 @@ img {
   .mobile-menu a { font-size: 13px; padding: 10px 12px; }
   .menu-backdrop { top: 56px; }
 }
+
+/* Toast Container */
+.toast-container {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 100%;
+    text-align: center;
+}
+
+/* Toast Notification Styles */
+#toastMessage {
+    visibility: hidden; /* Initially hidden */
+    min-width: 250px;
+    margin-left: -125px; /* Center the toast */
+    background-color: green; /* Green background */
+    color: #fff; /* White text */
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 9999;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Show the toast message */
+#toastMessage.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+/* Contact Form Styling */
+.Contact-Us {
+    padding: 50px 20px;
+}
+
+.app-form-control {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.app-form-button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.app-form-button:hover {
+    background-color: #0056B3;
+    color: white;
+}
+
+/* Instagram Icon Css */
+.instagram-contactus{
+  color: white;
+  font-size: 15px;
+}
+.instagram-contactus:hover{
+  color: #007BFF;
+}
