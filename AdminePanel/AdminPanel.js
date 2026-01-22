@@ -38,7 +38,7 @@
     let currentLoadedImages = [];
     let previewIndex = 0;
     let urlCount = 2;
-    const MAX_CHARS = 750;
+    const MAX_CHARS = 1000;
     let editMode = false;
     let editingProductId = null;
     let selectingBestSellers = false;
