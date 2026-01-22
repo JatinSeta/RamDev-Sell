@@ -1,149 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Responsive Sidebar Admin</title>
-  
+
   <!-- FontAwesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-  
+
   <!-- Custom Styles -->
   <link rel="stylesheet" href="./AdminPanel.css">
 </head>
 
 <body>
-<div id="loginOverlay"></div>
+  <div id="loginOverlay"></div>
 
-<!-- Login Modal -->
-<div id="loginModal" class="modal">
-  <form id="loginForm">
-    <h2>Admin Login</h2>
-    <div id="error-message" style="color:red;margin-bottom:10px;"></div>
-    <input type="email" id="email" placeholder="Email" required>
-<div style="position: relative;">
-  <input type="password" id="password" placeholder="Password" required>
- <i id="togglePassword" class="fa-solid fa-eye" 
-     style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
-</div>
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <form id="loginForm">
+      <h2>Admin Login</h2>
+      <div id="error-message" style="color:red;margin-bottom:10px;"></div>
+      <input type="email" id="email" placeholder="Email" required>
+      <div style="position: relative;">
+        <input type="password" id="password" placeholder="Password" required>
+        <i id="togglePassword" class="fa-solid fa-eye"
+          style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+      </div>
 
-    <button type="submit">Login</button>
-    <button type="button" id="closeModalBtn">Close</button>
-  </form>
-</div>
+      <button type="submit">Login</button>
+    </form>
+  </div>
 
   <!-- Sidebar -->
   <div id="sidebar" class="sidebar">
-  <div class="top-section">
-    <div class="logo">
-      <img src="../Imges/Logo.png" alt="Logo">
+    <div class="top-section">
+      <div class="logo">
+        <img src="../Imges/Logo.png" alt="Logo">
+      </div>
+    </div>
+
+    <div class="menu">
+      <a href="#" class="menu-item" data-section="addProductSection">
+        <span class="icon"><i class="fa-solid fa-plus"></i></span>
+        <span class="text">Add Product</span>
+      </a>
+
+      <a href="#" class="menu-item" data-section="allProductsSection">
+        <span class="icon"><i class="fa-solid fa-box"></i></span>
+        <span class="text">All Products</span>
+      </a>
+
+      <a href="#" class="menu-item" data-section="bestSellersSection">
+        <span class="icon"><i class="fa-solid fa-star"></i></span>
+        <span class="text">Best Sellers</span>
+      </a>
+
+      <a href="#" class="menu-item" data-section="ordersSection">
+        <span class="icon"><i class="fa-solid fa-list"></i></span>
+        <span class="text">Orders</span>
+      </a>
+
+      <!-- New Contact Us Section -->
+      <a href="#" class="menu-item" data-section="contactSection">
+        <span class="icon"><i class="fa-solid fa-envelope"></i></span>
+        <span class="text">Contact Us</span>
+      </a>
+    </div>
+
+    <div class="bottom-section">
+      <a href="#" class="menu-item signout">
+        <span class="icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+        <span class="text">Log Out</span>
+      </a>
     </div>
   </div>
 
-  <div class="menu">
-    <a href="#" class="menu-item" data-section="addProductSection">
-      <span class="icon"><i class="fa-solid fa-plus"></i></span>
-      <span class="text">Add Product</span>
-    </a>
+  <div id="overlay"></div>
 
-    <a href="#" class="menu-item" data-section="allProductsSection">
-      <span class="icon"><i class="fa-solid fa-box"></i></span>
-      <span class="text">All Products</span>
-    </a>
-
-    <a href="#" class="menu-item" data-section="bestSellersSection">
-      <span class="icon"><i class="fa-solid fa-star"></i></span>
-      <span class="text">Best Sellers</span>
-    </a>
-
-    <a href="#" class="menu-item" data-section="ordersSection">
-      <span class="icon"><i class="fa-solid fa-list"></i></span>
-      <span class="text">Orders</span>
-    </a>
-
-    <!-- New Contact Us Section -->
-    <a href="#" class="menu-item" data-section="contactSection">
-      <span class="icon"><i class="fa-solid fa-envelope"></i></span>
-      <span class="text">Contact Us</span>
-    </a>
-  </div>
-
-  <div class="bottom-section">
-    <a href="#" class="menu-item signout">
-      <span class="icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
-      <span class="text">Log Out</span>
-    </a>
-  </div>
-</div>
-
-<div id="overlay"></div>
-
-<div class="mobile-toggle-btn">
+  <div class="mobile-toggle-btn">
     <i class="fa-solid fa-bars"></i>
-</div>
+  </div>
 
 
   <!-- Main Content -->
   <div class="main-content">
 
-  <section id="addProductSection" class="admin-section">
-        <div class="container">
-          <h1>Add Product</h1>
-          <form id="dataForm">
-            <label>Product Name:</label>
-            <input type="text" id="name" placeholder="Enter Product Name" required>
-            <label>Brand:</label>
-  <input type="text" id="brand" placeholder="Enter Brand Name" required>
+    <section id="addProductSection" class="admin-section">
+      <div class="container">
+        <h1>Add Product</h1>
+        <form id="dataForm">
+          <label>Product Name:</label>
+          <input type="text" id="name" placeholder="Enter Product Name" required>
+          <label>Brand:</label>
+          <input type="text" id="brand" placeholder="Enter Brand Name" required>
 
-  <label>Price:</label>
-  <div class="price-input-container">
-    <span class="rupee-symbol">₹</span>
-    <input type="number" id="price" placeholder="Enter Price" min="0" step="0.01" required>
-  </div>
+          <label>Price:</label>
+          <div class="price-input-container">
+            <span class="rupee-symbol">₹</span>
+            <input type="number" id="price" placeholder="Enter Price" min="0" step="0.01" required>
+          </div>
 
           <label>Product Details (Max 2000 Characters):</label>
-<textarea id="details" placeholder="Enter product details" required></textarea>
-<div id="wordCount">0 / 750 characters</div>
-<button type="button" id="summarizeBtn">Summarize</button> <!-- New Button -->
-<textarea id="summary" placeholder="Summary will appear here" ></textarea> <!-- Optional summary field -->
+          <textarea id="details" placeholder="Enter product details" required></textarea>
+          <div id="wordCount">0 / 750 characters</div>
+          <button type="button" id="summarizeBtn">Summarize</button> <!-- New Button -->
+          <textarea id="summary" placeholder="Summary will appear here"></textarea> <!-- Optional summary field -->
 
-            <label>Image URLs:</label>
-            <input type="url" id="url1" class="image-url" placeholder="Main Image URL" required>
-            <input type="url" id="url2" class="image-url" placeholder="Second Image URL" required>
-            <div id="extraUrls"></div>
-            <button type="button" id="addUrlBtn">Add More Images</button>
+          <label>Image URLs:</label>
+          <input type="url" id="url1" class="image-url" placeholder="Main Image URL" required>
+          <input type="url" id="url2" class="image-url" placeholder="Second Image URL" required>
+          <div id="extraUrls"></div>
+          <button type="button" id="addUrlBtn">Add More Images</button>
 
-            <!-- Image Preview -->
-            <div id="previewContainer" style="display:none; margin-top:20px;">
-              <img id="mainPreview" style="width:200px;height:200px;object-fit:cover;border:1px solid #ccc;border-radius:10px;">
-              <div id="thumbnails" style="display:flex;gap:10px;margin-top:10px;"></div>
-            </div>
+          <!-- Image Preview -->
+          <div id="previewContainer" style="display:none; margin-top:20px;">
+            <img id="mainPreview"
+              style="width:200px;height:200px;object-fit:cover;border:1px solid #ccc;border-radius:10px;">
+            <div id="thumbnails" style="display:flex;gap:10px;margin-top:10px;"></div>
+          </div>
 
-            <label>Additional Table Fields</label>
-            <div id="keyValueContainer"></div>
-            <button type="button" id="addFieldBtn">Add Table Field</button>
+          <label>Additional Table Fields</label>
+          <div id="keyValueContainer"></div>
+          <button type="button" id="addFieldBtn">Add Table Field</button>
 
-            <label>Category:</label>
-            <select id="category" required>
-              <option value="">Select Category</option>
-              <option value="Hardware">Hardware</option>
-              <option value="Electrical">Electrical</option>
-            </select>
+          <label>Category:</label>
+          <select id="category" required>
+            <option value="">Select Category</option>
+            <option value="Hardware">Hardware</option>
+            <option value="Electrical">Electrical</option>
+          </select>
 
-            <button type="submit" class="submit-btn">Save Product</button>
-          </form>
-        </div>
-      </section>
+          <button type="submit" class="submit-btn">Save Product</button>
+        </form>
+      </div>
+    </section>
 
-<section id="allProductsSection" class="admin-section" style="display:none;">
-    <h2>All Products</h2>
-    <div id="searchContainer" class="search-container">
+    <section id="allProductsSection" class="admin-section" style="display:none;">
+      <h2>All Products</h2>
+      <div id="searchContainer" class="search-container">
         <input type="text" id="searchInput" placeholder="Search products...">
         <button id="selectBSBtn">Select Best Sellers</button>
-    </div>
-    <div id="productsList" class="products-grid"></div>
-    <button id="loadMoreBtn" style="display:none;margin:20px auto;padding:10px 20px;cursor:pointer;">Load More Products</button>
-</section>
+      </div>
+      <div id="productsList" class="products-grid"></div>
+      <button id="loadMoreBtn" style="display:none;margin:20px auto;padding:10px 20px;cursor:pointer;">Load More
+        Products</button>
+    </section>
 
 
 
@@ -153,43 +155,44 @@
       <h2>Best Sellers</h2>
       <div id="bestSellersList" class="products-grid"></div>
     </section>
-<section id="ordersSection" class="admin-section">
-  <h2>Orders</h2>
+    <section id="ordersSection" class="admin-section">
+      <h2>Orders</h2>
 
-  <input type="text" id="orderSearchInput" placeholder="Search orders..." style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+      <input type="text" id="orderSearchInput" placeholder="Search orders..."
+        style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
 
-  <div class="orders-list" id="ordersList">
-    <!-- JS will insert grouped orders here -->
-  </div>
+      <div class="orders-list" id="ordersList">
+        <!-- JS will insert grouped orders here -->
+      </div>
 
-  <!-- Modal -->
-<div id="inquiryModal" class="modal">
-  <div class="modal-content">
-    <span id="closeModal" class="close">&times;</span>
-    <h3>Order Details</h3>
-    <p><strong>Company:</strong> <span id="modalCompany"></span></p>
-    <p><strong>Name:</strong> <span id="modalName"></span></p>
-    <p><strong>Email:</strong> <span id="modalEmail"></span></p>
-    <p><strong>Phone Number:</strong> <span id="modalMobile"></span></p>
-    <p><strong>Product:</strong> <span id="modalProduct"></span></p>
-    <p><strong>Quantity:</strong> <span id="modalQuantity"></span></p>
-    <p><strong>Date:</strong> <span id="modalDate"></span></p>
-    <p><strong>Message:</strong> <span id="modalMessge"></span></p>
+      <!-- Modal -->
+      <div id="inquiryModal" class="modal">
+        <div class="modal-content">
+          <span id="closeModal" class="close">&times;</span>
+          <h3>Order Details</h3>
+          <p><strong>Company:</strong> <span id="modalCompany"></span></p>
+          <p><strong>Name:</strong> <span id="modalName"></span></p>
+          <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+          <p><strong>Phone Number:</strong> <span id="modalMobile"></span></p>
+          <p><strong>Product:</strong> <span id="modalProduct"></span></p>
+          <p><strong>Quantity:</strong> <span id="modalQuantity"></span></p>
+          <p><strong>Date:</strong> <span id="modalDate"></span></p>
+          <p><strong>Message:</strong> <span id="modalMessge"></span></p>
 
-    <!-- Action buttons -->
-   
-  </div>
-</div>
+          <!-- Action buttons -->
 
-</section>
+        </div>
+      </div>
 
-<!-- Contact Messages Section -->
-<section id="contactSection" class="admin-section" style="display:none;">
-  <h2>Contact Messages</h2>
-  <input type="text" id="contactSearchInput" placeholder="Search messages..." 
-         style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
-  <div id="contactList"></div>
-</section>
+    </section>
+
+    <!-- Contact Messages Section -->
+    <section id="contactSection" class="admin-section" style="display:none;">
+      <h2>Contact Messages</h2>
+      <input type="text" id="contactSearchInput" placeholder="Search messages..."
+        style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+      <div id="contactList"></div>
+    </section>
 
   </div>
 
@@ -198,4 +201,5 @@
   <script type="module" src="./AdminPanel.js"></script>
 
 </body>
-</html>
+
+</html>>

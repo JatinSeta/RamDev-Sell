@@ -38,7 +38,7 @@
     let currentLoadedImages = [];
     let previewIndex = 0;
     let urlCount = 2;
-    const MAX_CHARS = 500;
+    const MAX_CHARS = 750;
     let editMode = false;
     let editingProductId = null;
     let selectingBestSellers = false;
@@ -545,105 +545,94 @@
         window.addEventListener("click", e=>{ if(e.target==modal) modal.style.display="none"; });
 
         loadOrders();
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-        const loginModal = document.getElementById("loginModal");
-        const loginForm = document.getElementById("loginForm");
-        const emailInput = document.getElementById("email");
-        const passwordInput = document.getElementById("password");
-        const errorMessage = document.getElementById("error-message");
-        const closeLoginBtn = document.getElementById("closeModalBtn");
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-        // Optional: hide the close button if you don't want users to close modal manually
-        closeLoginBtn.style.display = "none";
+const loginModal = document.getElementById("loginModal");
+const loginForm = document.getElementById("loginForm");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const errorMessage = document.getElementById("error-message");
 
-        // Example using Firebase Auth (Web v9 modular)
+const auth = getAuth();
 
-        const auth = getAuth();
+// Show login modal if user is not logged in
+function showLoginModal() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (!isLoggedIn) {
+        loginModal.style.display = 'flex';
+        document.getElementById('loginOverlay').style.display = 'block';
+    }
+}
 
-    loginForm.addEventListener("submit", async (e) => {
+// Hide login modal (only call this after successful login)
+function hideLoginModal() {
+    loginModal.style.display = 'none';
+    document.getElementById('loginOverlay').style.display = 'none';
+}
+
+// Handle login
+loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        console.log("Logged in:", userCredential.user);
+
+        // Save login state
+        localStorage.setItem('isLoggedIn', 'true');
+
+        // Close modal
+        hideLoginModal();
+
+        // Your admin panel adjustments
+        sidebar.classList.remove('active');
+        mobileToggleBtn.style.display = "block";
+
+    } catch (error) {
+        console.error(error);
+
+        let message = "";
+        switch (error.code) {
+            case "auth/user-not-found":
+                message = "Email mismatch: user not found.";
+                break;
+            case "auth/wrong-password":
+                message = "Password mismatch: incorrect password.";
+                break;
+            case "auth/invalid-email":
+                message = "Invalid email format.";
+                break;
+            case "auth/user-disabled":
+                message = "User account is disabled.";
+                break;
+            default:
+                message = "Login failed. Please try again.";
+        }
+
+        errorMessage.textContent = message;
+    }
+});
+
+// Show login modal on page load
+document.addEventListener('DOMContentLoaded', showLoginModal);
+
+// Logout function
+function logout() {
+    localStorage.removeItem('isLoggedIn');
+    window.location.reload();
+}
+
+const logoutBtn = document.querySelector('.menu-item.signout');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', function (e) {
         e.preventDefault();
-        const email = emailInput.value.trim();
-        const password = passwordInput.value.trim();
-
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log("Logged in:", userCredential.user);
-
-            localStorage.setItem('isLoggedIn', 'true');
-
-            loginModal?.remove();
-            document.getElementById('loginOverlay')?.remove();
-
-            sidebar.classList.remove('active');
-            mobileToggleBtn.style.display = "block";
-
-        } catch (error) {
-            console.error(error);
-
-            // Friendly error messages
-            let message = "";
-            switch (error.code) {
-                case "auth/user-not-found":
-                    message = "Email mismatch: user not found.";
-                    break;
-                case "auth/wrong-password":
-                    message = "Password mismatch: incorrect password.";
-                    break;
-                case "auth/invalid-email":
-                    message = "Invalid email format.";
-                    break;
-                case "auth/user-disabled":
-                    message = "User account is disabled.";
-                    break;
-                default:
-                    message = "Login failed. Please try again.";
-            }
-
-            errorMessage.textContent = message;
-        }
+        logout();
     });
+}
 
-
-
-        const loginOverlay = document.getElementById('loginOverlay');
-
-        function showLoginModal() {
-        // Check if user is logged in, if so, skip showing the modal
-        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-        if (!isLoggedIn) {
-            loginModal.style.display = 'flex';
-            loginOverlay.style.display = 'block';
-        }
-        }
-
-        function hideLoginModal() {
-        loginModal.style.display = 'none';
-        loginOverlay.style.display = 'none';
-        }
-
-        closeLoginBtn.addEventListener('click', hideLoginModal);
-        loginOverlay.addEventListener('click', hideLoginModal);
-
-        // Example: show login modal on page load
-        document.addEventListener('DOMContentLoaded', showLoginModal);
-
-        // Function to handle logout
-        function logout() {
-        // Remove the login state from localStorage
-        localStorage.removeItem('isLoggedIn');
-        
-        // Reload the page to reset the state and potentially show the login modal
-        window.location.reload();
-        }
-
-        // Event listener for "Log Out" click
-        const logoutBtn = document.querySelector('.menu-item.signout');
-        if (logoutBtn) {
-        logoutBtn.addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent default link behavior (if any)
-            logout(); // Call logout function
-        });
-        }
     const togglePassword = document.getElementById("togglePassword");
 
     togglePassword.addEventListener("click", () => {
