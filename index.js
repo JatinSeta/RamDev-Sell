@@ -88,7 +88,11 @@ type();
 
 // ==================== Firebase Imports ====================
 import { db } from "../firebase-config.js";
-import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { 
+  collection, 
+  addDoc, 
+  getDocs 
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 // ==================== Toast Notification Function ====================
 function showToast(message) {
@@ -144,25 +148,51 @@ const suggestionBox = document.getElementById("indexSearchSuggestions");
 let homeProducts = [];
 
 async function loadHomeProducts() {
-  const productsRef = collection(db, "Products");
-  const snap = await getDocs(productsRef);
-  homeProducts = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  try {
+    const productsRef = collection(db, "Products");
+    const snap = await getDocs(productsRef);
+
+    homeProducts = snap.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    console.log("Loaded products:", homeProducts);
+  } catch (err) {
+    console.error("Failed to load products:", err);
+  }
 }
+
 loadHomeProducts();
+
 
 homeSearch.addEventListener("input", () => {
   const query = homeSearch.value.toLowerCase().trim();
 
-  if (query === "") {
+  if (!query) {
     suggestionBox.style.display = "none";
     return;
   }
 
-  const filtered = homeProducts
-    .filter(p =>
-      p.name.toLowerCase().includes(query) ||
-      (p.brand || "").toLowerCase().includes(query)
-    )
+  const scoredProducts = homeProducts.map(product => {
+    const name = product.name.toLowerCase();
+    const brand = (product.brand || "").toLowerCase();
+    let score = 0;
+
+    // 🔥 Relevance scoring
+    if (name === query) score += 100;
+    else if (name.startsWith(query)) score += 80;
+    else if (name.split(" ").includes(query)) score += 60;
+    else if (name.includes(query)) score += 40;
+
+    if (brand.includes(query)) score += 20;
+
+    return { ...product, score };
+  });
+
+  const filtered = scoredProducts
+    .filter(p => p.score > 0)
+    .sort((a, b) => b.score - a.score)
     .slice(0, 6);
 
   suggestionBox.innerHTML = "";
@@ -178,11 +208,14 @@ homeSearch.addEventListener("input", () => {
 
     div.innerHTML = `
       <img src="${product.mainUrl || "https://via.placeholder.com/40"}" class="suggestion-img">
-      <div class="suggestion-text">${product.name} (${product.brand || "No Brand"})</div>
+      <div class="suggestion-text">
+        <strong>${product.name}</strong>
+        <small>${product.brand || "No Brand"}</small>
+      </div>
     `;
 
     div.addEventListener("click", () => {
-      window.location.href = `./Products/Products.html?query=${product.name}`;
+      window.location.href = `./Products/Products.html?query=${encodeURIComponent(product.name)}`;
     });
 
     suggestionBox.appendChild(div);
@@ -190,6 +223,7 @@ homeSearch.addEventListener("input", () => {
 
   suggestionBox.style.display = "block";
 });
+
 
 document.addEventListener("click", (e) => {
   if (!suggestionBox.contains(e.target) && e.target !== homeSearch) {

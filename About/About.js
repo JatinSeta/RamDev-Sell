@@ -56,23 +56,38 @@ async function loadHomeProducts() {
 }
 loadHomeProducts();
 
-// Live search suggestions
-homeSearch?.addEventListener("input", () => {
+homeSearch.addEventListener("input", () => {
   const query = homeSearch.value.toLowerCase().trim();
-  suggestionBox.innerHTML = ""; // clear previous suggestions
 
   if (!query) {
     suggestionBox.style.display = "none";
     return;
   }
 
-  // Filter products by name or brand, top 5 suggestions
-  const filtered = homeProducts.filter(p =>
-    p.name.toLowerCase().includes(query) ||
-    (p.brand || "").toLowerCase().includes(query)
-  ).slice(0, 5);
+  const scoredProducts = homeProducts.map(product => {
+    const name = product.name.toLowerCase();
+    const brand = (product.brand || "").toLowerCase();
+    let score = 0;
 
-  if (!filtered.length) {
+    // 🔥 Relevance scoring
+    if (name === query) score += 100;
+    else if (name.startsWith(query)) score += 80;
+    else if (name.split(" ").includes(query)) score += 60;
+    else if (name.includes(query)) score += 40;
+
+    if (brand.includes(query)) score += 20;
+
+    return { ...product, score };
+  });
+
+  const filtered = scoredProducts
+    .filter(p => p.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 6);
+
+  suggestionBox.innerHTML = "";
+
+  if (filtered.length === 0) {
     suggestionBox.style.display = "none";
     return;
   }
@@ -80,13 +95,17 @@ homeSearch?.addEventListener("input", () => {
   filtered.forEach(product => {
     const div = document.createElement("div");
     div.className = "suggestion-item";
+
     div.innerHTML = `
-      <img src="${product.mainUrl || 'https://via.placeholder.com/40'}" class="suggestion-img">
-      <div class="suggestion-text">${product.name} (${product.brand || 'No Brand'})</div>
+      <img src="${product.mainUrl || "https://via.placeholder.com/40"}" class="suggestion-img">
+      <div class="suggestion-text">
+        <strong>${product.name}</strong>
+        <small>${product.brand || "No Brand"}</small>
+      </div>
     `;
 
     div.addEventListener("click", () => {
-      window.location.href = `../Products/Products.html?query=${product.name}`;
+      window.location.href = `./Products/Products.html?query=${encodeURIComponent(product.name)}`;
     });
 
     suggestionBox.appendChild(div);
@@ -95,9 +114,10 @@ homeSearch?.addEventListener("input", () => {
   suggestionBox.style.display = "block";
 });
 
-// Hide suggestions on outside click
+
 document.addEventListener("click", (e) => {
   if (!suggestionBox.contains(e.target) && e.target !== homeSearch) {
     suggestionBox.style.display = "none";
   }
 });
+

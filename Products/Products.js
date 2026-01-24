@@ -345,7 +345,7 @@ priceRange.addEventListener('input', () => {
 // Initialize Brand and Category Filters
 function initializeFilters() {
   // Get maximum price from products data
-  const maxPriceFromData = Math.max(...allProductsData.map(p => p.price || 0), 10000);
+  const maxPriceFromData = Math.max(...allProductsData.map(p => p.price || 0), 100000);
   
   // Set price slider max value to actual max price (rounded up to nearest 1000)
   const roundedMaxPrice = Math.ceil(maxPriceFromData / 1000) * 1000;
