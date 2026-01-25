@@ -133,7 +133,7 @@
         input.type='url'; input.className='image-url'; input.placeholder=`Image URL ${urlCount}`; input.style.flexGrow='1';
         input.addEventListener('input', updatePreviews);
         const removeBtn=document.createElement('button'); removeBtn.type='button'; removeBtn.textContent='Remove';
-        removeBtn.addEventListener('click', ()=>{ wrapper.remove(); updatePreviews(); });
+        removeBtn.addEventListfener('click', ()=>{ wrapper.remove(); updatePreviews(); });
         wrapper.appendChild(input); wrapper.appendChild(removeBtn);
         extraUrlsContainer.appendChild(wrapper);
     });
@@ -197,31 +197,63 @@
     
     const mainImage = images[0];
     const otherImages = images.slice(1);
+    const minQtyInput = document.getElementById('minQuantity');
+if (!minQtyInput) {
+    return showToast('Minimum quantity field is missing!', 'error');
+}
+const minQuantity = parseInt(minQtyInput.value);
+if (isNaN(minQuantity) || minQuantity <= 0) {
+    return showToast('Enter a valid minimum quantity', 'error');
+}
 
-    try {
-        if (editMode && editingProductId) {
-            const docRef = doc(db, 'Products', editingProductId);
-            await updateDoc(docRef, {
-                name, details, category, brand, price, mainUrl: mainImage, images: otherImages, extraFields, updatedAt: serverTimestamp()
-            });
-            showToast('Product updated!');
-        } else {
-            await addDoc(collection(db, 'Products'), {
-                name, details, category, brand, price, mainUrl: mainImage, images: otherImages, extraFields, bestSeller: false, createdAt: serverTimestamp()
-            });
-            showToast('Product added!');
-        }
-        resetForm();
-        loadProducts();
-    } catch (err) {
-        console.error(err);
-        showToast('Error saving product', 'error');
+
+try {
+    if (editMode && editingProductId) {
+        const docRef = doc(db, 'Products', editingProductId);
+   await updateDoc(docRef, {
+    name,
+    details,
+    category,
+    brand,
+    price: Number(price),
+    minQuantity: Number(minQuantity), // 🔥 FORCE NUMBER
+    mainUrl: mainImage,
+    images: otherImages,
+    extraFields,
+    updatedAt: serverTimestamp()
+});
+
+        showToast('Product updated!');
+    } else {
+       await addDoc(collection(db, 'Products'), {
+    name,
+    details,
+    category,
+    brand,
+    price: Number(price),
+    minQuantity: Number(minQuantity), // 🔥 FORCE NUMBER
+    mainUrl: mainImage,
+    images: otherImages,
+    extraFields,
+    bestSeller: false,
+    createdAt: serverTimestamp()
+});
+
+        showToast('Product added!');
     }
+    resetForm();
+    loadProducts();
+} catch (err) {
+    console.error(err);
+    showToast('Error saving product', 'error');
+}
+
 });
 
     // ---------------- Reset Form ----------------
-  function resetForm() {
+function resetForm() {
     form.reset();
+    document.getElementById('minQuantity').value = '';
     extraUrlsContainer.innerHTML = '';
     keyValueContainer.innerHTML = '';
     currentLoadedImages = [];
@@ -232,6 +264,7 @@
     fieldCount = 0;
     detailsTextarea.dispatchEvent(new Event('input'));
 }
+
 
 
     // ---------------- Select Best Sellers ----------------
@@ -321,18 +354,19 @@
     }
 
     // ---------------- Fill Edit Form ----------------
-   function fillEditForm(id, data) {
+    function fillEditForm(id, data) {
     editMode = true;
     editingProductId = id;
-    
+
     document.getElementById('name').value = data.name;
     detailsTextarea.value = data.details;
     detailsTextarea.dispatchEvent(new Event('input'));
     categorySelect.value = data.category;
-    document.getElementById('price').value = data.price; // Pre-fill the price
-    document.getElementById('brand').value = data.brand; // Pre-fill the brand
-    
-    // Handle Image URLs (as already done in your current code)
+    document.getElementById('price').value = data.price;
+    document.getElementById('brand').value = data.brand;
+    document.getElementById('minQuantity').value = data.minQuantity || 1; // <-- Pre-fill MinQuantity
+
+    // Images
     document.getElementById('url1').value = data.mainUrl;
     document.getElementById('url2').value = data.images[0] || '';
     extraUrlsContainer.innerHTML = '';
@@ -340,12 +374,14 @@
         urlCount++;
         const row = document.createElement('div');
         row.className = 'extra-url-row';
-        row.innerHTML = `<input type="url" class="image-url" value="${url}" style="flex-grow:1"><button type="button" class="remove-btn">Remove</button>`;
+        row.innerHTML = `<input type="url" class="image-url" value="${url}" style="flex-grow:1">
+                         <button type="button" class="remove-btn">Remove</button>`;
         row.querySelector('.remove-btn').addEventListener('click', () => row.remove());
         row.querySelector('.image-url').addEventListener('input', updatePreviews);
         extraUrlsContainer.appendChild(row);
     });
 
+    // Extra fields
     keyValueContainer.innerHTML = '';
     fieldCount = 0;
     if (data.extraFields) {
@@ -358,9 +394,11 @@
             keyValueContainer.appendChild(row);
         });
     }
+
     updatePreviews();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
 
 
     // ---------------- Search ----------------

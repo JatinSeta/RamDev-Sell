@@ -1054,3 +1054,19 @@ button:hover {
     grid-template-columns: 1fr; /* 1 column on small screens */
   }
 }
+/* Minimum Quantity Input Field */
+.min-qty-input {
+    width: 100px;            /* adjust width as needed */
+    padding: 8px 12px;       /* inner spacing */
+    border: 1px solid #ccc;  /* light border */
+    border-radius: 5px;      /* rounded corners */
+    font-size: 14px;         /* text size */
+    outline: none;           /* remove default focus outline */
+    box-sizing: border-box;  /* include padding in width */
+    transition: border-color 0.2s, box-shadow 0.2s; /* smooth focus effect */
+}
+
+.min-qty-input:focus {
+    border-color: #007bff;   /* highlight border on focus */
+    box-shadow: 0 0 5px rgba(0,123,255,0.3);
+}
