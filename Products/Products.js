@@ -36,6 +36,11 @@ const filterSearchInput = document.getElementById('filterSearch');
 const categoryFiltersDiv = document.getElementById('categoryFilters');
 
 let allProductsData = [];
+let minQuantity = 1; // default quantity
+
+const quantityInput = document.getElementById('quantity');
+const increaseBtn = document.getElementById('increaseQty');
+const decreaseBtn = document.getElementById('decreaseQty');
 
 // =======================================
 // AUTO-APPLY FILTERS FUNCTION
@@ -136,10 +141,7 @@ function renderProducts(products) {
     contactBtn.className = 'contact-btn';
     contactBtn.textContent = 'Contact Us';
     contactBtn.addEventListener('click', () => {
-      productInput.value = product.name || "";
-      contactModal.style.display = 'flex';
-      formSection.style.display = 'block';
-      thankYouSection.style.display = 'none';
+      openContactModal(product); // <-- use the minQuantity logic here
     });
 
     btnContainer.appendChild(contactBtn);
@@ -154,7 +156,104 @@ function renderProducts(products) {
 }
 
 // =======================================
-// APPLY SEARCH FILTER
+// OPEN CONTACT MODAL FUNCTION
+// =======================================
+function openContactModal(product) {
+  productInput.value = product.name || "";
+
+  // Use product's minQuantity from Firebase
+  minQuantity = product.minQuantity || 1;
+
+  // Set quantity input
+  quantityInput.value = minQuantity;
+  quantityInput.setAttribute('min', minQuantity);
+
+  contactModal.style.display = 'flex';
+  formSection.style.display = 'block';
+  thankYouSection.style.display = 'none';
+}
+
+// =======================================
+// QUANTITY BUTTONS
+// =======================================
+increaseBtn.addEventListener('click', () => {
+  let currentQty = parseInt(quantityInput.value) || minQuantity;
+  quantityInput.value = currentQty + 1;
+});
+
+decreaseBtn.addEventListener('click', () => {
+  let currentQty = parseInt(quantityInput.value) || minQuantity;
+  if (currentQty > minQuantity) {
+    quantityInput.value = currentQty - 1;
+  }
+});
+
+// Prevent manual typing below minQuantity
+quantityInput.addEventListener('input', () => {
+  let currentQty = parseInt(quantityInput.value);
+  if (isNaN(currentQty) || currentQty < minQuantity) {
+    quantityInput.value = minQuantity;
+  }
+});
+
+// =======================================
+// CONTACT FORM SUBMIT
+// =======================================
+contactForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const name = document.getElementById('name').value.trim();
+  const company = document.getElementById('company').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const product = document.getElementById('product').value.trim();
+  const message = document.getElementById('message').value.trim();
+  const quantity = parseInt(document.getElementById('quantity').value) || minQuantity;
+
+  if (!name || !email || !phone || !message || quantity < minQuantity) {
+    alert(`Please fill all required fields. Quantity must be at least ${minQuantity}.`);
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "Inquiries"), {
+      name,
+      company,
+      email,
+      phone,
+      product,
+      quantity,
+      message,
+      createdAt: new Date()
+    });
+
+    formSection.style.display = "none";
+    thankYouSection.style.display = "block";
+
+    setTimeout(() => {
+      contactModal.style.display = 'none';
+      contactForm.reset();
+      quantityInput.value = minQuantity;
+      formSection.style.display = "block";
+      thankYouSection.style.display = "none";
+    }, 3000);
+
+  } catch (err) {
+    alert("Error submitting inquiry: " + err.message);
+  }
+});
+
+// Close modal
+closeModal.addEventListener('click', () => {
+  contactModal.style.display = 'none';
+  contactForm.reset();
+  quantityInput.value = minQuantity;
+  formSection.style.display = "block";
+  thankYouSection.style.display = "none";
+});
+
+// =======================================
+// SEARCH AND FILTER LOGIC
 // =======================================
 export function applySearchFilter(searchText) {
   searchText = searchText.toLowerCase().trim();
@@ -191,9 +290,6 @@ export function applySearchFilter(searchText) {
   }
 }
 
-// =======================================
-// SEARCH SUGGESTIONS
-// =======================================
 function showSearchSuggestions(query) {
   searchSuggestions.innerHTML = '';
   const filtered = allProductsData
@@ -235,9 +331,6 @@ function hideSearchSuggestions() {
   searchSuggestions.style.display = 'none';
 }
 
-// =======================================
-// SEARCH INPUT EVENTS
-// =======================================
 navSearch.addEventListener('input', () => {
   const query = navSearch.value.toLowerCase().trim();
 
@@ -253,9 +346,6 @@ navSearch.addEventListener('input', () => {
   }
 });
 
-// =======================================
-// SEARCH FORM SUBMIT (FROM INDEX + PRODUCTS PAGE)
-// =======================================
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const query = navSearch.value.toLowerCase().trim();
@@ -264,54 +354,7 @@ searchForm.addEventListener('submit', (e) => {
 });
 
 // =======================================
-// CONTACT FORM
-// =======================================
-contactModal.addEventListener("click", e => e.stopPropagation());
-
-contactForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const name = document.getElementById('name').value.trim();
-  const company = document.getElementById('company').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const product = document.getElementById('product').value.trim();
-  const message = document.getElementById('message').value.trim();
-  const quantity = document.getElementById('quantity').value.trim();
-
-  if (!name || !email || !phone || !message || !quantity) {
-    alert("Please fill all required fields.");
-    return;
-  }
-
-  try {
-    await addDoc(collection(db, "Inquiries"), {
-      name, company, email, phone, product, quantity, message, createdAt: new Date()
-    });
-
-    formSection.style.display = "none";
-    thankYouSection.style.display = "block";
-
-    setTimeout(() => {
-      contactModal.style.display = 'none';
-      contactForm.reset();
-      formSection.style.display = "block";
-      thankYouSection.style.display = "none";
-    }, 3000);
-
-  } catch (err) {
-    alert("Error submitting inquiry: " + err.message);
-  }
-});
-
-closeModal.addEventListener('click', () => {
-  contactModal.style.display = 'none';
-  contactForm.reset();
-  formSection.style.display = "block";
-  thankYouSection.style.display = "none";
-});
-
-// =======================================
-// FILTER SIDEBAR FUNCTIONALITY
+// FILTER SIDEBAR
 // =======================================
 function toggleFilterSidebar() {
   filterSidebar.classList.toggle('active');
@@ -327,39 +370,28 @@ function closeFilterSidebar() {
   filterBackdrop.setAttribute('aria-hidden', 'true');
 }
 
-// Filter Button Click
 filterBtn.addEventListener('click', toggleFilterSidebar);
-
-// Close Button Click
 closeSidebar.addEventListener('click', closeFilterSidebar);
-
-// Backdrop Click to Close
 filterBackdrop.addEventListener('click', closeFilterSidebar);
 
-// Price Slider Update
 priceRange.addEventListener('input', () => {
   const maxPrice = parseInt(priceRange.value);
   priceDisplay.textContent = `₹0 - ₹${maxPrice.toLocaleString()}`;
+  applyFiltersAutomatically();
 });
 
-// Initialize Brand and Category Filters
 function initializeFilters() {
-  // Get maximum price from products data
   const maxPriceFromData = Math.max(...allProductsData.map(p => p.price || 0), 100000);
-  
-  // Set price slider max value to actual max price (rounded up to nearest 1000)
   const roundedMaxPrice = Math.ceil(maxPriceFromData / 1000) * 1000;
   priceRange.max = roundedMaxPrice;
   priceRange.value = roundedMaxPrice;
   priceDisplay.textContent = `₹0 - ₹${roundedMaxPrice.toLocaleString()}`;
 
   const categories = new Set();
-
   allProductsData.forEach(product => {
     if (product.category) categories.add(product.category);
   });
 
-  // Populate Category Filters
   categoryFiltersDiv.innerHTML = '';
   categories.forEach(category => {
     const label = document.createElement('label');
@@ -369,34 +401,22 @@ function initializeFilters() {
       <span>${category}</span>
     `;
     categoryFiltersDiv.appendChild(label);
-    
-    // Add event listener to category filter
     label.querySelector('input').addEventListener('change', applyFiltersAutomatically);
   });
 
-  // Add event listeners for auto-apply
   filterSearchInput.addEventListener('input', applyFiltersAutomatically);
-  priceRange.addEventListener('input', () => {
-    const maxPrice = parseInt(priceRange.value);
-    priceDisplay.textContent = `₹0 - ₹${maxPrice.toLocaleString()}`;
-    applyFiltersAutomatically();
-  });
   bestSellersCheckbox.addEventListener('change', applyFiltersAutomatically);
 }
 
-// Reset Filters
 resetFiltersBtn.addEventListener('click', () => {
   const maxPriceFromData = Math.max(...allProductsData.map(p => p.price || 0), 10000);
   const roundedMaxPrice = Math.ceil(maxPriceFromData / 1000) * 1000;
-  
+
   filterSearchInput.value = '';
   priceRange.value = roundedMaxPrice;
   priceDisplay.textContent = `₹0 - ₹${roundedMaxPrice.toLocaleString()}`;
   bestSellersCheckbox.checked = false;
-  
-  document.querySelectorAll('.category-filter').forEach(cb => {
-    cb.checked = false;
-  });
+  document.querySelectorAll('.category-filter').forEach(cb => cb.checked = false);
 
   renderProducts(allProductsData);
   closeFilterSidebar();
@@ -408,7 +428,6 @@ resetFiltersBtn.addEventListener('click', () => {
 window.addEventListener("DOMContentLoaded", async () => {
   await loadProducts();
 
-  // GET ?query= FROM URL (INDEX SEARCH)
   const params = new URLSearchParams(window.location.search);
   const searchQuery = params.get("query");
 

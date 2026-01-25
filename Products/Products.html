@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="./Products.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
 
   <!-- Loader -->
@@ -66,13 +68,13 @@
 
   <!-- Main Content -->
   <div id="mainContent" style="display:none;">
-   <section id="heroSection" class="hero">
-  <div class="hero-container">
-    <h1>All Products</h1>
-    <p class="hero-sub">Turning ideas into reality with top-quality hardware and electrical supplies.</p>
-  </div>
-  <div class="hero-image"></div>
-</section>
+    <section id="heroSection" class="hero">
+      <div class="hero-container">
+        <h1>All Products</h1>
+        <p class="hero-sub">Turning ideas into reality with top-quality hardware and electrical supplies.</p>
+      </div>
+      <div class="hero-image"></div>
+    </section>
 
     <!-- Filter Button -->
     <button id="filterBtn" class="filter-btn" aria-label="Open filter menu" title="Open filter menu">
@@ -86,7 +88,7 @@
         <h2>Filters</h2>
         <button id="closeSidebar" class="close-sidebar-btn" aria-label="Close filter menu">&times;</button>
       </div>
-      
+
       <div class="filter-content">
         <!-- Search Filter -->
         <div class="filter-group">
@@ -133,6 +135,40 @@
   </div>
 
   <!-- Contact Modal -->
+   <footer>
+  <div class="footer-container">
+    
+    <!-- Left section -->
+    <div class="footer-left">
+      <div class="logo-Img"><img src="../Imges/Logo.png" alt="" ></div>
+      <div class="footer-about">
+        About your company details go here. Short info about services or mission.
+      </div>
+      <div class="footer-social">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+
+    <!-- Center section: Contact -->
+    <div class="footer-center">
+      <h3>Contact Us</h3>
+      <p>Email: sales@ramdevsales.com</p>
+      <p>Phone: +91 7621 888 426</p>
+    </div>
+
+    <!-- Right section: Navigation -->
+    <div class="footer-right">
+      <h3>Navigation</h3>
+      <a href="../index.html">Home</a>
+      <a href="./Products.html">Shop</a>
+      <a href="../About/About.html">About</a>
+      <a href="../Contact/Contact.html">Contact</a>
+    </div>
+
+  </div>
+</footer>
   <div id="contactModal" class="contact-modal">
     <div class="modal-content">
       <span id="closeModal" class="close-btn">&times;</span>
@@ -144,13 +180,19 @@
           <input type="text" id="company" placeholder="Company Name">
           <input type="email" id="email" placeholder="Email" required>
           <input type="tel" id="phone" placeholder="Phone Number" required>
-          <input type="number" id="quantity" placeholder="Quantity" required min="1">
+          <div class="quantity-wrapper">
+            <button type="button" id="decreaseQty" class="qty-btn">−</button>
+            <input type="number" id="quantity" placeholder="Quantity" required value="1">
+            <button type="button" id="increaseQty" class="qty-btn">+</button>
+          </div>
+
+
           <input type="text" id="product" placeholder="Product Name" readonly>
           <textarea id="message" placeholder="Message" required></textarea>
           <button type="submit" class="submit-btn">Submit</button>
         </form>
       </div>
-
+      
       <div id="thankYouSection" class="thankyou-section" style="display:none;">
         <h2>Thank You!</h2>
         <p>Your inquiry has been submitted. We will contact you soon.</p>
@@ -164,4 +206,5 @@
   <script type="module" src="../index.js"></script>
 
 </body>
+
 </html>

@@ -1054,19 +1054,35 @@ button:hover {
     grid-template-columns: 1fr; /* 1 column on small screens */
   }
 }
-/* Minimum Quantity Input Field */
-.min-qty-input {
-    width: 100px;            /* adjust width as needed */
-    padding: 8px 12px;       /* inner spacing */
-    border: 1px solid #ccc;  /* light border */
-    border-radius: 5px;      /* rounded corners */
-    font-size: 14px;         /* text size */
-    outline: none;           /* remove default focus outline */
-    box-sizing: border-box;  /* include padding in width */
-    transition: border-color 0.2s, box-shadow 0.2s; /* smooth focus effect */
+
+/* Minimum Quantity Input Styles */
+#minQuantity {
+  width: 200px;               /* Set desired width */
+  padding: 10px 12px;         /* Comfortable padding */
+  border: 1px solid #ccc;     /* Light grey border */
+  border-radius: 6px;         /* Rounded corners */
+  font-size: 16px;            /* Readable font */
+  outline: none;              /* Remove default outline */
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.min-qty-input:focus {
-    border-color: #007bff;   /* highlight border on focus */
-    box-shadow: 0 0 5px rgba(0,123,255,0.3);
+#minQuantity:focus {
+  border-color: #007bff;                     /* Match your primary blue */
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.3); /* subtle glow */
+}
+
+/* Label styling */
+label[for="minQty"] {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #333;
+  font-size: 15px;
+}
+
+/* Optional wrapper for alignment */
+.minQty-wrapper {
+  display: flex;
+  flex-direction: column;  /* label on top, input below */
+  margin-bottom: 15px;     /* spacing between other fields */
 }
